@@ -20,7 +20,7 @@ export const useAuthStore = create((set, get) => ({
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: "https://www.nashejewels.in/auth/callback",
         queryParams: { access_type: "offline", prompt: "consent" },
       },
     })
