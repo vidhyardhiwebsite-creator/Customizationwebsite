@@ -23,6 +23,8 @@ const OrdersPage = lazy(() => import('./pages/OrdersPage'))
 const WishlistPage = lazy(() => import('./pages/WishlistPage'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
 const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
+const PolicyPage = lazy(() => import('./pages/PolicyPage'))
 
 // Admin pages (code split)
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
@@ -101,6 +103,8 @@ export default function App() {
                       <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
                       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
                       <Route path="/auth/callback" element={<AuthCallbackPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/:slug" element={<PolicyPage />} />
                     </Routes>
                   </Suspense>
                 </ErrorBoundary>
