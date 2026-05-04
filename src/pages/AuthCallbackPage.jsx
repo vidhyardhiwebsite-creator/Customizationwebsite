@@ -12,58 +12,48 @@ export default function AuthCallbackPage() {
   const { loadWishlist } = useWishlistStore()
 
   useEffect(() => {
-    // Supabase processes the #access_token hash and fires SIGNED_IN
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        subscription.unsubscribe()
-        const user = session.user
-        try {
-          await mergeLocalCart(user.id)
-          await loadCart(user.id)
-          await loadWishlist(user.id)
-        } catch {}
-        toast.success(`Welcome, ${user.user_metadata?.full_name || user.email}!`)
-        if (isAdmin(user)) {
-          navigate("/admin", { replace: true })
-        } else {
-          navigate("/", { replace: true })
-        }
-      } else if (event === "SIGNED_OUT" || (event !== "SIGNED_IN" && event !== "INITIAL_SESSION")) {
-        // Fallback: try getSession in case hash was already consumed
-        const { data: { session: s } } = await supabase.auth.getSession()
-        if (s) {
-          subscription.unsubscribe()
-          const user = s.user
-          try {
-            await mergeLocalCart(user.id)
-            await loadCart(user.id)
-            await loadWishlist(user.id)
-          } catch {}
-          toast.success(`Welcome, ${user.user_metadata?.full_name || user.email}!`)
-          navigate(isAdmin(user) ? "/admin" : "/", { replace: true })
-        } else {
-          subscription.unsubscribe()
-          toast.error("Authentication failed")
-          navigate("/login", { replace: true })
-        }
-      }
-    })
+    let done = false
 
-    // Also try immediately in case session is already available
+    const redirect = async (session) => {
+      if (done) return
+      done = true
+      const user = session.user
+      try {
+        await Promise.all([
+          mergeLocalCart(user.id),
+          loadCart(user.id),
+          loadWishlist(user.id),
+        ])
+      } catch {}
+      toast.success(`Welcome, ${user.user_metadata?.full_name || user.email}!`)
+      navigate(isAdmin(user) ? "/admin" : "/", { replace: true })
+    }
+
+    // 1. Try getSession first — works if Supabase already parsed the hash
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        subscription.unsubscribe()
-        const user = session.user
-        Promise.all([mergeLocalCart(user.id), loadCart(user.id), loadWishlist(user.id)])
-          .catch(() => {})
-          .finally(() => {
-            toast.success(`Welcome, ${user.user_metadata?.full_name || user.email}!`)
-            navigate(isAdmin(user) ? "/admin" : "/", { replace: true })
-          })
+      if (session) redirect(session)
+    })
+
+    // 2. Listen for SIGNED_IN event as fallback
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session) {
+        redirect(session)
       }
     })
 
-    return () => subscription.unsubscribe()
+    // 3. Timeout fallback — if nothing happens in 5s, go to login
+    const timeout = setTimeout(() => {
+      if (!done) {
+        done = true
+        toast.error("Sign in timed out. Please try again.")
+        navigate("/login", { replace: true })
+      }
+    }, 5000)
+
+    return () => {
+      subscription.unsubscribe()
+      clearTimeout(timeout)
+    }
   }, [])
 
   return (
@@ -71,6 +61,7 @@ export default function AuthCallbackPage() {
       <div className="text-center">
         <div className="w-10 h-10 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
         <p className="text-gray-400 text-sm">Signing you in...</p>
+        <p className="text-gray-600 text-xs mt-2">Please wait...</p>
       </div>
     </div>
   )
