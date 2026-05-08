@@ -94,7 +94,7 @@ export default function AdminOrders() {
     const msg = encodeURIComponent(
       `✅ *Order Confirmed - NaShe Jewels*\n\n` +
       `Hi ${addr.full_name || "Customer"},\n` +
-      `Your order #${String(order.id).slice(-8).toUpperCase()} has been confirmed!\n` +
+      `Your order ${order.display_order_id || '#' + String(order.id).slice(-8).toUpperCase()} has been confirmed!\n` +
       `Amount: ₹${order.total_amount?.toLocaleString("en-IN")}\n\n` +
       `We will ship your jewelry soon. Thank you for shopping with NaShe Jewels! 💍`
     )
@@ -182,7 +182,7 @@ export default function AdminOrders() {
                 onClick={() => setExpanded(isExpanded ? null : order.id)}>
                 <div>
                   <p className="text-white text-sm font-mono">
-                    #{String(order.id).slice(-8).toUpperCase()}
+                    {order.display_order_id || '#' + String(order.id).slice(-8).toUpperCase()}
                     {order.order_series && (
                       <span className={`ml-2 text-xs px-1.5 py-0.5 rounded font-bold ${order.order_series === "NS1" ? "bg-purple-500/20 text-purple-400" : "bg-blue-500/20 text-blue-400"}`}>
                         {order.order_series}

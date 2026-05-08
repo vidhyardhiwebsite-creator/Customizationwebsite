@@ -195,7 +195,7 @@ export default function OrdersPage() {
               <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#1A1A1A] transition-colors"
                 onClick={() => setExpanded(expanded === order.id ? null : order.id)}>
                 <div>
-                  <p className="text-white font-medium text-sm">Order #{order.id?.slice(-8)?.toUpperCase()}</p>
+                  <p className="text-white font-medium text-sm">{order.display_order_id || `Order #${order.id?.slice(-8)?.toUpperCase()}`}</p>
                   <p className="text-gray-500 text-xs mt-1">{formatDate(order.created_at)}</p>
                 </div>
                 <div className="flex items-center gap-3">

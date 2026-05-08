@@ -130,10 +130,18 @@ export default function CheckoutPage() {
       if (uploadErr) throw uploadErr
       const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path)
 
-      // Derive order series from products in cart
-      // If any product has NS1, the order goes to NS1; otherwise NS0
-      const hasNS1 = items.some(item => item.products?.series_id === "NS1")
-      const autoSeries = hasNS1 ? "NS1" : "NS0"
+      // Order ID = product's custom_id set by admin (e.g. NS-HOME-001, NS-HYD-001)
+      // If multiple products, join them. If no custom_id, fallback to timestamp
+      const productIds = [...new Set(
+        items.map(i => i.products?.custom_id).filter(Boolean)
+      )]
+      const displayOrderId = productIds.length > 0
+        ? productIds.join(', ')
+        : `ORD-${Date.now().toString().slice(-6)}`
+
+      // Derive series from product IDs
+      const hasHyd = productIds.some(id => id.toUpperCase().includes('HYD'))
+      const autoSeries = hasHyd ? "NS-HYD" : "NS-HOME"
 
       // Save order with pending_verification status
       const { data: order, error: orderErr } = await supabase.from("orders").insert({
@@ -146,6 +154,7 @@ export default function CheckoutPage() {
         address: JSON.stringify(addr),
         order_status: "pending",
         order_series: autoSeries,
+        display_order_id: displayOrderId,
       }).select().single()
       if (orderErr) throw orderErr
 
@@ -165,7 +174,7 @@ export default function CheckoutPage() {
       const itemsList = items.map(i => `${i.products?.name} x${i.quantity}`).join(", ")
       const msg = encodeURIComponent(
         `🛍️ *New Order Received!*\n\n` +
-        `Order ID: ${order.id.slice(-8).toUpperCase()}\n` +
+        `Order ID: ${displayOrderId}\n` +
         `Series: ${autoSeries}\n` +
         `Customer: ${addr.full_name}\n` +
         `Phone: ${addr.phone}\n` +
