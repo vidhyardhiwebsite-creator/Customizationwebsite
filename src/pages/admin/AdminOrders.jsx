@@ -226,10 +226,10 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                     {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-7 h-7 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-xs truncate">{item.products?.name}</p>
-                      <p className="text-gray-500 text-xs">
-                        {item.products?.custom_id && <span className="text-[#D4AF37]/70 mr-1">[{item.products.custom_id}]</span>}
-                        ×{item.quantity} · {formatINR(item.price)}
-                      </p>
+                      {item.products?.custom_id && (
+                        <p className="text-[#D4AF37] text-xs font-mono">Product ID: {item.products.custom_id}</p>
+                      )}
+                      <p className="text-gray-500 text-xs">×{item.quantity} · {formatINR(item.price)}</p>
                     </div>
                   </div>
                 ))}
