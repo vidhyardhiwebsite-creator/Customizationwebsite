@@ -182,21 +182,6 @@ export default function CheckoutPage() {
       // Clear cart
       await clearCart(user.id)
 
-      // Send WhatsApp notification to admin
-      const itemsList = items.map(i => `${i.products?.name} x${i.quantity}`).join(", ")
-      const msg = encodeURIComponent(
-        `🛍️ *New Order Received!*\n\n` +
-        `Order ID: ${displayOrderId}\n` +
-        `Customer: ${addr.full_name}\n` +
-        `Phone: ${addr.phone}\n` +
-        `Amount: ₹${total.toLocaleString("en-IN")}\n` +
-        `Items: ${itemsList}\n` +
-        `Address: ${addr.address1}, ${addr.city}, ${addr.state} - ${addr.pincode}\n` +
-        `UPI Ref: ${upiRef || "Not provided"}\n\n` +
-        `Please verify payment screenshot in admin panel.`
-      )
-      window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`, "_blank")
-
       setStep("success")
       toast.success("Order placed! Awaiting payment verification.")
     } catch (e) {
