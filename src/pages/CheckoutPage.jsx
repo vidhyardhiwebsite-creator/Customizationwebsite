@@ -10,7 +10,7 @@ import { supabase } from "../lib/supabase"
 import { formatINR } from "../utils/format"
 import toast from "react-hot-toast"
 
-const UPI_ID = "Q901588902@ybl"
+const UPI_ID = "Q487529392@ybl"
 const ADMIN_WHATSAPP = "918639006849"
 // Generate QR dynamically from UPI ID using Google Charts API
 const getQRUrl = (upiId, amount) =>
