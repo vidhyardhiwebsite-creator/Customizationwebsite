@@ -160,25 +160,21 @@ export default function AdminOrders() {
     else toast.error("No phone number")
   }
 
-  const isHome = (o) => {
-    const id = (o.display_order_id || "").toUpperCase()
-    const series = (o.order_series || "").toUpperCase()
-    return id.includes("HOME") || series.includes("HOME") || (!id.includes("HYD") && !series.includes("HYD"))
-  }
-  const isHyd = (o) => {
-    const id = (o.display_order_id || "").toUpperCase()
-    const series = (o.order_series || "").toUpperCase()
-    return id.includes("HYD") || series.includes("HYD")
-  }
-
   const filtered = localOrders.filter(o =>
     !search || (o.display_order_id || "").toLowerCase().includes(search.toLowerCase()) ||
     String(o.id).toLowerCase().includes(search.toLowerCase())
   )
 
-  const homeOrders = filtered.filter(isHome)
-  const hydOrders = filtered.filter(isHyd)
-  const otherOrders = filtered.filter(o => !isHome(o) && !isHyd(o))
+  const hasHome = (o) => {
+    const id = (o.display_order_id || "").toUpperCase()
+    return id.includes("HOME") || (!id.includes("HYD") && id.length > 0 && !id.startsWith("#"))
+  }
+  const hasHyd = (o) => (o.display_order_id || "").toUpperCase().includes("HYD")
+
+  // An order can appear in BOTH columns if it has both series
+  const homeOrders = filtered.filter(hasHome)
+  const hydOrders = filtered.filter(hasHyd)
+  const otherOrders = filtered.filter(o => !hasHome(o) && !hasHyd(o))
 
   const cardProps = { onStatusUpdate: handleStatusUpdate, onVerify: verifyPayment, onReject: rejectPayment, onNotify: notifyCustomer, onScreenshot: setScreenshotModal }
 

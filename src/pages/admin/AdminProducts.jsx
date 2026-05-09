@@ -148,6 +148,17 @@ export default function AdminProducts() {
   const handleSave = async () => {
     if (!validate()) return
     setSaving(true)
+
+    // Check for duplicate custom_id (only when adding new or changing the ID)
+    const newCustomId = form.custom_id?.trim()
+    if (newCustomId && (!editProduct || editProduct.custom_id !== newCustomId)) {
+      const existing = products.find(p => p.custom_id === newCustomId && p.id !== editProduct?.id)
+      if (existing) {
+        toast.error(`Product ID "${newCustomId}" already exists — "${existing.name}". Edit that product instead.`, { duration: 5000 })
+        setSaving(false)
+        return
+      }
+    }
     const payload = {
       name: form.name.trim(), price: Number(form.price), category: form.category, custom_id: form.custom_id?.trim() || null,
       description: form.description.trim(), size: form.size,
