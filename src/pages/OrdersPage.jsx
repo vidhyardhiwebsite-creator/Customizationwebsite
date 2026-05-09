@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Package, ChevronDown, ChevronUp, CheckCircle, Truck, Clock, XCircle, AlertTriangle } from "lucide-react"
+import { Package, ChevronDown, ChevronUp, CheckCircle, Truck, Clock, XCircle, AlertTriangle, Search } from "lucide-react"
 import { useAuthStore } from "../store/authStore"
 import { supabase } from "../lib/supabase"
 import { formatINR, formatDate } from "../utils/format"
@@ -118,6 +118,11 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState(null)
+  const [search, setSearch] = useState("")
+
+  const filteredOrders = search.trim()
+    ? orders.filter(o => (o.display_order_id || "").toLowerCase().includes(search.toLowerCase().trim()))
+    : orders
 
   const handleCancel = (orderId) => {
     setOrders(prev => prev.map(o =>
@@ -192,9 +197,30 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-white mb-8" style={{ fontFamily: "Georgia, serif" }}>My Orders</h1>
+      <h1 className="text-3xl font-bold text-white mb-6" style={{ fontFamily: "Georgia, serif" }}>My Orders</h1>
+
+      {/* Search bar */}
+      <div className="relative mb-6">
+        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        <input
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search by order ID (e.g. NS0-001)..."
+          className="w-full bg-[#111] border border-[#D4AF37]/20 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
+        />
+        {search && (
+          <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white text-xs">✕</button>
+        )}
+      </div>
+
       <div className="space-y-4">
-        {orders.map((order, i) => {
+        {filteredOrders.length === 0 && search && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-sm">No orders found for "{search}"</p>
+            <button onClick={() => setSearch("")} className="mt-3 text-[#D4AF37] text-xs hover:underline">Clear search</button>
+          </div>
+        )}
+        {filteredOrders.map((order, i) => {
           const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
           const statusInfo = getStatusBadge(order)
           const StatusIcon = statusInfo.icon
