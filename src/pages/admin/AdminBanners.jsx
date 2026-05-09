@@ -32,7 +32,7 @@ const LINK_OPTIONS = [
 const EMPTY = {
   id: null, badge: "", title: "", subtitle: "", desc: "",
   price: "", originalPrice: "",
-  cta: "Shop Now", link: "/products",
+  cta: "Shop Now", link: "/products", productId: "",
   bg: COLORS[0].bg, accent: COLORS[0].accent, image: ""
 }
 
@@ -143,6 +143,13 @@ function BannerForm({ initial, onSave, onCancel }) {
             className="w-full bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#D4AF37]">
             {LINK_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
+        </div>
+        <div className="col-span-2">
+          <label className={lbl}>Or link to a specific product (paste product UUID or custom ID)</label>
+          <input value={form.productId||""} onChange={e=>{const v=e.target.value.trim();setForm(f=>({...f,productId:v,link:v?`/products/${v}`:f.link}))}}
+            placeholder="e.g. paste product UUID from Supabase"
+            className={inp} />
+          {form.productId && <p className="text-[#D4AF37] text-xs mt-0.5">→ Links to: /products/{form.productId}</p>}
         </div>
 
         {/* Image upload */}
