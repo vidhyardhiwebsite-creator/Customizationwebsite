@@ -6,7 +6,9 @@ export async function fetchProducts(filters = {}) {
   try {
     let query = supabase.from('products').select('*')
     if (filters.category) query = query.eq('category', filters.category)
-    if (filters.search) query = query.ilike('name', `%${filters.search}%`)
+    if (filters.search) {
+      query = query.or(`name.ilike.%${filters.search}%,custom_id.ilike.%${filters.search}%`)
+    }
     if (filters.sort === 'price_asc') query = query.order('price', { ascending: true })
     else if (filters.sort === 'price_desc') query = query.order('price', { ascending: false })
     else query = query.order('created_at', { ascending: false })
@@ -37,7 +39,8 @@ function applyFilters(products, filters) {
     result = result.filter(p =>
       p.name.toLowerCase().includes(q) ||
       p.description?.toLowerCase().includes(q) ||
-      p.tags?.some(t => t.toLowerCase().includes(q))
+      p.tags?.some(t => t.toLowerCase().includes(q)) ||
+      (p.custom_id || "").toLowerCase().includes(q)
     )
   }
   if (filters.sort === 'price_asc') result.sort((a, b) => a.price - b.price)
