@@ -107,8 +107,10 @@ export default function App() {
                       <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
                       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
                       <Route path="/auth/callback" element={<AuthCallbackPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/:slug" element={<PolicyPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/refund-policy" element={<PolicyPage />} />
+                    <Route path="/shipping-policy" element={<PolicyPage />} />
+                    <Route path="/privacy-policy" element={<PolicyPage />} />
                     </Routes>
                   </Suspense>
                 </ErrorBoundary>
