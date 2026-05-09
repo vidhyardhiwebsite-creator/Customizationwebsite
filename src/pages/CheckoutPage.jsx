@@ -130,10 +130,10 @@ export default function CheckoutPage() {
       if (uploadErr) throw uploadErr
       const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path)
 
-      // Split items by series: NS1 for HYD products, NS0 for Home
+      // Split items by series based on admin-assigned custom_id prefix
+      // NS1-xxx = HYD series, NS0-xxx (or anything else) = Home series
       const ns1Items = items.filter(i =>
-        (i.products?.custom_id || "").toUpperCase().includes("HYD") ||
-        (i.products?.tags || []).some(t => t.toUpperCase().includes("HYD"))
+        (i.products?.custom_id || "").toUpperCase().startsWith("NS1")
       )
       const ns0Items = items.filter(i => !ns1Items.includes(i))
 
@@ -148,11 +148,11 @@ export default function CheckoutPage() {
       for (const [series, groupItems] of orderGroups) {
         const groupTotal = groupItems.reduce((s, i) => s + (i.products?.price || 0) * i.quantity, 0)
 
-        // Get next sequential number atomically
-        const { data: seqData, error: seqErr } = await supabase.rpc("get_next_series_number", { p_series: series })
-        if (seqErr) throw seqErr
-        const seqNum = String(seqData).padStart(3, "0")
-        const displayOrderId = `${series}-${seqNum}`
+        // Use admin-entered custom_id as the display order ID
+        const customIds = [...new Set(groupItems.map(i => i.products?.custom_id).filter(Boolean))]
+        const displayOrderId = customIds.length > 0
+          ? customIds.join(", ")
+          : `${series}-${Date.now().toString().slice(-4)}`
 
         const { data: order, error: orderErr } = await supabase.from("orders").insert({
           user_id: user.id,

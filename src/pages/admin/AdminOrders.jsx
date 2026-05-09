@@ -299,8 +299,8 @@ export default function AdminOrders() {
     return id.includes(q) || String(o.id).toLowerCase().includes(q) || name.includes(q) || phone.includes(q)
   })
 
-  const isNS0 = (o) => (o.display_order_id || "").toUpperCase().startsWith("NS0")
-  const isNS1 = (o) => (o.display_order_id || "").toUpperCase().startsWith("NS1")
+  const isNS0 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("NS0")
+  const isNS1 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("NS1")
 
   const ns0Orders = localOrders.filter(isNS0)
   const ns1Orders = localOrders.filter(isNS1)
