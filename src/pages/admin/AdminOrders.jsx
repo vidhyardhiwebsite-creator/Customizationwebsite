@@ -214,10 +214,12 @@ export default function AdminOrders() {
     else toast.error("No phone number")
   }
 
-  const filtered = localOrders.filter(o =>
-    !search || (o.display_order_id || "").toLowerCase().includes(search.toLowerCase()) ||
-    String(o.id).toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = localOrders.filter(o => {
+    if (!search) return true
+    const id = (o.display_order_id || "").toLowerCase()
+    const s = search.toLowerCase()
+    return id.includes(s) || String(o.id).toLowerCase().includes(s)
+  })
 
   const isNS0 = (o) => (o.display_order_id || "").toUpperCase().startsWith("NS0")
   const isNS1 = (o) => (o.display_order_id || "").toUpperCase().startsWith("NS1")

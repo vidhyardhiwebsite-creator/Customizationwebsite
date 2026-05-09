@@ -130,43 +130,55 @@ export default function CheckoutPage() {
       if (uploadErr) throw uploadErr
       const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path)
 
-      // Determine series: NS1 for HYD products, NS0 for HOME
-      // Check cart items for any HYD-tagged products
-      const hasHyd = items.some(i =>
+      // Split items by series: NS1 for HYD products, NS0 for Home
+      const ns1Items = items.filter(i =>
         (i.products?.custom_id || "").toUpperCase().includes("HYD") ||
         (i.products?.tags || []).some(t => t.toUpperCase().includes("HYD"))
       )
-      const autoSeries = hasHyd ? "NS1" : "NS0"
+      const ns0Items = items.filter(i => !ns1Items.includes(i))
 
-      // Get next sequential number atomically from DB
-      const { data: seqData, error: seqErr } = await supabase.rpc("get_next_series_number", { p_series: autoSeries })
-      if (seqErr) throw seqErr
-      const seqNum = String(seqData).padStart(3, "0")
-      const displayOrderId = `${autoSeries}-${seqNum}`
+      // Build list of [series, itemsForSeries] pairs — skip empty
+      const orderGroups = []
+      if (ns0Items.length > 0) orderGroups.push(["NS0", ns0Items])
+      if (ns1Items.length > 0) orderGroups.push(["NS1", ns1Items])
+      if (orderGroups.length === 0) orderGroups.push(["NS0", items]) // fallback
 
-      // Save order with pending_verification status
-      const { data: order, error: orderErr } = await supabase.from("orders").insert({
-        user_id: user.id,
-        total_amount: total,
-        payment_status: "pending_verification",
-        payment_method: "upi",
-        payment_screenshot_url: urlData.publicUrl,
-        upi_ref: upiRef.trim(),
-        address: JSON.stringify(addr),
-        order_status: "pending",
-        order_series: autoSeries,
-        display_order_id: displayOrderId,
-      }).select().single()
-      if (orderErr) throw orderErr
+      const createdOrderIds = []
 
-      // Save order items
-      const orderItems = items.map(item => ({
-        order_id: order.id,
-        product_id: item.product_id,
-        quantity: item.quantity,
-        price: item.products?.price || 0,
-      }))
-      await supabase.from("order_items").insert(orderItems)
+      for (const [series, groupItems] of orderGroups) {
+        const groupTotal = groupItems.reduce((s, i) => s + (i.products?.price || 0) * i.quantity, 0)
+
+        // Get next sequential number atomically
+        const { data: seqData, error: seqErr } = await supabase.rpc("get_next_series_number", { p_series: series })
+        if (seqErr) throw seqErr
+        const seqNum = String(seqData).padStart(3, "0")
+        const displayOrderId = `${series}-${seqNum}`
+
+        const { data: order, error: orderErr } = await supabase.from("orders").insert({
+          user_id: user.id,
+          total_amount: groupTotal,
+          payment_status: "pending_verification",
+          payment_method: "upi",
+          payment_screenshot_url: urlData.publicUrl,
+          upi_ref: upiRef.trim(),
+          address: JSON.stringify(addr),
+          order_status: "pending",
+          order_series: series,
+          display_order_id: displayOrderId,
+        }).select().single()
+        if (orderErr) throw orderErr
+
+        const orderItems = groupItems.map(item => ({
+          order_id: order.id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price: item.products?.price || 0,
+        }))
+        await supabase.from("order_items").insert(orderItems)
+        createdOrderIds.push(displayOrderId)
+      }
+
+      const displayOrderId = createdOrderIds.join(" + ")
 
       // Clear cart
       await clearCart(user.id)
@@ -176,7 +188,6 @@ export default function CheckoutPage() {
       const msg = encodeURIComponent(
         `🛍️ *New Order Received!*\n\n` +
         `Order ID: ${displayOrderId}\n` +
-        `Series: ${autoSeries}\n` +
         `Customer: ${addr.full_name}\n` +
         `Phone: ${addr.phone}\n` +
         `Amount: ₹${total.toLocaleString("en-IN")}\n` +
