@@ -148,11 +148,10 @@ export default function CheckoutPage() {
       for (const [series, groupItems] of orderGroups) {
         const groupTotal = groupItems.reduce((s, i) => s + (i.products?.price || 0) * i.quantity, 0)
 
-        // Use admin-entered custom_id as the display order ID
-        const customIds = [...new Set(groupItems.map(i => i.products?.custom_id).filter(Boolean))]
-        const displayOrderId = customIds.length > 0
-          ? customIds.join(", ")
-          : `${series}-${Date.now().toString().slice(-4)}`
+        // Generate sequential order ID: NS0-001, NS0-002 / NS1-001, NS1-002
+        const { data: seqData, error: seqErr } = await supabase.rpc("get_next_series_number", { p_series: series })
+        if (seqErr) throw seqErr
+        const displayOrderId = `${series}-${String(seqData).padStart(3, "0")}`
 
         const { data: order, error: orderErr } = await supabase.from("orders").insert({
           user_id: user.id,
