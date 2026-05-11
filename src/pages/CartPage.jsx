@@ -54,7 +54,8 @@ export default function CartPage() {
     const product = item.products
     if (!product) return
     await toggleWishlist(product, user.id)
-    toast.success('Added to wishlist! Item kept in cart.')
+    await removeFromCart(item.id || item.product_id, user?.id)
+    toast.success('Moved to wishlist!')
   }
 
   const handleQty = async (item, delta) => {
@@ -116,9 +117,6 @@ export default function CartPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-[#1B2B5E] font-bold text-sm">{formatINR((product.price || 0) * item.quantity)}</span>
-                        <button onClick={() => handleSaveLater(item)} title="Save for later" className="text-[#8A8AAA] hover:text-[#C9956C] transition-colors">
-                          <Heart size={15} />
-                        </button>
                         <button onClick={() => handleRemove(item)} title="Remove" className="text-[#8A8AAA] hover:text-red-500 transition-colors">
                           <Trash2 size={15} />
                         </button>
