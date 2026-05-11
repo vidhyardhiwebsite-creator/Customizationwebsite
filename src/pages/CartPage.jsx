@@ -54,8 +54,7 @@ export default function CartPage() {
     const product = item.products
     if (!product) return
     await toggleWishlist(product, user.id)
-    await removeFromCart(item.id || item.product_id, user?.id)
-    toast.success('Saved to wishlist!')
+    toast.success('Added to wishlist! Item kept in cart.')
   }
 
   const handleQty = async (item, delta) => {

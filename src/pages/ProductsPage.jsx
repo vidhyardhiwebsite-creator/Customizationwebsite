@@ -24,7 +24,18 @@ export default function ProductsPage() {
   const search = searchParams.get('search') || ''
   const sort = searchParams.get('sort') || 'newest'
 
+  // If search exactly matches a category name, treat it as a category filter
+  const matchedCategory = CATEGORIES.find(c => c.toLowerCase() === search.toLowerCase())
+
   useEffect(() => {
+    if (matchedCategory && !category) {
+      // Auto-switch to category filter
+      const params = new URLSearchParams(searchParams)
+      params.set('category', matchedCategory)
+      params.delete('search')
+      setSearchParams(params, { replace: true })
+      return
+    }
     setLoading(true)
     fetchProducts({ category, search, sort }).then(data => {
       setProducts(data)
@@ -74,7 +85,11 @@ export default function ProductsPage() {
               <button
                 key={cat}
                 onClick={() => setFilter('category', cat)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${category === cat ? 'bg-[#1B2B5E] text-white' : 'bg-white text-[#4A4A6A] hover:text-[#1B2B5E] border border-[#E8E0D5]'}`}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  category === cat || search.toLowerCase() === cat.toLowerCase()
+                    ? 'bg-[#1B2B5E] text-white'
+                    : 'bg-white text-[#4A4A6A] hover:text-[#1B2B5E] border border-[#E8E0D5]'
+                }`}
               >
                 {cat}
               </button>
