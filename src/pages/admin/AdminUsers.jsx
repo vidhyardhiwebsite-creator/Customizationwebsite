@@ -103,7 +103,7 @@ export default function AdminUsers() {
                   </div>
                   <div>
                     <p className="text-[#1A1A2E] text-sm font-medium">{u.name}</p>
-                    <p className="text-gray-500 text-xs">{u.orders} orders · {formatINR(u.totalSpent)}</p>
+                    <p className="text-gray-500 text-xs">{u.orders} orders . {formatINR(u.totalSpent)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -135,7 +135,7 @@ export default function AdminUsers() {
                           {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-8 h-8 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
                           <div className="flex-1 min-w-0">
                             <p className="text-[#1A1A2E] text-xs truncate">{item.products?.name}</p>
-                            <p className="text-gray-500 text-xs">Qty: {item.quantity} · {formatINR(item.products?.price)}</p>
+                            <p className="text-gray-500 text-xs">Qty: {item.quantity} . {formatINR(item.products?.price)}</p>
                           </div>
                         </div>
                       ))}

@@ -8,7 +8,7 @@ import { uploadProductImages, deleteProductImage } from "../../services/storageS
 import { supabase } from "../../lib/supabase"
 import toast from "react-hot-toast"
 
-// Only Bangles have sizes — admin types them as comma-separated values
+// Only Bangles have sizes - admin types them as comma-separated values
 const BANGLE_CATEGORY = "Bangles"
 
 const EMPTY_FORM = {
@@ -74,7 +74,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
             <>
               <ImagePlus size={28} className="text-[#D4AF37]/50 mx-auto mb-2" />
               <p className="text-gray-400 text-sm">Drop images here or click to browse</p>
-              <p className="text-gray-600 text-xs mt-1">JPG, PNG, WEBP — max 5MB each</p>
+              <p className="text-gray-600 text-xs mt-1">JPG, PNG, WEBP - max 5MB each</p>
             </>
           )}
         </div>
@@ -158,7 +158,7 @@ export default function AdminProducts() {
     if (newCustomId && (!editProduct || editProduct.custom_id !== newCustomId)) {
       const existing = products.find(p => p.custom_id === newCustomId && p.id !== editProduct?.id)
       if (existing) {
-        toast.error(`Product ID "${newCustomId}" already exists — "${existing.name}". Edit that product instead.`, { duration: 5000 })
+        toast.error(`Product ID "${newCustomId}" already exists - "${existing.name}". Edit that product instead.`, { duration: 5000 })
         setSaving(false)
         return
       }
@@ -197,7 +197,7 @@ export default function AdminProducts() {
       setDeleteConfirm(null)
     } catch (e) {
       if (e.message?.includes("foreign key")) {
-        toast.error("Cannot delete — this product exists in orders. Run fix-product-fk.sql in Supabase first.", { duration: 6000 })
+        toast.error("Cannot delete - this product exists in orders. Run fix-product-fk.sql in Supabase first.", { duration: 6000 })
       } else {
         toast.error(e.message || "Failed to delete product")
       }

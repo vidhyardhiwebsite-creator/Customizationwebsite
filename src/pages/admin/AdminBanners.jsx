@@ -84,10 +84,10 @@ function ProductSelector({ form, setForm }) {
       }}
       className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
     >
-      <option value="">— None (use link above) —</option>
+      <option value="">- None (use link above) -</option>
       {products.map(p => (
         <option key={p.id} value={p.id}>
-          {p.custom_id ? `[${p.custom_id}] ` : ""}{p.name} — ?{p.price}
+          {p.custom_id ? `[${p.custom_id}] ` : ""}{p.name} - ?{p.price}
         </option>
       ))}
     </select>
@@ -187,7 +187,7 @@ function BannerForm({ initial, onSave, onCancel }) {
               <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-[#D4AF37]/20 flex-shrink-0">
                 <img src={form.image} alt="" className="w-full h-full object-cover" />
                 <button type="button" onClick={() => setForm(f => ({ ...f, image: "" }))}
-                  className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs leading-none">×</button>
+                  className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs leading-none">x</button>
               </div>
             )}
           </div>

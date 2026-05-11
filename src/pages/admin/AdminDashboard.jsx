@@ -322,11 +322,11 @@ export default function AdminDashboard() {
   )
 }
 
-// Offer Banner Manager — add/edit/remove scrolling offers
+// Offer Banner Manager - add/edit/remove scrolling offers
 function OfferBannerManager() {
   const [offers, setOffers] = useState([
     { id: 1, text: '?? Free Shipping on all orders across India!', link: '/products' },
-    { id: 2, text: '?? New Bridal Collection — Shop Now', link: '/products?tags=bridal' },
+    { id: 2, text: '?? New Bridal Collection - Shop Now', link: '/products?tags=bridal' },
     { id: 3, text: '? Use code NASHE10 for 10% off on first order', link: '/products' },
   ])
   const [saving, setSaving] = useState(false)
@@ -365,7 +365,7 @@ function OfferBannerManager() {
     <div className="bg-white border border-gray-200 rounded-xl p-5">
       <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
         <span className="text-[#D4AF37]">??</span> Offer Banner
-        <span className="text-xs text-gray-500 font-normal ml-1">— scrolling banner below navbar</span>
+        <span className="text-xs text-gray-500 font-normal ml-1">- scrolling banner below navbar</span>
       </h3>
 
       {/* Current offers */}
