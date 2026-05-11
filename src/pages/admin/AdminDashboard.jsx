@@ -66,7 +66,7 @@ function HeroVideoManager() {
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+      <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
         <Video size={16} className="text-[#D4AF37]" /> Hero Video
       </h3>
       {currentUrl && (
@@ -92,7 +92,7 @@ function HeroVideoManager() {
               value={manualUrl}
               onChange={e => setManualUrl(e.target.value)}
               placeholder="https://..."
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
             />
             <button onClick={handleSaveUrl} disabled={saving || !manualUrl.trim()}
               className="px-4 py-2 bg-[#D4AF37] text-black text-sm font-medium rounded-lg hover:bg-[#F0D060] disabled:opacity-60 flex items-center gap-1">
@@ -117,7 +117,7 @@ const StatCard = ({ icon: Icon, label, value, sub, color = 'gold' }) => (
         <Icon size={18} className={color === 'gold' ? 'text-[#D4AF37]' : color === 'green' ? 'text-green-400' : color === 'red' ? 'text-red-400' : 'text-blue-400'} />
       </div>
     </div>
-    <p className="text-2xl font-bold text-white mb-1">{value}</p>
+    <p className="text-2xl font-bold text-[#1B2B5E] mb-1">{value}</p>
     <p className="text-gray-400 text-sm">{label}</p>
     {sub && <p className="text-xs text-gray-600 mt-1">{sub}</p>}
   </motion.div>
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>Dashboard</h1>
+        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: 'Georgia, serif' }}>Dashboard</h1>
         <p className="text-gray-500 text-sm mt-1">Welcome back. Here's what's happening.</p>
       </div>
 
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Orders + Revenue Line Chart */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+          <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
             <TrendingUp size={16} className="text-[#D4AF37]" /> Orders (Last 14 Days)
           </h3>
           <ResponsiveContainer width="100%" height={220}>
@@ -197,7 +197,7 @@ export default function AdminDashboard() {
 
         {/* Revenue Bar Chart */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4">Revenue (Last 14 Days)</h3>
+          <h3 className="text-[#1B2B5E] font-medium mb-4">Revenue (Last 14 Days)</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={stats.last14Days}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Category Pie */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4">Category Sales</h3>
+          <h3 className="text-[#1B2B5E] font-medium mb-4">Category Sales</h3>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie data={stats.categorySales} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" nameKey="name">
@@ -228,7 +228,7 @@ export default function AdminDashboard() {
 
         {/* City Distribution */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4">Orders by City</h3>
+          <h3 className="text-[#1B2B5E] font-medium mb-4">Orders by City</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stats.cityData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
 
         {/* Top Products */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4">Top Products</h3>
+          <h3 className="text-[#1B2B5E] font-medium mb-4">Top Products</h3>
           <div className="space-y-2">
             {stats.topProducts.slice(0, 6).map((p, i) => (
               <div key={i} className="flex items-center gap-2">
@@ -266,13 +266,13 @@ export default function AdminDashboard() {
       {/* Low Stock Alert */}
       {stats.lowStockProducts?.length > 0 && (
         <div className="bg-white border border-red-500/20 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+          <h3 className="text-[#1B2B5E] font-medium mb-3 flex items-center gap-2">
             <AlertTriangle size={16} className="text-red-400" /> Low Stock Alert
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {stats.lowStockProducts.slice(0, 8).map(p => (
               <div key={p.id} className="bg-gray-50 rounded-lg p-3">
-                <p className="text-white text-xs font-medium truncate">{p.name}</p>
+                <p className="text-[#1A1A2E] text-xs font-medium truncate">{p.name}</p>
                 <p className="text-red-400 text-xs mt-1">{p.stock} left</p>
               </div>
             ))}
@@ -286,7 +286,7 @@ export default function AdminDashboard() {
 
       {/* Recent Orders */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-white font-medium mb-4">Recent Orders</h3>        <div className="overflow-x-auto">
+        <h3 className="text-[#1B2B5E] font-medium mb-4">Recent Orders</h3>        <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">
@@ -363,7 +363,7 @@ function OfferBannerManager() {
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+      <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
         <span className="text-[#D4AF37]">??</span> Offer Banner
         <span className="text-xs text-gray-500 font-normal ml-1">— scrolling banner below navbar</span>
       </h3>
@@ -384,11 +384,11 @@ function OfferBannerManager() {
       <div className="space-y-2">
         <input value={newText} onChange={e => setNewText(e.target.value)}
           placeholder="Offer text e.g. ?? Free Shipping on all orders!"
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
         <div className="flex gap-2">
           <input value={newLink} onChange={e => setNewLink(e.target.value)}
             placeholder="Link e.g. /products"
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
           <button onClick={addOffer} disabled={saving || !newText.trim()}
             className="px-4 py-2 bg-[#D4AF37] text-black text-sm font-semibold rounded-lg hover:bg-[#F0D060] disabled:opacity-60 transition-all">
             {saving ? '...' : '+ Add'}

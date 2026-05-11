@@ -214,7 +214,7 @@ export default function AdminProducts() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>Products</h1>
+          <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Products</h1>
           <p className="text-gray-500 text-sm mt-1">{products.length} total products</p>
         </div>
         <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-black font-semibold rounded-lg hover:bg-[#F0D060] transition-all text-sm">
@@ -225,7 +225,7 @@ export default function AdminProducts() {
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..."
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
@@ -292,7 +292,7 @@ export default function AdminProducts() {
               className="bg-white border border-gray-200 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between p-5 border-b border-gray-200">
                 <h2 className="text-[#1B2B5E] font-semibold">{editProduct ? "Edit Product" : "Add New Product"}</h2>
-                <button onClick={() => !uploading && setModalOpen(false)} className="text-gray-400 hover:text-white p-1"><X size={18} /></button>
+                <button onClick={() => !uploading && setModalOpen(false)} className="text-gray-400 hover:text-[#1A1A2E] p-1"><X size={18} /></button>
               </div>
               <div className="p-5 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -394,7 +394,7 @@ export default function AdminProducts() {
           <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }}
               className="bg-white border border-red-500/20 rounded-xl p-6 max-w-sm w-full text-center">
               <Trash2 size={32} className="text-red-400 mx-auto mb-3" />
-              <h3 className="text-white font-semibold mb-2">Delete Product?</h3>
+              <h3 className="text-[#1B2B5E] font-semibold mb-2">Delete Product?</h3>
               <p className="text-gray-400 text-sm mb-5">Images will also be deleted from storage. This cannot be undone.</p>
               <div className="flex gap-3">
                 <button onClick={() => setDeleteConfirm(null)} disabled={deleting} className="flex-1 py-2 border border-gray-200 text-gray-400 rounded-lg text-sm disabled:opacity-50">Cancel</button>

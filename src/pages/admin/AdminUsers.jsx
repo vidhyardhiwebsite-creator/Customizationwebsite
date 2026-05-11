@@ -70,20 +70,20 @@ export default function AdminUsers() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>Users</h1>
+        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Users</h1>
         <p className="text-gray-500 text-sm mt-1">Customer activity, cart & wishlist</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-5"><Users size={18} className="text-[#D4AF37] mb-3" /><p className="text-2xl font-bold text-white">{users.length}</p><p className="text-gray-500 text-xs mt-1">Total Customers</p></div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5"><DollarSign size={18} className="text-green-400 mb-3" /><p className="text-2xl font-bold text-white">{formatINR(totalRevenue)}</p><p className="text-gray-500 text-xs mt-1">Total Revenue</p></div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5"><ShoppingBag size={18} className="text-blue-400 mb-3" /><p className="text-2xl font-bold text-white">{formatINR(avgOrderValue)}</p><p className="text-gray-500 text-xs mt-1">Avg Order Value</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><Users size={18} className="text-[#D4AF37] mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{users.length}</p><p className="text-gray-500 text-xs mt-1">Total Customers</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><DollarSign size={18} className="text-green-400 mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{formatINR(totalRevenue)}</p><p className="text-gray-500 text-xs mt-1">Total Revenue</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><ShoppingBag size={18} className="text-blue-400 mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{formatINR(avgOrderValue)}</p><p className="text-gray-500 text-xs mt-1">Avg Order Value</p></div>
       </div>
 
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name or user ID..."
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
       </div>
 
       <div className="space-y-3">

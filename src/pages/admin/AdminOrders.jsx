@@ -109,7 +109,7 @@ function TrackingPanel({ order, onSave }) {
         value={trackingId}
         onChange={e => setTrackingId(e.target.value)}
         placeholder="Tracking ID (e.g. DTDC123456)"
-        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-yellow-500/50"
+        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-yellow-500/50"
       />
       <label className="flex items-center gap-2 p-2 border border-dashed border-gray-200 hover:border-yellow-500/40 rounded-lg cursor-pointer transition-all">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
@@ -195,7 +195,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                       </button>
                     </div>
                   )}
-                  {order.upi_ref && <p className="text-gray-500 text-xs">UPI Ref: <span className="font-mono text-white">{order.upi_ref}</span></p>}
+                  {order.upi_ref && <p className="text-gray-500 text-xs">UPI Ref: <span className="font-mono text-[#1A1A2E]">{order.upi_ref}</span></p>}
                   <div className="grid grid-cols-2 gap-2">
                     <button onClick={() => onVerify(order.id)}
                       className="py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg hover:bg-green-500/30 transition-all">
@@ -331,14 +331,14 @@ export default function AdminOrders() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>Orders</h1>
+        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Orders</h1>
         <p className="text-gray-500 text-sm mt-0.5">{localOrders.length} total · {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
       </div>
 
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by order ID (e.g. NS0-001), name, phone..."
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
       </div>
 
       {/* Search results — flat list */}
@@ -426,7 +426,7 @@ export default function AdminOrders() {
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="max-w-lg w-full bg-white rounded-2xl overflow-hidden">
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <p className="text-[#1B2B5E] font-medium">Payment Screenshot</p>
-                <button onClick={() => setScreenshotModal(null)} className="text-gray-400 hover:text-white">?</button>
+                <button onClick={() => setScreenshotModal(null)} className="text-gray-400 hover:text-[#1A1A2E]">?</button>
               </div>
               <img src={screenshotModal} alt="Payment screenshot" className="w-full max-h-[70vh] object-contain p-4" />
             </motion.div>

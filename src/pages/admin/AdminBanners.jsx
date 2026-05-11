@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useAdminStore } from "../../store/adminStore"
 import { motion, AnimatePresence } from "framer-motion"
 import { Plus, Trash2, Edit2, Save, ChevronUp, ChevronDown, Loader2, ImagePlus } from "lucide-react"
@@ -37,7 +37,7 @@ const EMPTY = {
   bg: COLORS[0].bg, accent: COLORS[0].accent, image: ""
 }
 
-const inp = "w-full bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
+const inp = "w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
 const lbl = "text-xs text-gray-400 mb-1 block"
 
 function BannerPreview({ banner }) {
@@ -48,12 +48,12 @@ function BannerPreview({ banner }) {
           style={{ background: banner.accent + "25", color: banner.accent, border: `1px solid ${banner.accent}50` }}>
           {banner.badge || "BADGE"}
         </span>
-        <p className="text-white text-sm font-bold leading-tight">{banner.title || "Title"}</p>
+        <p className="text-[#1A1A2E] text-sm font-bold leading-tight">{banner.title || "Title"}</p>
         <p className="text-xs font-semibold" style={{ color: banner.accent }}>{banner.subtitle || "Subtitle"}</p>
         {(banner.price || banner.originalPrice) && (
           <div className="flex items-center gap-2 mt-0.5">
-            {banner.price && <span className="text-white text-sm font-bold">₹{banner.price}</span>}
-            {banner.originalPrice && <span className="text-gray-400 text-xs line-through">₹{banner.originalPrice}</span>}
+            {banner.price && <span className="text-[#1A1A2E] text-sm font-bold">?{banner.price}</span>}
+            {banner.originalPrice && <span className="text-gray-400 text-xs line-through">?{banner.originalPrice}</span>}
           </div>
         )}
         <span className="inline-block mt-1.5 px-3 py-1 rounded text-xs font-semibold"
@@ -82,12 +82,12 @@ function ProductSelector({ form, setForm }) {
         const id = e.target.value
         setForm(f => ({ ...f, productId: id, link: id ? `/products/${id}` : f.link }))
       }}
-      className="w-full bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#D4AF37]"
+      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
     >
-      <option value="">— None (use link above) —</option>
+      <option value="">� None (use link above) �</option>
       {products.map(p => (
         <option key={p.id} value={p.id}>
-          {p.custom_id ? `[${p.custom_id}] ` : ""}{p.name} — ₹{p.price}
+          {p.custom_id ? `[${p.custom_id}] ` : ""}{p.name} � ?{p.price}
         </option>
       ))}
     </select>
@@ -148,11 +148,11 @@ function BannerForm({ initial, onSave, onCancel }) {
 
         {/* Price fields */}
         <div>
-          <label className={lbl}>Sale Price (₹)</label>
+          <label className={lbl}>Sale Price (?)</label>
           <input type="number" value={form.price||""} onChange={e=>setForm(f=>({...f,price:e.target.value}))} placeholder="e.g. 2499" className={inp} />
         </div>
         <div>
-          <label className={lbl}>Original Price (₹) <span className="text-gray-600">optional</span></label>
+          <label className={lbl}>Original Price (?) <span className="text-gray-600">optional</span></label>
           <input type="number" value={form.originalPrice||""} onChange={e=>setForm(f=>({...f,originalPrice:e.target.value}))} placeholder="e.g. 3999" className={inp} />
         </div>
 
@@ -163,7 +163,7 @@ function BannerForm({ initial, onSave, onCancel }) {
         <div>
           <label className={lbl}>Button Link</label>
           <select value={form.link||"/products"} onChange={e=>setForm(f=>({...f,link:e.target.value}))}
-            className="w-full bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#D4AF37]">
+            className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]">
             {LINK_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
@@ -187,7 +187,7 @@ function BannerForm({ initial, onSave, onCancel }) {
               <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-[#D4AF37]/20 flex-shrink-0">
                 <img src={form.image} alt="" className="w-full h-full object-cover" />
                 <button type="button" onClick={() => setForm(f => ({ ...f, image: "" }))}
-                  className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs leading-none">×</button>
+                  className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs leading-none">�</button>
               </div>
             )}
           </div>
@@ -258,7 +258,7 @@ export default function AdminBanners() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>Promo Banners</h1>
+          <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Promo Banners</h1>
           <p className="text-gray-500 text-sm mt-1">Manage sliding offer banners on the homepage</p>
         </div>
         {!showForm && !editBanner && (
@@ -283,7 +283,7 @@ export default function AdminBanners() {
         </div>
       ) : banners.length === 0 && !showForm ? (
         <div className="text-center py-16 bg-[#111] rounded-xl border border-[#D4AF37]/10">
-          <p className="text-4xl mb-3">🎨</p>
+          <p className="text-4xl mb-3">??</p>
           <p className="text-gray-400">No banners yet.</p>
           <button onClick={() => setShowForm(true)} className="mt-4 px-6 py-2 bg-[#D4AF37] text-black rounded-lg text-sm font-medium">+ Add Banner</button>
         </div>
@@ -301,8 +301,8 @@ export default function AdminBanners() {
                   <div className="flex items-center justify-between px-4 py-2 border-t border-[#D4AF37]/10">
                     <div className="flex items-center gap-1">
                       <span className="text-gray-600 text-xs">#{idx + 1}</span>
-                      <button onClick={() => move(idx, -1)} disabled={idx === 0} className="p-1 text-gray-500 hover:text-white disabled:opacity-30"><ChevronUp size={14} /></button>
-                      <button onClick={() => move(idx, 1)} disabled={idx === banners.length - 1} className="p-1 text-gray-500 hover:text-white disabled:opacity-30"><ChevronDown size={14} /></button>
+                      <button onClick={() => move(idx, -1)} disabled={idx === 0} className="p-1 text-gray-500 hover:text-[#1A1A2E] disabled:opacity-30"><ChevronUp size={14} /></button>
+                      <button onClick={() => move(idx, 1)} disabled={idx === banners.length - 1} className="p-1 text-gray-500 hover:text-[#1A1A2E] disabled:opacity-30"><ChevronDown size={14} /></button>
                     </div>
                     <div className="flex items-center gap-2">
                       <button onClick={() => setEditBanner(banner)} disabled={saving} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-[#D4AF37] border border-[#D4AF37]/20 rounded-lg disabled:opacity-40"><Edit2 size={12} /> Edit</button>

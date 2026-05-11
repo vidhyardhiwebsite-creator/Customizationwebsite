@@ -53,7 +53,7 @@ export default function AdminAnalytics() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>Analytics</h1>
+        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: 'Georgia, serif' }}>Analytics</h1>
         <p className="text-gray-500 text-sm mt-1">Sales performance and insights</p>
       </div>
 
@@ -67,7 +67,7 @@ export default function AdminAnalytics() {
         ].map((k, i) => (
           <div key={i} className="bg-white border border-gray-200 rounded-xl p-5">
             <k.icon size={18} className={`${k.color} mb-3`} />
-            <p className="text-2xl font-bold text-white">{k.value}</p>
+            <p className="text-2xl font-bold text-[#1B2B5E]">{k.value}</p>
             <p className="text-gray-500 text-xs mt-1">{k.label}</p>
           </div>
         ))}
@@ -75,7 +75,7 @@ export default function AdminAnalytics() {
 
       {/* Revenue Area Chart */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-white font-medium mb-4">Revenue Trend (Last 14 Days)</h3>
+        <h3 className="text-[#1B2B5E] font-medium mb-4">Revenue Trend (Last 14 Days)</h3>
         <ResponsiveContainer width="100%" height={260}>
           <AreaChart data={stats.last14Days}>
             <defs>
@@ -97,7 +97,7 @@ export default function AdminAnalytics() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Weekly Orders */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4">Weekly Orders</h3>
+          <h3 className="text-[#1B2B5E] font-medium mb-4">Weekly Orders</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -111,7 +111,7 @@ export default function AdminAnalytics() {
 
         {/* Category Revenue Pie */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-white font-medium mb-4">Revenue by Category</h3>
+          <h3 className="text-[#1B2B5E] font-medium mb-4">Revenue by Category</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
               <Pie data={revenueByCategory} cx="50%" cy="50%" outerRadius={80} dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
@@ -125,7 +125,7 @@ export default function AdminAnalytics() {
 
       {/* Location Analytics */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+        <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
           <MapPin size={16} className="text-[#D4AF37]" /> Location Analytics – Top Cities
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -166,7 +166,7 @@ export default function AdminAnalytics() {
 
       {/* Top Products Bar */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-white font-medium mb-4">Best Selling Products</h3>
+        <h3 className="text-[#1B2B5E] font-medium mb-4">Best Selling Products</h3>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={stats.topProducts}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
