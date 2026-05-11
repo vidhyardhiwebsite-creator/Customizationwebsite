@@ -1,8 +1,8 @@
 ﻿// Mock product data - replace with Supabase data in production
 
 export const CATEGORIES = [
-  "Earrings", "Necklaces", "Black Beads", "Tikka",
-  "Champaswaram", "Maatilu", "Bracelets", "Bangles"
+  "Bangles", "Black Beads", "Bracelets", "Champaswaram",
+  "Earrings", "Maatilu", "Necklaces", "Tikka"
 ]
 
 export const TAGS = ["traditional", "modern", "bridal", "dailywear", "premium"]
