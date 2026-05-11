@@ -305,8 +305,10 @@ export default function AdminBanners() {
                       <button onClick={() => move(idx, 1)} disabled={idx === banners.length - 1} className="p-1 text-gray-500 hover:text-white disabled:opacity-30"><ChevronDown size={14} /></button>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button onClick={() => setEditBanner(banner)} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-[#D4AF37] border border-[#D4AF37]/20 rounded-lg"><Edit2 size={12} /> Edit</button>
-                      <button onClick={() => handleDelete(banner.id)} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-red-400 border border-red-500/20 rounded-lg"><Trash2 size={12} /> Delete</button>
+                      <button onClick={() => setEditBanner(banner)} disabled={saving} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-[#D4AF37] border border-[#D4AF37]/20 rounded-lg disabled:opacity-40"><Edit2 size={12} /> Edit</button>
+                      <button onClick={() => handleDelete(banner.id)} disabled={saving} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-red-400 border border-red-500/20 rounded-lg disabled:opacity-40">
+                        {saving ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Delete
+                      </button>
                     </div>
                   </div>
                 </div>

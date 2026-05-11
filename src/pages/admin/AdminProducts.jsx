@@ -112,6 +112,7 @@ export default function AdminProducts() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(null)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => { loadProducts() }, [])
 
@@ -185,14 +186,20 @@ export default function AdminProducts() {
   }
 
   const handleDelete = async (id) => {
-    // Also delete images from storage
-    const product = products.find(p => p.id === id)
-    if (product?.images?.length) {
-      for (const url of product.images) await deleteProductImage(url)
+    setDeleting(true)
+    try {
+      const product = products.find(p => p.id === id)
+      if (product?.images?.length) {
+        for (const url of product.images) await deleteProductImage(url)
+      }
+      await deleteProduct(id)
+      toast.success("Product deleted")
+      setDeleteConfirm(null)
+    } catch (e) {
+      toast.error(e.message || "Failed to delete product")
+    } finally {
+      setDeleting(false)
     }
-    await deleteProduct(id)
-    toast.success("Product deleted")
-    setDeleteConfirm(null)
   }
 
   const toggleTag = (tag) => {
@@ -380,14 +387,18 @@ export default function AdminProducts() {
         {deleteConfirm && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }}
+          <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }}
               className="bg-[#111] border border-red-500/20 rounded-xl p-6 max-w-sm w-full text-center">
               <Trash2 size={32} className="text-red-400 mx-auto mb-3" />
               <h3 className="text-white font-semibold mb-2">Delete Product?</h3>
               <p className="text-gray-400 text-sm mb-5">Images will also be deleted from storage. This cannot be undone.</p>
               <div className="flex gap-3">
-                <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-2 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm">Cancel</button>
-                <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-all">Delete</button>
+                <button onClick={() => setDeleteConfirm(null)} disabled={deleting} className="flex-1 py-2 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm disabled:opacity-50">Cancel</button>
+                <button onClick={() => handleDelete(deleteConfirm)} disabled={deleting}
+                  className="flex-1 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+                  {deleting && <Loader2 size={14} className="animate-spin" />}
+                  {deleting ? "Deleting..." : "Delete"}
+                </button>
               </div>
             </motion.div>
           </motion.div>
