@@ -1,4 +1,4 @@
-ï»¿import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Plus, Edit2, Trash2, Search, AlertTriangle, X, Upload, ImagePlus, Loader2 } from "lucide-react"
 import { useAdminStore } from "../../store/adminStore"
@@ -8,7 +8,7 @@ import { uploadProductImages, deleteProductImage } from "../../services/storageS
 import { supabase } from "../../lib/supabase"
 import toast from "react-hot-toast"
 
-// Only Bangles have sizes â€” admin types them as comma-separated values
+// Only Bangles have sizes — admin types them as comma-separated values
 const BANGLE_CATEGORY = "Bangles"
 
 const EMPTY_FORM = {
@@ -55,7 +55,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-[#D4AF37]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-[#1A1A1A]"
+          className="border-2 border-dashed border-[#D4AF37]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-gray-50"
         >
           <input
             ref={inputRef}
@@ -74,7 +74,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
             <>
               <ImagePlus size={28} className="text-[#D4AF37]/50 mx-auto mb-2" />
               <p className="text-gray-400 text-sm">Drop images here or click to browse</p>
-              <p className="text-gray-600 text-xs mt-1">JPG, PNG, WEBP â€” max 5MB each</p>
+              <p className="text-gray-600 text-xs mt-1">JPG, PNG, WEBP — max 5MB each</p>
             </>
           )}
         </div>
@@ -84,7 +84,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
         <div className="flex gap-2 flex-wrap">
           {images.map((url, i) => (
             <div key={i} className="relative group">
-              <img src={url} alt="" className="w-20 h-20 object-cover rounded-lg border border-[#D4AF37]/20" loading="lazy"
+              <img src={url} alt="" className="w-20 h-20 object-cover rounded-lg border border-gray-200" loading="lazy"
                 onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
               <button
                 type="button"
@@ -158,7 +158,7 @@ export default function AdminProducts() {
     if (newCustomId && (!editProduct || editProduct.custom_id !== newCustomId)) {
       const existing = products.find(p => p.custom_id === newCustomId && p.id !== editProduct?.id)
       if (existing) {
-        toast.error(`Product ID "${newCustomId}" already exists â€” "${existing.name}". Edit that product instead.`, { duration: 5000 })
+        toast.error(`Product ID "${newCustomId}" already exists — "${existing.name}". Edit that product instead.`, { duration: 5000 })
         setSaving(false)
         return
       }
@@ -197,7 +197,7 @@ export default function AdminProducts() {
       setDeleteConfirm(null)
     } catch (e) {
       if (e.message?.includes("foreign key")) {
-        toast.error("Cannot delete â€” this product exists in orders. Run fix-product-fk.sql in Supabase first.", { duration: 6000 })
+        toast.error("Cannot delete — this product exists in orders. Run fix-product-fk.sql in Supabase first.", { duration: 6000 })
       } else {
         toast.error(e.message || "Failed to delete product")
       }
@@ -225,20 +225,20 @@ export default function AdminProducts() {
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..."
-          className="w-full bg-[#111] border border-[#D4AF37]/20 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
       </div>
 
-      <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="border-b border-[#D4AF37]/10">
+            <thead className="border-b border-gray-200">
               <tr>{["Product","Category","Price","Stock","Tags","Actions"].map(h => (
                 <th key={h} className="text-left text-gray-500 text-xs px-4 py-3 font-medium">{h}</th>
               ))}</tr>
             </thead>
-            <tbody className="divide-y divide-[#D4AF37]/5">
+            <tbody className="divide-y divide-gray-100">
               {filtered.map(p => (
-                <tr key={p.id} className="hover:bg-white/2 transition-colors">
+                <tr key={p.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <img
@@ -249,13 +249,13 @@ export default function AdminProducts() {
                         onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }}
                       />
                       <div>
-                        <p className="text-white text-xs font-medium">{p.name}</p>
+                        <p className="text-[#1A1A2E] text-xs font-medium">{p.name}</p>
                         {p.custom_id && <p className="text-[#D4AF37] text-xs font-mono">{p.custom_id}</p>}
-                        <p className="text-gray-600 text-xs">{p.size}</p>
+                        <p className="text-gray-400 text-xs">{p.size}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">{p.category}</td>
+                  <td className="px-4 py-3 text-gray-500 text-xs">{p.category}</td>
                   <td className="px-4 py-3 text-[#D4AF37] text-xs font-medium">{formatINR(p.price)}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium ${p.stock < 10 ? "text-red-400" : p.stock < 20 ? "text-yellow-400" : "text-green-400"}`}>
@@ -289,9 +289,9 @@ export default function AdminProducts() {
             className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
             onClick={e => e.target === e.currentTarget && !uploading && setModalOpen(false)}>
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#111] border border-[#D4AF37]/20 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-5 border-b border-[#D4AF37]/10">
-                <h2 className="text-white font-semibold">{editProduct ? "Edit Product" : "Add New Product"}</h2>
+              className="bg-white border border-gray-200 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-5 border-b border-gray-200">
+                <h2 className="text-[#1B2B5E] font-semibold">{editProduct ? "Edit Product" : "Add New Product"}</h2>
                 <button onClick={() => !uploading && setModalOpen(false)} className="text-gray-400 hover:text-white p-1"><X size={18} /></button>
               </div>
               <div className="p-5 space-y-4">
@@ -299,7 +299,7 @@ export default function AdminProducts() {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400 mb-1 block">Product ID <span className="text-gray-600">(e.g. NS0.1, NS1.5)</span></label>
                     <input value={form.custom_id||""} onChange={e => setForm(f => ({ ...f, custom_id: e.target.value }))}
-                      className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
                       placeholder="e.g. NS0.1" />
                     <p className="text-gray-600 text-xs mt-0.5">Leave empty to auto-generate</p>
                   </div>
@@ -307,28 +307,28 @@ export default function AdminProducts() {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400 mb-1 block">Product Name *</label>
                     <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
                       placeholder="e.g. Kundan Jhumka Earrings" />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Price (â‚¹) *</label>
+                    <label className="text-xs text-gray-400 mb-1 block">Price (?) *</label>
                     <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-                      className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
                       placeholder="2499" />
                     {errors.price && <p className="text-red-400 text-xs mt-1">{errors.price}</p>}
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Stock *</label>
                     <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
-                      className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
                       placeholder="15" />
                     {errors.stock && <p className="text-red-400 text-xs mt-1">{errors.stock}</p>}
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
-                      className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]">
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]">
                       {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
@@ -339,7 +339,7 @@ export default function AdminProducts() {
                         value={form.size}
                         onChange={e => setForm(f => ({ ...f, size: e.target.value }))}
                         placeholder="e.g. 2.4, 2.6, 2.8, Free Size"
-                        className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]"
+                        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
                       />
                       <p className="text-gray-600 text-xs mt-0.5">Comma-separated. Remove a size to mark it out of stock.</p>
                     </div>
@@ -347,7 +347,7 @@ export default function AdminProducts() {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400 mb-1 block">Description</label>
                     <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                      rows={3} className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37] resize-none"
+                      rows={3} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37] resize-none"
                       placeholder="Product description..." />
                   </div>
                   <div className="col-span-2">
@@ -355,7 +355,7 @@ export default function AdminProducts() {
                     <div className="flex flex-wrap gap-2">
                       {TAGS.map(tag => (
                         <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#D4AF37] text-black" : "bg-[#1A1A1A] text-gray-400 border border-[#D4AF37]/20 hover:border-[#D4AF37]/50"}`}>
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#D4AF37] text-black" : "bg-gray-50 text-gray-400 border border-gray-200 hover:border-[#D4AF37]/50"}`}>
                           {tag}
                         </button>
                       ))}
@@ -371,7 +371,7 @@ export default function AdminProducts() {
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button onClick={() => !uploading && setModalOpen(false)}
-                    className="flex-1 py-2.5 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm hover:border-[#D4AF37]/50 transition-all">
+                    className="flex-1 py-2.5 border border-gray-200 text-gray-400 rounded-lg text-sm hover:border-[#D4AF37]/50 transition-all">
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving || uploading}
@@ -392,12 +392,12 @@ export default function AdminProducts() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
           <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }}
-              className="bg-[#111] border border-red-500/20 rounded-xl p-6 max-w-sm w-full text-center">
+              className="bg-white border border-red-500/20 rounded-xl p-6 max-w-sm w-full text-center">
               <Trash2 size={32} className="text-red-400 mx-auto mb-3" />
               <h3 className="text-white font-semibold mb-2">Delete Product?</h3>
               <p className="text-gray-400 text-sm mb-5">Images will also be deleted from storage. This cannot be undone.</p>
               <div className="flex gap-3">
-                <button onClick={() => setDeleteConfirm(null)} disabled={deleting} className="flex-1 py-2 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm disabled:opacity-50">Cancel</button>
+                <button onClick={() => setDeleteConfirm(null)} disabled={deleting} className="flex-1 py-2 border border-gray-200 text-gray-400 rounded-lg text-sm disabled:opacity-50">Cancel</button>
                 <button onClick={() => handleDelete(deleteConfirm)} disabled={deleting}
                   className="flex-1 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-all disabled:opacity-60 flex items-center justify-center gap-2">
                   {deleting && <Loader2 size={14} className="animate-spin" />}

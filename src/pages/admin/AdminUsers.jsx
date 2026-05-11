@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Users, ShoppingBag, DollarSign, Search, Heart, ShoppingCart, MessageCircle, ChevronDown, ChevronUp } from "lucide-react"
 import { useAdminStore } from "../../store/adminStore"
 import { formatINR, formatDate } from "../../utils/format"
@@ -51,13 +51,13 @@ export default function AdminUsers() {
     const details = userDetails[user.userId]
     let msg = ""
     if (type === "cart" && details?.cart?.length) {
-      const items = details.cart.map(i => `${i.products?.name} (₹${i.products?.price})`).join(", ")
-      msg = encodeURIComponent(`Hi ${user.name}! 👋\n\nYou have items in your cart at NaShe Jewels:\n${items}\n\nComplete your purchase now: https://www.nashejewels.in/cart\n\n💍 NaShe Jewels`)
+      const items = details.cart.map(i => `${i.products?.name} (?${i.products?.price})`).join(", ")
+      msg = encodeURIComponent(`Hi ${user.name}! ??\n\nYou have items in your cart at NaShe Jewels:\n${items}\n\nComplete your purchase now: https://www.nashejewels.in/cart\n\n?? NaShe Jewels`)
     } else if (type === "wishlist" && details?.wishlist?.length) {
-      const items = details.wishlist.map(i => `${i.products?.name} (₹${i.products?.price})`).join(", ")
-      msg = encodeURIComponent(`Hi ${user.name}! 💕\n\nYour wishlist at NaShe Jewels:\n${items}\n\nShop now before they sell out: https://www.nashejewels.in/wishlist\n\n💍 NaShe Jewels`)
+      const items = details.wishlist.map(i => `${i.products?.name} (?${i.products?.price})`).join(", ")
+      msg = encodeURIComponent(`Hi ${user.name}! ??\n\nYour wishlist at NaShe Jewels:\n${items}\n\nShop now before they sell out: https://www.nashejewels.in/wishlist\n\n?? NaShe Jewels`)
     } else {
-      msg = encodeURIComponent(`Hi ${user.name}! 👋\n\nCheck out our latest jewelry collection at NaShe Jewels!\nhttps://www.nashejewels.in\n\n💍 NaShe Jewels`)
+      msg = encodeURIComponent(`Hi ${user.name}! ??\n\nCheck out our latest jewelry collection at NaShe Jewels!\nhttps://www.nashejewels.in\n\n?? NaShe Jewels`)
     }
     if (phone) window.open(`https://wa.me/91${phone}?text=${msg}`, "_blank")
     else window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(`Customer ${user.name} has no phone on file`)}`, "_blank")
@@ -75,15 +75,15 @@ export default function AdminUsers() {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5"><Users size={18} className="text-[#D4AF37] mb-3" /><p className="text-2xl font-bold text-white">{users.length}</p><p className="text-gray-500 text-xs mt-1">Total Customers</p></div>
-        <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5"><DollarSign size={18} className="text-green-400 mb-3" /><p className="text-2xl font-bold text-white">{formatINR(totalRevenue)}</p><p className="text-gray-500 text-xs mt-1">Total Revenue</p></div>
-        <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5"><ShoppingBag size={18} className="text-blue-400 mb-3" /><p className="text-2xl font-bold text-white">{formatINR(avgOrderValue)}</p><p className="text-gray-500 text-xs mt-1">Avg Order Value</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><Users size={18} className="text-[#D4AF37] mb-3" /><p className="text-2xl font-bold text-white">{users.length}</p><p className="text-gray-500 text-xs mt-1">Total Customers</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><DollarSign size={18} className="text-green-400 mb-3" /><p className="text-2xl font-bold text-white">{formatINR(totalRevenue)}</p><p className="text-gray-500 text-xs mt-1">Total Revenue</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><ShoppingBag size={18} className="text-blue-400 mb-3" /><p className="text-2xl font-bold text-white">{formatINR(avgOrderValue)}</p><p className="text-gray-500 text-xs mt-1">Avg Order Value</p></div>
       </div>
 
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name or user ID..."
-          className="w-full bg-[#111] border border-[#D4AF37]/20 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
       </div>
 
       <div className="space-y-3">
@@ -94,16 +94,16 @@ export default function AdminUsers() {
           const details = userDetails[u.userId]
           const isExpanded = expanded === u.userId
           return (
-            <div key={u.userId} className="bg-[#111] border border-[#D4AF37]/10 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/2 transition-colors"
+            <div key={u.userId} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={() => loadUserDetails(u.userId)}>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-[#D4AF37]/15 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-[#D4AF37] text-sm font-bold">{u.name[0]?.toUpperCase()}</span>
                   </div>
                   <div>
-                    <p className="text-white text-sm font-medium">{u.name}</p>
-                    <p className="text-gray-500 text-xs">{u.orders} orders · {formatINR(u.totalSpent)}</p>
+                    <p className="text-[#1A1A2E] text-sm font-medium">{u.name}</p>
+                    <p className="text-gray-500 text-xs">{u.orders} orders � {formatINR(u.totalSpent)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -116,7 +116,7 @@ export default function AdminUsers() {
               </div>
 
               {isExpanded && details && (
-                <div className="border-t border-[#D4AF37]/10 p-4 space-y-4">
+                <div className="border-t border-gray-200 p-4 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Cart */}
                     <div>
@@ -129,13 +129,13 @@ export default function AdminUsers() {
                           </button>
                         )}
                       </div>
-                      {details.cart.length === 0 ? <p className="text-gray-600 text-xs">Cart is empty</p>
+                      {details.cart.length === 0 ? <p className="text-gray-400 text-xs">Cart is empty</p>
                       : details.cart.map(item => (
-                        <div key={item.id} className="flex items-center gap-2 bg-[#1A1A1A] rounded-lg p-2 mb-1">
+                        <div key={item.id} className="flex items-center gap-2 bg-gray-50 rounded-lg p-2 mb-1">
                           {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-8 h-8 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
                           <div className="flex-1 min-w-0">
-                            <p className="text-white text-xs truncate">{item.products?.name}</p>
-                            <p className="text-gray-500 text-xs">Qty: {item.quantity} · {formatINR(item.products?.price)}</p>
+                            <p className="text-[#1A1A2E] text-xs truncate">{item.products?.name}</p>
+                            <p className="text-gray-500 text-xs">Qty: {item.quantity} � {formatINR(item.products?.price)}</p>
                           </div>
                         </div>
                       ))}
@@ -152,12 +152,12 @@ export default function AdminUsers() {
                           </button>
                         )}
                       </div>
-                      {details.wishlist.length === 0 ? <p className="text-gray-600 text-xs">Wishlist is empty</p>
+                      {details.wishlist.length === 0 ? <p className="text-gray-400 text-xs">Wishlist is empty</p>
                       : details.wishlist.map(item => (
-                        <div key={item.id} className="flex items-center gap-2 bg-[#1A1A1A] rounded-lg p-2 mb-1">
+                        <div key={item.id} className="flex items-center gap-2 bg-gray-50 rounded-lg p-2 mb-1">
                           {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-8 h-8 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
                           <div className="flex-1 min-w-0">
-                            <p className="text-white text-xs truncate">{item.products?.name}</p>
+                            <p className="text-[#1A1A2E] text-xs truncate">{item.products?.name}</p>
                             <p className="text-gray-500 text-xs">{formatINR(item.products?.price)}</p>
                           </div>
                         </div>

@@ -11,7 +11,7 @@ import { formatINR } from '../../utils/format'
 const COLORS = ['#D4AF37', '#F0D060', '#B8960C', '#8B6914', '#E8C84A', '#C9A227', '#FFD700', '#DAA520']
 
 const TooltipStyle = {
-  contentStyle: { background: '#1A1A1A', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 8, fontSize: 11 },
+  contentStyle: { background: '#fff', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 8, fontSize: 11 },
   labelStyle: { color: '#999' },
 }
 
@@ -65,7 +65,7 @@ export default function AdminAnalytics() {
           { icon: TrendingUp, label: 'Avg Order Value', value: formatINR(stats.totalOrders ? Math.round(stats.totalRevenue / stats.paidOrders || 0) : 0), color: 'text-green-400' },
           { icon: MapPin, label: 'Cities Reached', value: stats.cityData?.length || 0, color: 'text-purple-400' },
         ].map((k, i) => (
-          <div key={i} className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5">
+          <div key={i} className="bg-white border border-gray-200 rounded-xl p-5">
             <k.icon size={18} className={`${k.color} mb-3`} />
             <p className="text-2xl font-bold text-white">{k.value}</p>
             <p className="text-gray-500 text-xs mt-1">{k.label}</p>
@@ -74,7 +74,7 @@ export default function AdminAnalytics() {
       </div>
 
       {/* Revenue Area Chart */}
-      <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5">
+      <div className="bg-white border border-gray-200 rounded-xl p-5">
         <h3 className="text-white font-medium mb-4">Revenue Trend (Last 14 Days)</h3>
         <ResponsiveContainer width="100%" height={260}>
           <AreaChart data={stats.last14Days}>
@@ -84,7 +84,7 @@ export default function AdminAnalytics() {
                 <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 10 }} />
             <YAxis tick={{ fill: '#666', fontSize: 10 }} tickFormatter={v => `₹${(v / 1000).toFixed(0)}k`} />
             <Tooltip {...TooltipStyle} formatter={(v, n) => [n === 'revenue' ? formatINR(v) : v, n]} />
@@ -96,11 +96,11 @@ export default function AdminAnalytics() {
       {/* Two charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Weekly Orders */}
-        <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
           <h3 className="text-white font-medium mb-4">Weekly Orders</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={weeklyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="week" tick={{ fill: '#666', fontSize: 11 }} />
               <YAxis tick={{ fill: '#666', fontSize: 11 }} />
               <Tooltip {...TooltipStyle} />
@@ -110,7 +110,7 @@ export default function AdminAnalytics() {
         </div>
 
         {/* Category Revenue Pie */}
-        <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5">
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
           <h3 className="text-white font-medium mb-4">Revenue by Category</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
@@ -124,14 +124,14 @@ export default function AdminAnalytics() {
       </div>
 
       {/* Location Analytics */}
-      <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5">
+      <div className="bg-white border border-gray-200 rounded-xl p-5">
         <h3 className="text-white font-medium mb-4 flex items-center gap-2">
           <MapPin size={16} className="text-[#D4AF37]" /> Location Analytics – Top Cities
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={stats.cityData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis type="number" tick={{ fill: '#666', fontSize: 10 }} />
               <YAxis dataKey="city" type="category" tick={{ fill: '#999', fontSize: 11 }} width={80} />
               <Tooltip {...TooltipStyle} />
@@ -145,10 +145,10 @@ export default function AdminAnalytics() {
                 <span className="text-[#D4AF37] text-xs w-5 font-bold">{i + 1}</span>
                 <div className="flex-1">
                   <div className="flex justify-between mb-1">
-                    <span className="text-white text-xs">{c.city}</span>
-                    <span className="text-gray-400 text-xs">{c.count} orders</span>
+                    <span className="text-[#1A1A2E] text-xs">{c.city}</span>
+                    <span className="text-gray-500 text-xs">{c.count} orders</span>
                   </div>
-                  <div className="h-1.5 bg-[#1A1A1A] rounded-full">
+                  <div className="h-1.5 bg-gray-50 rounded-full">
                     <div
                       className="h-full rounded-full"
                       style={{
@@ -165,11 +165,11 @@ export default function AdminAnalytics() {
       </div>
 
       {/* Top Products Bar */}
-      <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl p-5">
+      <div className="bg-white border border-gray-200 rounded-xl p-5">
         <h3 className="text-white font-medium mb-4">Best Selling Products</h3>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={stats.topProducts}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="name" tick={{ fill: '#666', fontSize: 9 }} />
             <YAxis tick={{ fill: '#666', fontSize: 10 }} />
             <Tooltip {...TooltipStyle} />
