@@ -1,21 +1,61 @@
 ﻿import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react'
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Heart } from 'lucide-react'
 import { useCartStore } from '../store/cartStore'
 import { useAuthStore } from '../store/authStore'
+import { useWishlistStore } from '../store/wishlistStore'
 import { formatINR } from '../utils/format'
 import toast from 'react-hot-toast'
+import { useEffect } from 'react'
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, getTotal } = useCartStore()
   const { user } = useAuthStore()
+  const { toggleWishlist } = useWishlistStore()
   const navigate = useNavigate()
   const total = getTotal()
   const hasOutOfStock = items.some(i => i.products?.stock === 0)
 
+  // Cart abandonment reminder after 3 minutes of inactivity
+  useEffect(() => {
+    if (items.length === 0) return
+    const timer = setTimeout(() => {
+      const phone = "918639006849"
+      const msg = encodeURIComponent("Hi! You have items waiting in your cart at NaShe Jewels 💍 Complete your order before they sell out!")
+      toast(
+        (t) => (
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">Still thinking? 💍</p>
+            <p className="text-xs text-gray-400">Your cart items might sell out soon!</p>
+            <div className="flex gap-2 mt-1">
+              <a href={`https://wa.me/${phone}?text=${msg}`} target="_blank" rel="noopener noreferrer"
+                className="px-3 py-1.5 bg-[#25D366] text-white text-xs rounded-lg font-medium">
+                Chat with us
+              </a>
+              <button onClick={() => toast.dismiss(t.id)} className="px-3 py-1.5 bg-gray-700 text-white text-xs rounded-lg">
+                Dismiss
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: 10000, id: 'cart-reminder' }
+      )
+    }, 3 * 60 * 1000) // 3 minutes
+    return () => clearTimeout(timer)
+  }, [items.length])
+
   const handleRemove = async (item) => {
     await removeFromCart(item.id || item.product_id, user?.id)
     toast.success('Removed from cart')
+  }
+
+  const handleSaveLater = async (item) => {
+    if (!user) { toast.error('Please login to save to wishlist'); return }
+    const product = item.products
+    if (!product) return
+    await toggleWishlist(product, user.id)
+    await removeFromCart(item.id || item.product_id, user?.id)
+    toast.success('Saved to wishlist!')
   }
 
   const handleQty = async (item, delta) => {
@@ -77,11 +117,18 @@ export default function CartPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-[#1B2B5E] font-bold text-sm">{formatINR((product.price || 0) * item.quantity)}</span>
-                        <button onClick={() => handleRemove(item)} className="text-[#8A8AAA] hover:text-red-500 transition-colors">
+                        <button onClick={() => handleSaveLater(item)} title="Save for later" className="text-[#8A8AAA] hover:text-[#C9956C] transition-colors">
+                          <Heart size={15} />
+                        </button>
+                        <button onClick={() => handleRemove(item)} title="Remove" className="text-[#8A8AAA] hover:text-red-500 transition-colors">
                           <Trash2 size={15} />
                         </button>
                       </div>
                     </div>
+                    <button onClick={() => handleSaveLater(item)}
+                      className="mt-2 text-xs text-[#C9956C] hover:text-[#1B2B5E] transition-colors flex items-center gap-1">
+                      <Heart size={11} /> Save for later
+                    </button>
                   </div>
                 </motion.div>
               )
