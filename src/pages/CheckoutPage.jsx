@@ -33,14 +33,14 @@ function NewAddressForm({ onSave, onCancel, saving }) {
     return Object.keys(e).length === 0
   }
   const handleSubmit = (e) => { e.preventDefault(); if (validate()) onSave(form) }
-  const inp = "w-full bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
-  const lbl = "text-xs text-gray-400 mb-1 block"
+  const inp = "w-full bg-white border border-[#E8E0D5] rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]"
+  const lbl = "text-xs text-[#4A4A6A] mb-1 block font-medium"
   return (
-    <form onSubmit={handleSubmit} className="border border-[#D4AF37]/20 rounded-xl p-4 bg-[#1A1A1A] space-y-3">
+    <form onSubmit={handleSubmit} className="border border-[#E8E0D5] rounded-xl p-4 bg-[#FAF8F5] space-y-3">
       <div className="flex gap-2 mb-1">
         {["Home","Work","Other"].map(l => (
           <button key={l} type="button" onClick={() => setForm(f => ({ ...f, label: l }))}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.label === l ? "bg-[#D4AF37] text-black" : "bg-[#222] text-gray-400 border border-[#D4AF37]/20"}`}>{l}</button>
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.label === l ? "bg-[#1B2B5E] text-white" : "bg-white text-[#4A4A6A] border border-[#E8E0D5]"}`}>{l}</button>
         ))}
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -57,8 +57,8 @@ function NewAddressForm({ onSave, onCancel, saving }) {
         Save as default address
       </label>
       <div className="flex gap-2">
-        <button type="button" onClick={onCancel} className="flex-1 py-2 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm">Cancel</button>
-        <button type="submit" disabled={saving} className="flex-1 py-2 bg-[#D4AF37] text-black font-semibold rounded-lg text-sm hover:bg-[#F0D060] disabled:opacity-60">Save & Use</button>
+        <button type="button" onClick={onCancel} className="flex-1 py-2 border border-[#E8E0D5] text-[#4A4A6A] rounded-lg text-sm">Cancel</button>
+        <button type="submit" disabled={saving} className="flex-1 py-2 bg-[#1B2B5E] text-white font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] disabled:opacity-60">Save & Use</button>
       </div>
     </form>
   )
@@ -240,24 +240,24 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {step === "address" && (
-            <div className="bg-[#111] border border-[#D4AF37]/20 rounded-xl p-5">
+            <div className="bg-white border border-[#E8E0D5] rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-white font-semibold flex items-center gap-2"><MapPin size={16} className="text-[#D4AF37]" /> Delivery Address</h2>
-                {!showNewForm && <button onClick={() => setShowNewForm(true)} className="flex items-center gap-1 text-xs text-[#D4AF37]"><Plus size={13} /> Add New</button>}
+                <h2 className="text-[#1A1A2E] font-semibold flex items-center gap-2"><MapPin size={16} className="text-[#C9956C]" /> Delivery Address</h2>
+                {!showNewForm && <button onClick={() => setShowNewForm(true)} className="flex items-center gap-1 text-xs text-[#1B2B5E] font-medium"><Plus size={13} /> Add New</button>}
               </div>
-              {loading ? <div className="h-20 bg-[#1A1A1A] rounded-xl animate-pulse" /> : (
+              {loading ? <div className="h-20 bg-[#F2EDE6] rounded-xl animate-pulse" /> : (
                 <div className="space-y-3">
                   {showNewForm && <NewAddressForm onSave={handleSaveNew} onCancel={() => addresses.length > 0 && setShowNewForm(false)} saving={savingAddr} />}
                   {addresses.map(addr => (
                     <div key={addr.id} onClick={() => { setSelectedId(addr.id); setShowNewForm(false) }}
-                      className={`border rounded-xl p-4 cursor-pointer transition-all ${selectedId === addr.id ? "border-[#D4AF37] bg-[#D4AF37]/5" : "border-[#D4AF37]/10 bg-[#1A1A1A] hover:border-[#D4AF37]/30"}`}>
+                      className={`border rounded-xl p-4 cursor-pointer transition-all ${selectedId === addr.id ? "border-[#1B2B5E] bg-[#1B2B5E]/5" : "border-[#E8E0D5] bg-[#FAF8F5] hover:border-[#1B2B5E]/30"}`}>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <span className="text-xs px-2 py-0.5 bg-[#D4AF37]/15 text-[#D4AF37] rounded-full">{addr.label}</span>
-                          <p className="text-white text-sm font-medium mt-1">{addr.full_name} · {addr.phone}</p>
-                          <p className="text-gray-400 text-xs">{addr.address1}, {addr.city}, {addr.state} – {addr.pincode}</p>
+                          <span className="text-xs px-2 py-0.5 bg-[#1B2B5E]/10 text-[#1B2B5E] rounded-full font-medium">{addr.label}</span>
+                          <p className="text-[#1A1A2E] text-sm font-medium mt-1">{addr.full_name} &middot; {addr.phone}</p>
+                          <p className="text-[#4A4A6A] text-xs">{addr.address1}, {addr.city}, {addr.state} &ndash; {addr.pincode}</p>
                         </div>
-                        {selectedId === addr.id && <div className="w-5 h-5 bg-[#D4AF37] rounded-full flex items-center justify-center ml-3"><Check size={12} className="text-black" /></div>}
+                        {selectedId === addr.id && <div className="w-5 h-5 bg-[#1B2B5E] rounded-full flex items-center justify-center ml-3"><Check size={12} className="text-white" /></div>}
                       </div>
                     </div>
                   ))}
@@ -265,8 +265,8 @@ export default function CheckoutPage() {
               )}
               <button onClick={() => { if (!selectedId) { toast.error("Select an address"); return } setStep("payment") }}
                 disabled={!selectedId || loading}
-                className="w-full mt-4 py-3 bg-[#D4AF37] text-black font-semibold rounded-lg hover:bg-[#F0D060] transition-all disabled:opacity-50">
-                Continue to Payment →
+                className="w-full mt-4 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all disabled:opacity-50">
+                Continue to Payment &rarr;
               </button>
             </div>
           )}
@@ -274,9 +274,9 @@ export default function CheckoutPage() {
           {step === "payment" && (
             <div className="space-y-4">
               {/* UPI Payment */}
-              <div className="bg-[#111] border border-[#D4AF37]/20 rounded-xl p-5">
-                <h2 className="text-white font-semibold mb-4 flex items-center gap-2">
-                  <Smartphone size={16} className="text-[#D4AF37]" /> Pay via UPI
+              <div className="bg-white border border-[#E8E0D5] rounded-xl p-5 shadow-sm">
+                <h2 className="text-[#1A1A2E] font-semibold mb-4 flex items-center gap-2">
+                  <Smartphone size={16} className="text-[#C9956C]" /> Pay via UPI
                 </h2>
 
                 {/* QR Code — flip card, hidden by default, tap to reveal */}
@@ -300,12 +300,12 @@ export default function CheckoutPage() {
                         }}>
                           {/* Front — blurred placeholder */}
                           <div style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
-                            className="absolute inset-0 bg-[#1A1A1A] border-2 border-[#D4AF37]/30 rounded-xl flex flex-col items-center justify-center gap-2">
+                            className="absolute inset-0 bg-[#F2EDE6] border-2 border-[#1B2B5E]/20 rounded-xl flex flex-col items-center justify-center gap-2">
                             <div className="w-16 h-16 grid grid-cols-3 gap-1 opacity-30">
                               {Array(9).fill(0).map((_, i) => <div key={i} className="bg-white rounded-sm" />)}
                             </div>
-                            <p className="text-[#D4AF37] text-xs font-semibold">Tap to reveal QR</p>
-                            <p className="text-gray-500 text-xs">₹{grandTotal.toLocaleString("en-IN")}</p>
+                            <p className="text-[#1B2B5E] text-xs font-semibold">Tap to reveal QR</p>
+                            <p className="text-[#4A4A6A] text-xs">&#8377;{grandTotal.toLocaleString("en-IN")}</p>
                           </div>
                           {/* Back — actual QR */}
                           <div style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
@@ -319,25 +319,25 @@ export default function CheckoutPage() {
                     )
                   })()}
                   <div className="flex-1 space-y-3">
-                    <div className="bg-[#1A1A1A] rounded-xl p-4">
-                      <p className="text-gray-400 text-xs mb-1">UPI ID</p>
+                    <div className="bg-[#FAF8F5] border border-[#E8E0D5] rounded-xl p-4">
+                      <p className="text-[#4A4A6A] text-xs mb-1">UPI ID</p>
                       <div className="flex items-center gap-2">
-                        <p className="text-white font-mono text-sm font-semibold">{UPI_ID}</p>
+                        <p className="text-[#1A1A2E] font-mono text-sm font-semibold">{UPI_ID}</p>
                         <button onClick={() => { navigator.clipboard.writeText(UPI_ID); toast.success("UPI ID copied!") }}
-                          className="text-[#D4AF37] hover:text-[#F0D060] transition-colors">
+                          className="text-[#C9956C] hover:text-[#1B2B5E] transition-colors">
                           <Copy size={14} />
                         </button>
                       </div>
                     </div>
-                    <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-xl p-3">
-                      <p className="text-[#D4AF37] text-xs font-semibold mb-1">Amount to Pay</p>
+                    <div className="bg-[#1B2B5E]/5 border border-[#1B2B5E]/20 rounded-xl p-3">
+                      <p className="text-[#1B2B5E] text-xs font-semibold mb-1">Amount to Pay</p>
                       {(() => {
                         const selectedAddr = addresses.find(a => a.id === selectedId)
                         const shipping = getShippingCost(selectedAddr)
-                        return <p className="text-white text-2xl font-bold">₹{(total + shipping).toLocaleString("en-IN")}</p>
+                        return <p className="text-[#1A1A2E] text-2xl font-bold">&#8377;{(total + shipping).toLocaleString("en-IN")}</p>
                       })()}
                     </div>
-                    <div className="text-xs text-gray-500 space-y-1">
+                    <div className="text-xs text-[#4A4A6A] space-y-1">
                       <p>1. Open PhonePe / GPay / Paytm</p>
                       <p>2. Scan QR or enter UPI ID</p>
                       <p>3. Pay exact amount shown above</p>
@@ -354,18 +354,18 @@ export default function CheckoutPage() {
                 {/* Screenshot upload */}
                 <div className="space-y-3">
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">UPI Transaction Reference (optional)</label>
+                    <label className="text-xs text-[#4A4A6A] mb-1 block font-medium">UPI Transaction Reference (optional)</label>
                     <input value={upiRef} onChange={e=>setUpiRef(e.target.value)} placeholder="e.g. 123456789012"
-                      className="w-full bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+                      className="w-full bg-white border border-[#E8E0D5] rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]" />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Payment Screenshot *</label>
-                    <label className="flex items-center gap-3 p-4 border-2 border-dashed border-[#D4AF37]/30 hover:border-[#D4AF37]/60 rounded-xl cursor-pointer transition-all bg-[#1A1A1A]">
+                    <label className="text-xs text-[#4A4A6A] mb-1 block font-medium">Payment Screenshot *</label>
+                    <label className="flex items-center gap-3 p-4 border-2 border-dashed border-[#E8E0D5] hover:border-[#1B2B5E]/40 rounded-xl cursor-pointer transition-all bg-[#FAF8F5]">
                       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
-                      <Upload size={20} className="text-[#D4AF37] flex-shrink-0" />
+                      <Upload size={20} className="text-[#C9956C] flex-shrink-0" />
                       <div>
-                        <p className="text-white text-sm font-medium">{screenshot ? screenshot.name : "Upload payment screenshot"}</p>
-                        <p className="text-gray-500 text-xs">JPG, PNG — max 10MB</p>
+                        <p className="text-[#1A1A2E] text-sm font-medium">{screenshot ? screenshot.name : "Upload payment screenshot"}</p>
+                        <p className="text-[#8A8AAA] text-xs">JPG, PNG &mdash; max 10MB</p>
                       </div>
                     </label>
                     {screenshotPreview && (
@@ -384,11 +384,11 @@ export default function CheckoutPage() {
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep("address")} className="px-4 py-3 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm hover:border-[#D4AF37]/50 transition-all">← Back</button>
+                <button onClick={() => setStep("address")} className="px-4 py-3 border border-[#E8E0D5] text-[#4A4A6A] rounded-lg text-sm hover:border-[#1B2B5E]/30 transition-all">&larr; Back</button>
                 <button onClick={handleSubmitOrder} disabled={submitting || !screenshot}
-                  className="flex-1 py-3 bg-[#D4AF37] text-black font-semibold rounded-lg hover:bg-[#F0D060] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                  className="flex-1 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                   {submitting && <Loader2 size={16} className="animate-spin" />}
-                  Place Order & Notify Admin
+                  Place Order &amp; Notify Admin
                 </button>
               </div>
             </div>
@@ -396,17 +396,17 @@ export default function CheckoutPage() {
         </div>
 
         {/* Order Summary */}
-        <div className="bg-[#111] border border-[#D4AF37]/20 rounded-xl p-6 h-fit sticky top-20">
-          <h2 className="text-white font-semibold mb-4">Order Summary</h2>
+        <div className="bg-white border border-[#E8E0D5] rounded-xl p-6 h-fit sticky top-20 shadow-sm">
+          <h2 className="text-[#1A1A2E] font-semibold mb-4">Order Summary</h2>
           <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
             {items.map(item => (
               <div key={item.id || item.product_id} className="flex justify-between text-sm">
-                <span className="text-gray-400 truncate mr-2">{item.products?.name} × {item.quantity}</span>
-                <span className="text-gray-300 shrink-0">{formatINR((item.products?.price || 0) * item.quantity)}</span>
+                <span className="text-[#4A4A6A] truncate mr-2">{item.products?.name} &times; {item.quantity}</span>
+                <span className="text-[#1A1A2E] shrink-0 font-medium">{formatINR((item.products?.price || 0) * item.quantity)}</span>
               </div>
             ))}
           </div>
-          <div className="border-t border-[#D4AF37]/10 pt-4 space-y-2 mb-5">
+          <div className="border-t border-[#E8E0D5] pt-4 space-y-2 mb-5">
             {(() => {
               const selectedAddr = addresses.find(a => a.id === selectedId)
               const shipping = getShippingCost(selectedAddr)
@@ -414,29 +414,29 @@ export default function CheckoutPage() {
               return (
                 <>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Subtotal</span>
-                    <span className="text-gray-300">{formatINR(total)}</span>
+                    <span className="text-[#4A4A6A]">Subtotal</span>
+                    <span className="text-[#1A1A2E] font-medium">{formatINR(total)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Shipping</span>
-                    <span className="text-yellow-400">+{formatINR(shipping)}</span>
+                    <span className="text-[#4A4A6A]">Shipping</span>
+                    <span className="text-[#C9956C] font-medium">+{formatINR(shipping)}</span>
                   </div>
                   {selectedAddr && (
-                    <p className="text-gray-600 text-xs">
+                    <p className="text-[#8A8AAA] text-xs">
                       {["andhra pradesh","telangana","ap","ts"].some(s => (selectedAddr.state||"").toLowerCase().includes(s))
                         ? "AP/Telangana rate"
                         : "Other states rate"}
                     </p>
                   )}
-                  <div className="flex justify-between font-semibold pt-1 border-t border-[#D4AF37]/10">
-                    <span className="text-white">Total</span>
-                    <span className="text-[#D4AF37] text-lg">{formatINR(grandTotal)}</span>
+                  <div className="flex justify-between font-semibold pt-1 border-t border-[#E8E0D5]">
+                    <span className="text-[#1A1A2E]">Total</span>
+                    <span className="text-[#1B2B5E] text-lg font-bold">{formatINR(grandTotal)}</span>
                   </div>
                 </>
               )
             })()}
           </div>
-          <p className="text-gray-600 text-xs text-center">🔒 UPI Payment · Secure & Safe</p>
+          <p className="text-[#8A8AAA] text-xs text-center">&#128274; UPI Payment &middot; Secure &amp; Safe</p>
         </div>
       </div>
     </div>

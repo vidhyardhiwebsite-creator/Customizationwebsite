@@ -44,14 +44,14 @@ function CancelButton({ order, onCancel }) {
       <div className="flex items-start gap-2 mb-3">
         <AlertTriangle size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
         <div>
-          <p className="text-white text-sm font-medium">Cancel this order?</p>
-          <p className="text-gray-400 text-xs mt-0.5">
+          <p className="text-[#1A1A2E] text-sm font-medium">Cancel this order?</p>
+          <p className="text-[#4A4A6A] text-xs mt-0.5">
             Your payment of {formatINR(order.total_amount)} will be refunded within 5-7 business days.
           </p>
         </div>
       </div>
       <div className="flex gap-2">
-        <button onClick={() => setConfirm(false)} className="flex-1 py-2 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-xs">
+        <button onClick={() => setConfirm(false)} className="flex-1 py-2 border border-[#E8E0D5] text-[#4A4A6A] rounded-lg text-xs">
           Keep Order
         </button>
         <button onClick={handleCancel} disabled={loading}
@@ -74,9 +74,9 @@ function DeliveryTracker({ status }) {
   const currentIdx = STATUS_STEPS.findIndex(s => s.key === status)
   const isCancelled = status === "cancelled"
   return (
-    <div className="bg-[#1A1A1A] rounded-xl p-4 mt-3">
+    <div className="bg-[#FAF8F5] border border-[#E8E0D5] rounded-xl p-4 mt-3">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-gray-400 text-xs font-medium">Delivery Status</p>
+        <p className="text-[#4A4A6A] text-xs font-medium">Delivery Status</p>
         {isCancelled && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">Cancelled</span>
         )}
@@ -89,17 +89,17 @@ function DeliveryTracker({ status }) {
           return (
             <div key={step.key} className="flex-1 flex flex-col items-center">
               <div className="flex items-center w-full">
-                <div className={`w-full h-0.5 ${idx === 0 ? "opacity-0" : done ? "bg-[#D4AF37]" : "bg-[#333]"}`} />
+                <div className={`w-full h-0.5 ${idx === 0 ? "opacity-0" : done ? "bg-[#1B2B5E]" : "bg-[#E8E0D5]"}`} />
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all ${
-                  active ? "border-[#D4AF37] bg-[#D4AF37]/20" :
-                  done ? "border-green-500 bg-green-500/20" :
-                  "border-[#333] bg-[#222]"
+                  active ? "border-[#1B2B5E] bg-[#1B2B5E]/10" :
+                  done ? "border-green-500 bg-green-50" :
+                  "border-[#E8E0D5] bg-white"
                 }`}>
-                  <Icon size={14} className={active ? "text-[#D4AF37]" : done ? "text-green-400" : "text-gray-600"} />
+                  <Icon size={14} className={active ? "text-[#1B2B5E]" : done ? "text-green-500" : "text-[#8A8AAA]"} />
                 </div>
-                <div className={`w-full h-0.5 ${idx === STATUS_STEPS.length - 1 ? "opacity-0" : done && idx < currentIdx ? "bg-[#D4AF37]" : "bg-[#333]"}`} />
+                <div className={`w-full h-0.5 ${idx === STATUS_STEPS.length - 1 ? "opacity-0" : done && idx < currentIdx ? "bg-[#1B2B5E]" : "bg-[#E8E0D5]"}`} />
               </div>
-              <p className={`text-xs mt-1.5 text-center ${active ? "text-[#D4AF37] font-medium" : done ? "text-green-400" : "text-gray-600"}`}>
+              <p className={`text-xs mt-1.5 text-center ${active ? "text-[#1B2B5E] font-medium" : done ? "text-green-600" : "text-[#8A8AAA]"}`}>
                 {step.label}
               </p>
             </div>
@@ -176,9 +176,9 @@ export default function OrdersPage() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-4">
         {[1,2,3].map(i => (
-          <div key={i} className="bg-[#111] rounded-xl p-6 animate-pulse">
-            <div className="h-4 bg-[#1A1A1A] rounded w-1/3 mb-3" />
-            <div className="h-3 bg-[#1A1A1A] rounded w-1/2" />
+          <div key={i} className="bg-white border border-[#E8E0D5] rounded-xl p-6 animate-pulse shadow-sm">
+            <div className="h-4 bg-[#F2EDE6] rounded w-1/3 mb-3" />
+            <div className="h-3 bg-[#F2EDE6] rounded w-1/2" />
           </div>
         ))}
       </div>
@@ -206,10 +206,10 @@ export default function OrdersPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search by order ID (e.g. NS0-001)..."
-          className="w-full bg-[#111] border border-[#D4AF37]/20 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
+          className="w-full bg-white border border-[#E8E0D5] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]"
         />
         {search && (
-          <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white text-xs">✕</button>
+          <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A8AAA] hover:text-[#1A1A2E] text-xs">&#10005;</button>
         )}
       </div>
 
@@ -226,28 +226,28 @@ export default function OrdersPage() {
           const StatusIcon = statusInfo.icon
           return (
             <motion.div key={order.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className="bg-[#111] border border-[#D4AF37]/10 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#1A1A1A] transition-colors"
+              className="bg-white border border-[#E8E0D5] rounded-xl overflow-hidden shadow-sm">
+              <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#FAF8F5] transition-colors"
                 onClick={() => setExpanded(expanded === order.id ? null : order.id)}>
                 <div>
-                  <p className="text-white font-medium text-sm">{order.display_order_id || `Order #${order.id?.slice(-8)?.toUpperCase()}`}</p>
-                  <p className="text-gray-500 text-xs mt-1">{formatDate(order.created_at)}</p>
+                  <p className="text-[#1A1A2E] font-medium text-sm">{order.display_order_id || `Order #${order.id?.slice(-8)?.toUpperCase()}`}</p>
+                  <p className="text-[#8A8AAA] text-xs mt-1">{formatDate(order.created_at)}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <p className="text-[#D4AF37] font-semibold">{formatINR(order.total_amount)}</p>
+                    <p className="text-[#1B2B5E] font-semibold">{formatINR(order.total_amount)}</p>
                     <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 mt-1 ${statusInfo.color}`}>
                       <StatusIcon size={10} /> {statusInfo.label}
                     </span>
                   </div>
-                  {expanded === order.id ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
+                  {expanded === order.id ? <ChevronUp size={16} className="text-[#8A8AAA]" /> : <ChevronDown size={16} className="text-[#8A8AAA]" />}
                 </div>
               </div>
 
               <AnimatePresence>
                 {expanded === order.id && (
                   <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
-                    <div className="border-t border-[#D4AF37]/10 p-5 space-y-4">
+                    <div className="border-t border-[#E8E0D5] p-5 space-y-4 bg-[#FAF8F5]">
       {/* Delivery Tracker */}
                       {order.payment_status === "paid" && (
                         <DeliveryTracker status={order.order_status || "confirmed"} />
@@ -255,18 +255,18 @@ export default function OrdersPage() {
 
                       {/* Tracking info — shown when shipped */}
                       {order.order_status === "shipping" && (order.tracking_id || order.tracking_image_url) && (
-                        <div className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-4 space-y-2">
-                          <p className="text-yellow-400 text-xs font-semibold flex items-center gap-1">
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 space-y-2">
+                          <p className="text-yellow-700 text-xs font-semibold flex items-center gap-1">
                             <Truck size={12} /> Shipment Tracking
                           </p>
                           {order.tracking_id && (
                             <div className="flex items-center gap-2">
-                              <p className="text-gray-400 text-xs">Tracking ID:</p>
-                              <p className="text-white text-xs font-mono font-semibold">{order.tracking_id}</p>
+                              <p className="text-[#4A4A6A] text-xs">Tracking ID:</p>
+                              <p className="text-[#1A1A2E] text-xs font-mono font-semibold">{order.tracking_id}</p>
                             </div>
                           )}
                           {order.tracking_image_url && (
-                            <img src={order.tracking_image_url} alt="Tracking" className="w-full max-h-48 object-contain rounded-lg border border-[#333]" />
+                            <img src={order.tracking_image_url} alt="Tracking" className="w-full max-h-48 object-contain rounded-lg border border-yellow-200" />
                           )}
                         </div>
                       )}
@@ -289,29 +289,27 @@ export default function OrdersPage() {
                         </div>
                       )}
 
-                      {/* Items */}
                       <div className="space-y-3">
                         {order.order_items?.map(item => (
                           <div key={item.id} className="flex items-center gap-3">
                             {item.products?.images?.[0] && (
-                              <img src={item.products.images[0]} alt={item.products?.name} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" onError={e => { if(e.target.src !== "https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80") e.target.src="https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80" }} />
+                              <img src={item.products.images[0]} alt={item.products?.name} className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-[#E8E0D5]" onError={e => { if(e.target.src !== "https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80") e.target.src="https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80" }} />
                             )}
                             <div className="flex-1">
-                              <p className="text-white text-sm">{item.products?.name || "Product"}</p>
-                              <p className="text-gray-500 text-xs">Qty: {item.quantity} × {formatINR(item.price)}</p>
+                              <p className="text-[#1A1A2E] text-sm">{item.products?.name || "Product"}</p>
+                              <p className="text-[#8A8AAA] text-xs">Qty: {item.quantity} &times; {formatINR(item.price)}</p>
                             </div>
-                            <p className="text-gray-300 text-sm">{formatINR(item.quantity * item.price)}</p>
+                            <p className="text-[#1B2B5E] text-sm font-medium">{formatINR(item.quantity * item.price)}</p>
                           </div>
                         ))}
                       </div>
 
-                      {/* Address */}
                       {addr.full_name && (
-                        <div className="bg-[#1A1A1A] rounded-lg p-3 text-xs text-gray-400">
-                          <p className="text-gray-300 font-medium mb-1">Delivery Address</p>
-                          <p>{addr.full_name}, {addr.phone}</p>
-                          <p>{addr.address1}{addr.address2 ? `, ${addr.address2}` : ""}</p>
-                          <p>{addr.city}, {addr.state} – {addr.pincode}</p>
+                        <div className="bg-white border border-[#E8E0D5] rounded-lg p-3 text-xs">
+                          <p className="text-[#4A4A6A] font-medium mb-1">Delivery Address</p>
+                          <p className="text-[#1A1A2E]">{addr.full_name}, {addr.phone}</p>
+                          <p className="text-[#4A4A6A]">{addr.address1}{addr.address2 ? `, ${addr.address2}` : ""}</p>
+                          <p className="text-[#4A4A6A]">{addr.city}, {addr.state} &ndash; {addr.pincode}</p>
                         </div>
                       )}
                     </div>
