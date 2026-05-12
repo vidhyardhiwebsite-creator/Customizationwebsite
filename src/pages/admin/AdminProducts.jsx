@@ -55,7 +55,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-[#D4AF37]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-gray-50"
+          className="border-2 border-dashed border-[#1B2B5E]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-gray-50"
         >
           <input
             ref={inputRef}
@@ -66,13 +66,13 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
             onChange={e => handleFiles(e.target.files)}
           />
           {uploading ? (
-            <div className="flex items-center justify-center gap-2 text-[#D4AF37]">
+            <div className="flex items-center justify-center gap-2 text-[#1B2B5E]">
               <Loader2 size={20} className="animate-spin" />
               <span className="text-sm">Uploading...</span>
             </div>
           ) : (
             <>
-              <ImagePlus size={28} className="text-[#D4AF37]/50 mx-auto mb-2" />
+              <ImagePlus size={28} className="text-[#1B2B5E]/50 mx-auto mb-2" />
               <p className="text-gray-400 text-sm">Drop images here or click to browse</p>
               <p className="text-gray-600 text-xs mt-1">JPG, PNG, WEBP - max 5MB each</p>
             </>
@@ -93,7 +93,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
               >
                 <X size={10} />
               </button>
-              {i === 0 && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-black/60 text-[#D4AF37] rounded-b-lg py-0.5">Main</span>}
+              {i === 0 && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-black/60 text-[#1B2B5E] rounded-b-lg py-0.5">Main</span>}
             </div>
           ))}
         </div>
@@ -217,7 +217,7 @@ export default function AdminProducts() {
           <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Products</h1>
           <p className="text-gray-500 text-sm mt-1">{products.length} total products</p>
         </div>
-        <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-black font-semibold rounded-lg hover:bg-[#F0D060] transition-all text-sm">
+        <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-black font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
           <Plus size={16} /> Add Product
         </button>
       </div>
@@ -225,7 +225,7 @@ export default function AdminProducts() {
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..."
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
@@ -250,13 +250,13 @@ export default function AdminProducts() {
                       />
                       <div>
                         <p className="text-[#1A1A2E] text-xs font-medium">{p.name}</p>
-                        {p.custom_id && <p className="text-[#D4AF37] text-xs font-mono">{p.custom_id}</p>}
+                        {p.custom_id && <p className="text-[#1B2B5E] text-xs font-mono">{p.custom_id}</p>}
                         <p className="text-gray-400 text-xs">{p.size}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-gray-500 text-xs">{p.category}</td>
-                  <td className="px-4 py-3 text-[#D4AF37] text-xs font-medium">{formatINR(p.price)}</td>
+                  <td className="px-4 py-3 text-[#1B2B5E] text-xs font-medium">{formatINR(p.price)}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium ${p.stock < 10 ? "text-red-400" : p.stock < 20 ? "text-yellow-400" : "text-green-400"}`}>
                       {p.stock < 10 && <AlertTriangle size={11} className="inline mr-1" />}{p.stock}
@@ -265,13 +265,13 @@ export default function AdminProducts() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
                       {(p.tags || []).slice(0,2).map(t => (
-                        <span key={t} className="text-xs px-1.5 py-0.5 bg-[#D4AF37]/10 text-[#D4AF37] rounded">{t}</span>
+                        <span key={t} className="text-xs px-1.5 py-0.5 bg-[#1B2B5E]/10 text-[#1B2B5E] rounded">{t}</span>
                       ))}
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <button onClick={() => openEdit(p)} className="text-gray-400 hover:text-[#D4AF37] transition-colors p-1"><Edit2 size={14} /></button>
+                      <button onClick={() => openEdit(p)} className="text-gray-400 hover:text-[#1B2B5E] transition-colors p-1"><Edit2 size={14} /></button>
                       <button onClick={() => setDeleteConfirm(p.id)} className="text-gray-400 hover:text-red-400 transition-colors p-1"><Trash2 size={14} /></button>
                     </div>
                   </td>
@@ -299,7 +299,7 @@ export default function AdminProducts() {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400 mb-1 block">Product ID <span className="text-gray-600">(e.g. NS0.1, NS1.5)</span></label>
                     <input value={form.custom_id||""} onChange={e => setForm(f => ({ ...f, custom_id: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
                       placeholder="e.g. NS0.1" />
                     <p className="text-gray-600 text-xs mt-0.5">Leave empty to auto-generate</p>
                   </div>
@@ -307,28 +307,28 @@ export default function AdminProducts() {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400 mb-1 block">Product Name *</label>
                     <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
                       placeholder="e.g. Kundan Jhumka Earrings" />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Price (?) *</label>
                     <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
                       placeholder="2499" />
                     {errors.price && <p className="text-red-400 text-xs mt-1">{errors.price}</p>}
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Stock *</label>
                     <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
                       placeholder="15" />
                     {errors.stock && <p className="text-red-400 text-xs mt-1">{errors.stock}</p>}
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]">
+                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
                       {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
@@ -339,7 +339,7 @@ export default function AdminProducts() {
                         value={form.size}
                         onChange={e => setForm(f => ({ ...f, size: e.target.value }))}
                         placeholder="e.g. 2.4, 2.6, 2.8, Free Size"
-                        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
+                        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
                       />
                       <p className="text-gray-600 text-xs mt-0.5">Comma-separated. Remove a size to mark it out of stock.</p>
                     </div>
@@ -347,7 +347,7 @@ export default function AdminProducts() {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400 mb-1 block">Description</label>
                     <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                      rows={3} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37] resize-none"
+                      rows={3} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E] resize-none"
                       placeholder="Product description..." />
                   </div>
                   <div className="col-span-2">
@@ -355,7 +355,7 @@ export default function AdminProducts() {
                     <div className="flex flex-wrap gap-2">
                       {TAGS.map(tag => (
                         <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#D4AF37] text-black" : "bg-gray-50 text-gray-400 border border-gray-200 hover:border-[#D4AF37]/50"}`}>
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#1B2B5E] text-black" : "bg-gray-50 text-gray-400 border border-gray-200 hover:border-[#1B2B5E]/50"}`}>
                           {tag}
                         </button>
                       ))}
@@ -371,11 +371,11 @@ export default function AdminProducts() {
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button onClick={() => !uploading && setModalOpen(false)}
-                    className="flex-1 py-2.5 border border-gray-200 text-gray-400 rounded-lg text-sm hover:border-[#D4AF37]/50 transition-all">
+                    className="flex-1 py-2.5 border border-gray-200 text-gray-400 rounded-lg text-sm hover:border-[#1B2B5E]/50 transition-all">
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving || uploading}
-                    className="flex-1 py-2.5 bg-[#D4AF37] text-black font-semibold rounded-lg text-sm hover:bg-[#F0D060] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+                    className="flex-1 py-2.5 bg-[#1B2B5E] text-black font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
                     {(saving || uploading) && <Loader2 size={14} className="animate-spin" />}
                     {editProduct ? "Update Product" : "Add Product"}
                   </button>

@@ -168,7 +168,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
           <p className="text-gray-500 text-xs mt-0.5">{addr.full_name || "Customer"} &middot; {formatDate(order.created_at)}</p>
         </div>
         <div className="flex items-center gap-2 ml-2">
-          <span className="text-[#D4AF37] text-xs font-semibold">{formatINR(order.total_amount)}</span>
+          <span className="text-[#1B2B5E] text-xs font-semibold">{formatINR(order.total_amount)}</span>
           <span className={`text-xs px-1.5 py-0.5 rounded-full ${badge.color}`}>{badge.label}</span>
           {expanded ? <ChevronUp size={13} className="text-gray-400" /> : <ChevronDown size={13} className="text-gray-400" />}
         </div>
@@ -218,7 +218,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                         const cur = ["confirmed","shipping","delivered"].indexOf(order.order_status || "confirmed")
                         const done = i < cur; const active = i === cur
                         return (
-                          <span key={s} className={`text-xs px-2 py-0.5 rounded border ${active?"bg-[#D4AF37]/15 border-[#D4AF37]/50 text-[#D4AF37]":done?"bg-green-500/10 border-green-500/30 text-green-400":"bg-gray-100 border-gray-200 text-gray-500"}`}>
+                          <span key={s} className={`text-xs px-2 py-0.5 rounded border ${active?"bg-[#1B2B5E]/15 border-[#1B2B5E]/50 text-[#1B2B5E]":done?"bg-green-500/10 border-green-500/30 text-green-400":"bg-gray-100 border-gray-200 text-gray-500"}`}>
                             {s.charAt(0).toUpperCase() + s.slice(1)}
                           </span>
                         )
@@ -241,7 +241,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                     <div className="flex-1 min-w-0">
                       <p className="text-[#1A1A2E] text-xs truncate">{item.products?.name}</p>
                       {item.products?.custom_id && (
-                        <p className="text-[#D4AF37] text-xs font-mono">Product ID: {item.products.custom_id}</p>
+                        <p className="text-[#1B2B5E] text-xs font-mono">Product ID: {item.products.custom_id}</p>
                       )}
                       <p className="text-gray-500 text-xs">x{item.quantity} &middot; {formatINR(item.price)}</p>
                     </div>
@@ -338,7 +338,7 @@ export default function AdminOrders() {
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by order ID (e.g. NS0-001), name, phone..."
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
       </div>
 
       {/* Search results - flat list */}
@@ -401,9 +401,9 @@ export default function AdminOrders() {
           {otherOrders.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
-                <div className="w-3 h-3 rounded-full bg-[#D4AF37]" />
+                <div className="w-3 h-3 rounded-full bg-[#1B2B5E]" />
                 <h2 className="text-[#1B2B5E] font-semibold">Other Orders</h2>
-                <span className="text-xs bg-[#D4AF37]/20 text-[#D4AF37] px-2 py-0.5 rounded-full">{otherOrders.length}</span>
+                <span className="text-xs bg-[#1B2B5E]/20 text-[#1B2B5E] px-2 py-0.5 rounded-full">{otherOrders.length}</span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {otherOrders.map(order => (

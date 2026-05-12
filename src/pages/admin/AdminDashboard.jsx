@@ -67,7 +67,7 @@ function HeroVideoManager() {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
       <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-        <Video size={16} className="text-[#D4AF37]" /> Hero Video
+        <Video size={16} className="text-[#1B2B5E]" /> Hero Video
       </h3>
       {currentUrl && (
         <video src={currentUrl} className="w-full h-32 object-cover rounded-lg mb-4 bg-gray-50" muted />
@@ -76,11 +76,11 @@ function HeroVideoManager() {
         {/* Upload from device */}
         <div>
           <label className="text-xs text-gray-400 mb-1 block">Upload from device (max 50MB)</label>
-          <label className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#D4AF37]/30 rounded-lg cursor-pointer hover:border-[#D4AF37]/60 transition-all">
+          <label className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#1B2B5E]/30 rounded-lg cursor-pointer hover:border-[#D4AF37]/60 transition-all">
             <input type="file" accept="video/*" className="hidden" onChange={handleFileUpload} disabled={uploading} />
             {uploading
-              ? <><Loader2 size={15} className="text-[#D4AF37] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
-              : <><Upload size={15} className="text-[#D4AF37]" /><span className="text-gray-400 text-sm">Choose video file</span></>
+              ? <><Loader2 size={15} className="text-[#1B2B5E] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
+              : <><Upload size={15} className="text-[#1B2B5E]" /><span className="text-gray-400 text-sm">Choose video file</span></>
             }
           </label>
         </div>
@@ -92,10 +92,10 @@ function HeroVideoManager() {
               value={manualUrl}
               onChange={e => setManualUrl(e.target.value)}
               placeholder="https://..."
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]"
             />
             <button onClick={handleSaveUrl} disabled={saving || !manualUrl.trim()}
-              className="px-4 py-2 bg-[#D4AF37] text-black text-sm font-medium rounded-lg hover:bg-[#F0D060] disabled:opacity-60 flex items-center gap-1">
+              className="px-4 py-2 bg-[#1B2B5E] text-black text-sm font-medium rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 flex items-center gap-1">
               {saving && <Loader2 size={13} className="animate-spin" />}
               Save
             </button>
@@ -113,8 +113,8 @@ const StatCard = ({ icon: Icon, label, value, sub, color = 'gold' }) => (
     className="bg-white border border-gray-200 rounded-xl p-5"
   >
     <div className="flex items-start justify-between mb-3">
-      <div className={`p-2 rounded-lg ${color === 'gold' ? 'bg-[#D4AF37]/15' : color === 'green' ? 'bg-green-500/15' : color === 'red' ? 'bg-red-500/15' : 'bg-blue-500/15'}`}>
-        <Icon size={18} className={color === 'gold' ? 'text-[#D4AF37]' : color === 'green' ? 'text-green-400' : color === 'red' ? 'text-red-400' : 'text-blue-400'} />
+      <div className={`p-2 rounded-lg ${color === 'gold' ? 'bg-[#1B2B5E]/15' : color === 'green' ? 'bg-green-500/15' : color === 'red' ? 'bg-red-500/15' : 'bg-blue-500/15'}`}>
+        <Icon size={18} className={color === 'gold' ? 'text-[#1B2B5E]' : color === 'green' ? 'text-green-400' : color === 'red' ? 'text-red-400' : 'text-blue-400'} />
       </div>
     </div>
     <p className="text-2xl font-bold text-[#1B2B5E] mb-1">{value}</p>
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
   if (!stats) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#1B2B5E] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
         {/* Orders + Revenue Line Chart */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
           <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-            <TrendingUp size={16} className="text-[#D4AF37]" /> Orders (Last 14 Days)
+            <TrendingUp size={16} className="text-[#1B2B5E]" /> Orders (Last 14 Days)
           </h3>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={stats.last14Days}>
@@ -246,12 +246,12 @@ export default function AdminDashboard() {
           <div className="space-y-2">
             {stats.topProducts.slice(0, 6).map((p, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-[#D4AF37] text-xs w-4">{i + 1}</span>
+                <span className="text-[#1B2B5E] text-xs w-4">{i + 1}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-gray-600 text-xs truncate">{p.name}</p>
                   <div className="h-1.5 bg-gray-50 rounded-full mt-1">
                     <div
-                      className="h-full bg-[#D4AF37] rounded-full"
+                      className="h-full bg-[#1B2B5E] rounded-full"
                       style={{ width: `${(p.qty / stats.topProducts[0].qty) * 100}%` }}
                     />
                   </div>
@@ -302,7 +302,7 @@ export default function AdminDashboard() {
                 <tr key={o.id} className="hover:bg-gray-50">
                   <td className="py-3 text-gray-400 text-xs font-mono">#{String(o.id).slice(-8).toUpperCase()}</td>
                   <td className="py-3 text-gray-600 text-xs">{o.users?.email || 'Guest'}</td>
-                  <td className="py-3 text-[#D4AF37] text-xs font-medium">{formatINR(o.total_amount)}</td>
+                  <td className="py-3 text-[#1B2B5E] text-xs font-medium">{formatINR(o.total_amount)}</td>
                   <td className="py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       o.payment_status === 'paid' ? 'bg-green-500/20 text-green-400' :
@@ -364,7 +364,7 @@ function OfferBannerManager() {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
       <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-        <span className="text-[#D4AF37]">??</span> Offer Banner
+        <span className="text-[#1B2B5E]">??</span> Offer Banner
         <span className="text-xs text-gray-500 font-normal ml-1">- scrolling banner below navbar</span>
       </h3>
 
@@ -384,13 +384,13 @@ function OfferBannerManager() {
       <div className="space-y-2">
         <input value={newText} onChange={e => setNewText(e.target.value)}
           placeholder="Offer text e.g. ?? Free Shipping on all orders!"
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
         <div className="flex gap-2">
           <input value={newLink} onChange={e => setNewLink(e.target.value)}
             placeholder="Link e.g. /products"
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
+            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
           <button onClick={addOffer} disabled={saving || !newText.trim()}
-            className="px-4 py-2 bg-[#D4AF37] text-black text-sm font-semibold rounded-lg hover:bg-[#F0D060] disabled:opacity-60 transition-all">
+            className="px-4 py-2 bg-[#1B2B5E] text-black text-sm font-semibold rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 transition-all">
             {saving ? '...' : '+ Add'}
           </button>
         </div>

@@ -82,7 +82,7 @@ function ProductSelector({ form, setForm }) {
         const id = e.target.value
         setForm(f => ({ ...f, productId: id, link: id ? `/products/${id}` : f.link }))
       }}
-      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]"
+      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
     >
       <option value="">- None (use link above) -</option>
       {products.map(p => (
@@ -163,7 +163,7 @@ function BannerForm({ initial, onSave, onCancel }) {
         <div>
           <label className={lbl}>Button Link</label>
           <select value={form.link||"/products"} onChange={e=>setForm(f=>({...f,link:e.target.value}))}
-            className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#D4AF37]">
+            className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
             {LINK_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
@@ -179,12 +179,12 @@ function BannerForm({ initial, onSave, onCancel }) {
             <label className="flex-1 flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#E8E0D5] hover:border-[#1B2B5E]/40 rounded-lg cursor-pointer transition-all bg-[#FAF8F5]">
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               {uploading
-                ? <><Loader2 size={15} className="text-[#D4AF37] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
-                : <><ImagePlus size={15} className="text-[#D4AF37]" /><span className="text-gray-400 text-sm">Upload from device</span></>
+                ? <><Loader2 size={15} className="text-[#1B2B5E] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
+                : <><ImagePlus size={15} className="text-[#1B2B5E]" /><span className="text-gray-400 text-sm">Upload from device</span></>
               }
             </label>
             {form.image && (
-              <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-[#D4AF37]/20 flex-shrink-0">
+              <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-[#1B2B5E]/20 flex-shrink-0">
                 <img src={form.image} alt="" className="w-full h-full object-cover" />
                 <button type="button" onClick={() => setForm(f => ({ ...f, image: "" }))}
                   className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs leading-none">x</button>
@@ -263,7 +263,7 @@ export default function AdminBanners() {
         </div>
         {!showForm && !editBanner && (
           <button onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-black font-semibold rounded-lg hover:bg-[#F0D060] transition-all text-sm">
+            className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-black font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
             <Plus size={16} /> Add Banner
           </button>
         )}
@@ -279,7 +279,7 @@ export default function AdminBanners() {
 
       {loading ? (
         <div className="flex items-center justify-center h-32">
-          <div className="w-6 h-6 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-[#1B2B5E] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : banners.length === 0 && !showForm ? (
         <div className="text-center py-16 bg-white rounded-xl border border-[#E8E0D5]">
@@ -298,14 +298,14 @@ export default function AdminBanners() {
               ) : (
                 <div className="bg-white border border-[#E8E0D5] rounded-xl overflow-hidden shadow-sm">
                   <BannerPreview banner={banner} />
-                  <div className="flex items-center justify-between px-4 py-2 border-t border-[#D4AF37]/10">
+                  <div className="flex items-center justify-between px-4 py-2 border-t border-[#1B2B5E]/10">
                     <div className="flex items-center gap-1">
                       <span className="text-gray-500 text-xs">#{idx + 1}</span>
                       <button onClick={() => move(idx, -1)} disabled={idx === 0} className="p-1 text-gray-500 hover:text-[#1A1A2E] disabled:opacity-30"><ChevronUp size={14} /></button>
                       <button onClick={() => move(idx, 1)} disabled={idx === banners.length - 1} className="p-1 text-gray-500 hover:text-[#1A1A2E] disabled:opacity-30"><ChevronDown size={14} /></button>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button onClick={() => setEditBanner(banner)} disabled={saving} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-[#D4AF37] border border-[#D4AF37]/20 rounded-lg disabled:opacity-40"><Edit2 size={12} /> Edit</button>
+                      <button onClick={() => setEditBanner(banner)} disabled={saving} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-[#1B2B5E] border border-[#1B2B5E]/20 rounded-lg disabled:opacity-40"><Edit2 size={12} /> Edit</button>
                       <button onClick={() => handleDelete(banner.id)} disabled={saving} className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 hover:text-red-400 border border-red-500/20 rounded-lg disabled:opacity-40">
                         {saving ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Delete
                       </button>
@@ -318,7 +318,7 @@ export default function AdminBanners() {
         </div>
       )}
       {saving && (
-        <div className="fixed bottom-4 right-4 bg-[#D4AF37] text-black px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-lg">
+        <div className="fixed bottom-4 right-4 bg-[#1B2B5E] text-black px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-lg">
           <Loader2 size={14} className="animate-spin" /> Saving...
         </div>
       )}

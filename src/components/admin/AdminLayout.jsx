@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { LayoutDashboard, Package, ShoppingBag, BarChart3, Users, Bell, Menu, X, LogOut, ChevronRight, AlertTriangle, Store, Image } from "lucide-react"
@@ -15,14 +15,14 @@ const NAV = [
   { path: "/admin/users", label: "Users", icon: Users },
 ]
 
-function Sidebar({ pathname, onSignOut }) {
+function Sidebar({ pathname, onSignOut, userName }) {
   return (
     <motion.aside initial={{ width: 0, opacity: 0 }} animate={{ width: 240, opacity: 1 }} exit={{ width: 0, opacity: 0 }} transition={{ duration: 0.2 }}
       className="flex-shrink-0 bg-[#1B2B5E] flex flex-col overflow-hidden">
       <div className="p-5 border-b border-white/10">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-white font-bold text-lg" style={{ fontFamily: "Georgia, serif" }}>NaShe</span>
-          <span className="text-xs text-[#C9956C] bg-white/10 px-2 py-0.5 rounded font-semibold">Admin</span>
+          <span className="text-xs text-white bg-white/20 px-2 py-0.5 rounded font-semibold truncate max-w-[100px]">{userName}</span>
         </Link>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
@@ -64,7 +64,7 @@ export default function AdminLayout({ children }) {
   return (
     <div className="flex h-screen bg-[#F4F6FA] overflow-hidden">
       <AnimatePresence initial={false}>
-        {sidebarOpen && <Sidebar pathname={pathname} onSignOut={handleSignOut} />}
+        {sidebarOpen && <Sidebar pathname={pathname} onSignOut={handleSignOut} userName={user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split("@")[0] || "User"} />}
       </AnimatePresence>
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 flex-shrink-0 shadow-sm">
@@ -106,10 +106,10 @@ export default function AdminLayout({ children }) {
               </AnimatePresence>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-[#1B2B5E] rounded-full flex items-center justify-center">
-                <span className="text-white text-xs font-bold">{user?.email?.[0]?.toUpperCase() || "A"}</span>
+              <div className="w-7 h-7 bg-[#1B2B5E] rounded-full flex items-center justify-center border-2 border-[#C9956C]">
+                <span className="text-white text-xs font-bold">{(user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || "U")[0]?.toUpperCase()}</span>
               </div>
-              <span className="text-gray-600 text-xs hidden sm:block">{user?.email?.split("@")[0]}</span>
+              <span className="text-gray-600 text-xs hidden sm:block font-medium">{user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split("@")[0]}</span>
             </div>
             {/* Quick logout in header */}
             <button onClick={handleSignOut} title="Sign Out"

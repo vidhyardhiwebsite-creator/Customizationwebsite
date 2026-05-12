@@ -25,7 +25,7 @@ export default function AdminAnalytics() {
   if (!stats) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#1B2B5E] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -60,7 +60,7 @@ export default function AdminAnalytics() {
       {/* KPI Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon: DollarSign, label: 'Total Revenue', value: formatINR(stats.totalRevenue), color: 'text-[#D4AF37]' },
+          { icon: DollarSign, label: 'Total Revenue', value: formatINR(stats.totalRevenue), color: 'text-[#1B2B5E]' },
           { icon: ShoppingBag, label: 'Total Orders', value: stats.totalOrders, color: 'text-blue-400' },
           { icon: TrendingUp, label: 'Avg Order Value', value: formatINR(stats.totalOrders ? Math.round(stats.totalRevenue / stats.paidOrders || 0) : 0), color: 'text-green-400' },
           { icon: MapPin, label: 'Cities Reached', value: stats.cityData?.length || 0, color: 'text-purple-400' },
@@ -126,7 +126,7 @@ export default function AdminAnalytics() {
       {/* Location Analytics */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
         <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-          <MapPin size={16} className="text-[#D4AF37]" /> Location Analytics â€" Top Cities
+          <MapPin size={16} className="text-[#1B2B5E]" /> Location Analytics â€" Top Cities
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ResponsiveContainer width="100%" height={240}>
@@ -142,7 +142,7 @@ export default function AdminAnalytics() {
           <div className="space-y-3">
             {stats.cityData.map((c, i) => (
               <div key={c.city} className="flex items-center gap-3">
-                <span className="text-[#D4AF37] text-xs w-5 font-bold">{i + 1}</span>
+                <span className="text-[#1B2B5E] text-xs w-5 font-bold">{i + 1}</span>
                 <div className="flex-1">
                   <div className="flex justify-between mb-1">
                     <span className="text-[#1A1A2E] text-xs">{c.city}</span>
