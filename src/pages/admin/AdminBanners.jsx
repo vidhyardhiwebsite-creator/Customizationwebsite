@@ -37,8 +37,8 @@ const EMPTY = {
   bg: COLORS[0].bg, accent: COLORS[0].accent, image: ""
 }
 
-const inp = "w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]"
-const lbl = "text-xs text-gray-400 mb-1 block"
+const inp = "w-full bg-white border border-[#E8E0D5] rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]"
+const lbl = "text-xs text-[#4A4A6A] mb-1 block font-medium"
 
 function BannerPreview({ banner }) {
   return (
@@ -127,7 +127,7 @@ function BannerForm({ initial, onSave, onCancel }) {
   }
 
   return (
-    <div className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-xl p-4 space-y-4">
+    <div className="bg-white border border-[#E8E0D5] rounded-xl p-4 space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={lbl}>Badge Text</label>
@@ -176,7 +176,7 @@ function BannerForm({ initial, onSave, onCancel }) {
         <div className="col-span-2">
           <label className={lbl}>Banner Image</label>
           <div className="flex gap-2 items-start">
-            <label className="flex-1 flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#D4AF37]/30 hover:border-[#D4AF37]/60 rounded-lg cursor-pointer transition-all bg-[#0A0A0A]">
+            <label className="flex-1 flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#E8E0D5] hover:border-[#1B2B5E]/40 rounded-lg cursor-pointer transition-all bg-[#FAF8F5]">
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               {uploading
                 ? <><Loader2 size={15} className="text-[#D4AF37] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
@@ -213,9 +213,9 @@ function BannerForm({ initial, onSave, onCancel }) {
       </div>
 
       <div className="flex gap-2">
-        <button type="button" onClick={onCancel} className="flex-1 py-2 border border-[#D4AF37]/20 text-gray-400 rounded-lg text-sm">Cancel</button>
+        <button type="button" onClick={onCancel} className="flex-1 py-2 border border-[#E8E0D5] text-[#4A4A6A] rounded-lg text-sm">Cancel</button>
         <button type="button" onClick={handleSave} disabled={saving || uploading}
-          className="flex-1 py-2 bg-[#D4AF37] text-black font-semibold rounded-lg text-sm hover:bg-[#F0D060] disabled:opacity-60 flex items-center justify-center gap-1">
+          className="flex-1 py-2 bg-[#1B2B5E] text-white font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] disabled:opacity-60 flex items-center justify-center gap-1">
           {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
           {initial?.id ? "Update Banner" : "Add Banner"}
         </button>
@@ -282,10 +282,10 @@ export default function AdminBanners() {
           <div className="w-6 h-6 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : banners.length === 0 && !showForm ? (
-        <div className="text-center py-16 bg-[#111] rounded-xl border border-[#D4AF37]/10">
-          <p className="text-4xl mb-3">??</p>
-          <p className="text-gray-400">No banners yet.</p>
-          <button onClick={() => setShowForm(true)} className="mt-4 px-6 py-2 bg-[#D4AF37] text-black rounded-lg text-sm font-medium">+ Add Banner</button>
+        <div className="text-center py-16 bg-white rounded-xl border border-[#E8E0D5]">
+          <p className="text-4xl mb-3">🎨</p>
+          <p className="text-[#4A4A6A]">No banners yet.</p>
+          <button onClick={() => setShowForm(true)} className="mt-4 px-6 py-2 bg-[#1B2B5E] text-white rounded-lg text-sm font-medium hover:bg-[#2A3F7E] transition-all">+ Add Banner</button>
         </div>
       ) : (
         <div className="space-y-3">
@@ -296,7 +296,7 @@ export default function AdminBanners() {
                   <BannerForm initial={editBanner} onSave={handleEdit} onCancel={() => setEditBanner(null)} />
                 </motion.div>
               ) : (
-                <div className="bg-[#111] border border-[#D4AF37]/10 rounded-xl overflow-hidden">
+                <div className="bg-white border border-[#E8E0D5] rounded-xl overflow-hidden shadow-sm">
                   <BannerPreview banner={banner} />
                   <div className="flex items-center justify-between px-4 py-2 border-t border-[#D4AF37]/10">
                     <div className="flex items-center gap-1">
