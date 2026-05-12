@@ -151,11 +151,19 @@ export default function App() {
           position="top-right"
           toastOptions={{
             style: {
-              background: '#111',
-              color: '#E5E5E5',
-              border: '1px solid rgba(212,175,55,0.3)',
+              background: '#ffffff',
+              color: '#1A1A2E',
+              border: '1px solid #E8E0D5',
+              boxShadow: '0 4px 16px rgba(27,43,94,0.10)',
+              borderRadius: '10px',
+              fontSize: '14px',
             },
-            success: { iconTheme: { primary: '#D4AF37', secondary: '#000' } },
+            success: {
+              iconTheme: { primary: '#1B2B5E', secondary: '#fff' },
+            },
+            error: {
+              iconTheme: { primary: '#ef4444', secondary: '#fff' },
+            },
           }}
         />
       </BrowserRouter>
