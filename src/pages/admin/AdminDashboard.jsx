@@ -95,7 +95,7 @@ function HeroVideoManager() {
               className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]"
             />
             <button onClick={handleSaveUrl} disabled={saving || !manualUrl.trim()}
-              className="px-4 py-2 bg-[#1B2B5E] text-black text-sm font-medium rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 flex items-center gap-1">
+              className="px-4 py-2 bg-[#1B2B5E] text-white text-sm font-medium rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 flex items-center gap-1">
               {saving && <Loader2 size={13} className="animate-spin" />}
               Save
             </button>
@@ -390,7 +390,7 @@ function OfferBannerManager() {
             placeholder="Link e.g. /products"
             className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
           <button onClick={addOffer} disabled={saving || !newText.trim()}
-            className="px-4 py-2 bg-[#1B2B5E] text-black text-sm font-semibold rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 transition-all">
+            className="px-4 py-2 bg-[#1B2B5E] text-white text-sm font-semibold rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 transition-all">
             {saving ? '...' : '+ Add'}
           </button>
         </div>

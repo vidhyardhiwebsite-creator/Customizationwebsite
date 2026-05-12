@@ -263,7 +263,7 @@ export default function AdminBanners() {
         </div>
         {!showForm && !editBanner && (
           <button onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-black font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
+            className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
             <Plus size={16} /> Add Banner
           </button>
         )}
@@ -318,7 +318,7 @@ export default function AdminBanners() {
         </div>
       )}
       {saving && (
-        <div className="fixed bottom-4 right-4 bg-[#1B2B5E] text-black px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-lg">
+        <div className="fixed bottom-4 right-4 bg-[#1B2B5E] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-lg">
           <Loader2 size={14} className="animate-spin" /> Saving...
         </div>
       )}

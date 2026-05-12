@@ -217,7 +217,7 @@ export default function AdminProducts() {
           <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Products</h1>
           <p className="text-gray-500 text-sm mt-1">{products.length} total products</p>
         </div>
-        <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-black font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
+        <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
           <Plus size={16} /> Add Product
         </button>
       </div>
@@ -355,7 +355,7 @@ export default function AdminProducts() {
                     <div className="flex flex-wrap gap-2">
                       {TAGS.map(tag => (
                         <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#1B2B5E] text-black" : "bg-gray-50 text-gray-400 border border-gray-200 hover:border-[#1B2B5E]/50"}`}>
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#1B2B5E] text-white" : "bg-gray-50 text-gray-400 border border-gray-200 hover:border-[#1B2B5E]/50"}`}>
                           {tag}
                         </button>
                       ))}
@@ -375,7 +375,7 @@ export default function AdminProducts() {
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving || uploading}
-                    className="flex-1 py-2.5 bg-[#1B2B5E] text-black font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+                    className="flex-1 py-2.5 bg-[#1B2B5E] text-white font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
                     {(saving || uploading) && <Loader2 size={14} className="animate-spin" />}
                     {editProduct ? "Update Product" : "Add Product"}
                   </button>
