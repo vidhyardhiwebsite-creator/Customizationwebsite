@@ -70,7 +70,7 @@ export default function AdminLayout({ children }) {
         <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 flex-shrink-0 shadow-sm">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(o => !o)} className="text-gray-500 hover:text-[#1B2B5E] p-1 transition-colors"><Menu size={20} /></button>
-            <span className="text-gray-600 text-sm font-medium hidden sm:block">{NAV.find(n => pathname === n.path || (n.path !== "/admin" && pathname.startsWith(n.path)))?.label || "Admin"}</span>
+            <span className="text-gray-600 text-sm font-medium hidden sm:block">{NAV.find(n => pathname === n.path || (n.path !== "/admin" && pathname.startsWith(n.path)))?.label || "User Panel"}</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative" ref={notifRef}>

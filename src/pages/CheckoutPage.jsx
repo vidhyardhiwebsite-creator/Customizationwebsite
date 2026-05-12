@@ -388,7 +388,7 @@ export default function CheckoutPage() {
                 <button onClick={handleSubmitOrder} disabled={submitting || !screenshot}
                   className="flex-1 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                   {submitting && <Loader2 size={16} className="animate-spin" />}
-                  Place Order &amp; Notify Admin
+                  Place Order &amp; Confirm
                 </button>
               </div>
             </div>

@@ -87,7 +87,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3">
             {isAdmin && (
               <Link to="/admin" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#1B2B5E] text-white text-xs font-bold rounded-lg hover:bg-[#2A3F7E] transition-all">
-                <Settings size={13} /> Admin
+                <Settings size={13} /> User Panel
               </Link>
             )}
             <button onClick={() => setSearchOpen(!searchOpen)} className="text-[#4A4A6A] hover:text-[#1B2B5E] transition-colors p-1">
@@ -125,7 +125,7 @@ export default function Navbar() {
                       <Link to="/orders" onClick={() => setUserOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#4A4A6A] hover:text-[#1B2B5E] hover:bg-[#FAF8F5] transition-colors"><Package size={14} /> My Orders</Link>
                       <Link to="/wishlist" onClick={() => setUserOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#4A4A6A] hover:text-[#1B2B5E] hover:bg-[#FAF8F5] transition-colors"><Heart size={14} /> Wishlist</Link>
                       {isAdmin && (
-                        <Link to="/admin" onClick={() => setUserOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#1B2B5E] hover:bg-[#FAF8F5] font-semibold transition-colors"><Settings size={14} /> Admin Panel</Link>
+                        <Link to="/admin" onClick={() => setUserOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#1B2B5E] hover:bg-[#FAF8F5] font-semibold transition-colors"><Settings size={14} /> User Panel</Link>
                       )}
                       <div className="border-t border-[#E8E0D5] mt-1 pt-1">
                         <button onClick={handleSignOut} className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#4A4A6A] hover:text-red-500 hover:bg-red-50 w-full transition-colors"><LogOut size={14} /> Sign Out</button>
@@ -176,7 +176,7 @@ export default function Navbar() {
                     <Link to="/profile" className="flex items-center gap-2 text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1" onClick={closeAll}><User size={15} /> Profile</Link>
                     <Link to="/orders" className="flex items-center gap-2 text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1" onClick={closeAll}><Package size={15} /> My Orders</Link>
                     <Link to="/wishlist" className="flex items-center gap-2 text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1" onClick={closeAll}><Heart size={15} /> Wishlist</Link>
-                    {isAdmin && <Link to="/admin" className="flex items-center gap-2 text-[#1B2B5E] text-sm py-2 px-1 font-semibold" onClick={closeAll}><Settings size={15} /> Admin Panel</Link>}
+                    {isAdmin && <Link to="/admin" className="flex items-center gap-2 text-[#1B2B5E] text-sm py-2 px-1 font-semibold" onClick={closeAll}><Settings size={15} /> User Panel</Link>}
                     <button onClick={handleSignOut} className="flex items-center gap-2 text-red-500 text-sm py-2 px-1 w-full"><LogOut size={15} /> Sign Out</button>
                   </div>
                 )}
