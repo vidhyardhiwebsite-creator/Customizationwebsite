@@ -120,7 +120,7 @@ function TrackingPanel({ order, onSave }) {
         <div className="relative inline-block">
           <img src={preview} alt="Tracking" className="h-20 rounded-lg border border-gray-200 object-cover" />
           <button onClick={() => { setImage(null); setPreview(null) }}
-            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">ï¿½</button>
+            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">-</button>
         </div>
       )}
       <button onClick={handleSave} disabled={saving}
@@ -165,7 +165,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
               {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
             </p>
           </div>
-          <p className="text-gray-500 text-xs mt-0.5">{addr.full_name || "Customer"} ï¿½ {formatDate(order.created_at)}</p>
+          <p className="text-gray-500 text-xs mt-0.5">{addr.full_name || "Customer"} &middot; {formatDate(order.created_at)}</p>
         </div>
         <div className="flex items-center gap-2 ml-2">
           <span className="text-[#D4AF37] text-xs font-semibold">{formatINR(order.total_amount)}</span>
@@ -229,7 +229,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                 </div>
               )}
 
-              {/* Tracking panel ï¿½ shown when order is shipping */}
+              {/* Tracking panel - shown when order is shipping */}
               {order.order_status === "shipping" && (
                 <TrackingPanel order={order} onSave={onTrackingSave} />
               )}
@@ -243,7 +243,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                       {item.products?.custom_id && (
                         <p className="text-[#D4AF37] text-xs font-mono">Product ID: {item.products.custom_id}</p>
                       )}
-                      <p className="text-gray-500 text-xs">ï¿½{item.quantity} ï¿½ {formatINR(item.price)}</p>
+                      <p className="text-gray-500 text-xs">x{item.quantity} &middot; {formatINR(item.price)}</p>
                     </div>
                   </div>
                 ))}
@@ -251,8 +251,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
 
               {addr.full_name && (
                 <div className="bg-gray-50 rounded-lg p-2 text-xs text-gray-400">
-                  <p className="text-[#1A1A2E]">{addr.full_name} ï¿½ {addr.phone}</p>
-                  <p>{addr.address1}, {addr.city} ï¿½ {addr.pincode}</p>
+                  <p className="text-[#1A1A2E]">{addr.full_name} &middot; {addr.phone}</p>
+                  <p>{addr.address1}, {addr.city} &middot; {addr.pincode}</p>
                 </div>
               )}
               <button onClick={() => onNotify(order, addr)}
@@ -332,7 +332,7 @@ export default function AdminOrders() {
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Orders</h1>
-        <p className="text-gray-500 text-sm mt-0.5">{localOrders.length} total ï¿½ {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
+        <p className="text-gray-500 text-sm mt-0.5">{localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
       </div>
 
       <div className="relative">
@@ -341,7 +341,7 @@ export default function AdminOrders() {
           className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]" />
       </div>
 
-      {/* Search results ï¿½ flat list */}
+      {/* Search results - flat list */}
       {q && (
         <div>
           <p className="text-gray-500 text-xs mb-3">{filtered.length} result{filtered.length !== 1 ? "s" : ""} for &quot;{search}&quot;</p>
@@ -360,11 +360,11 @@ export default function AdminOrders() {
       {!q && (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* NS0 ï¿½ Home */}
+            {/* NS0 - Home */}
             <div>
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-blue-500/30">
                 <div className="w-3 h-3 rounded-full bg-blue-500" />
-                <h2 className="text-[#1B2B5E] font-semibold">NS0 ï¿½ Home</h2>
+                <h2 className="text-[#1B2B5E] font-semibold">NS0 — Home</h2>
                 <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{ns0Orders.length}</span>
                 <span className="text-xs text-orange-400 ml-auto">{ns0Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
               </div>
@@ -378,11 +378,11 @@ export default function AdminOrders() {
               }
             </div>
 
-            {/* NS1 ï¿½ HYD */}
+            {/* NS1 - HYD */}
             <div>
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-purple-500/30">
                 <div className="w-3 h-3 rounded-full bg-purple-500" />
-                <h2 className="text-[#1B2B5E] font-semibold">NS1 ï¿½ HYD</h2>
+                <h2 className="text-[#1B2B5E] font-semibold">NS1 — HYD</h2>
                 <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">{ns1Orders.length}</span>
                 <span className="text-xs text-orange-400 ml-auto">{ns1Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
               </div>
