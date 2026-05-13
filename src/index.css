@@ -41,3 +41,33 @@
   .border-navy { border-color: #1B2B5E; }
   .shadow-card { box-shadow: 0 2px 16px rgba(27,43,94,0.08); }
 }
+
+@layer base {
+  button,
+  [role="button"],
+  label[for],
+  label.cursor-pointer,
+  select,
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  input[type="file"]::file-selector-button {
+    cursor: pointer;
+  }
+}
+
+/* Universal pointer cursor — outside any layer for full specificity */
+button,
+[role="button"],
+a,
+label,
+select,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="file"]::file-selector-button,
+input[type="checkbox"],
+input[type="radio"],
+summary {
+  cursor: pointer !important;
+}
