@@ -47,4 +47,11 @@ export const useAuthStore = create((set, get) => ({
     await supabase.auth.signOut()
     set({ user: null, session: null })
   },
+
+  resetPassword: async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://www.nashejewels.in/auth/callback",
+    })
+    if (error) throw error
+  },
 }))
