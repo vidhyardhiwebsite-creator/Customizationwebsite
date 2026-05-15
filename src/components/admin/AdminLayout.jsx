@@ -15,7 +15,7 @@ const NAV = [
   { path: "/admin/users", label: "Users", icon: Users },
 ]
 
-function Sidebar({ pathname, onSignOut }) {
+function Sidebar({ pathname, onSignOut, onNavClick }) {
   return (
     <motion.aside initial={{ width: 0, opacity: 0 }} animate={{ width: 240, opacity: 1 }} exit={{ width: 0, opacity: 0 }} transition={{ duration: 0.2 }}
       className="flex-shrink-0 bg-[#1B2B5E] flex flex-col overflow-hidden">
@@ -29,7 +29,8 @@ function Sidebar({ pathname, onSignOut }) {
         {NAV.map(({ path, label, icon: Icon }) => {
           const active = pathname === path || (path !== "/admin" && pathname.startsWith(path))
           return (
-            <Link key={path} to={path} className={"flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all " + (active ? "bg-white text-[#1B2B5E] font-semibold shadow-sm" : "text-blue-100 hover:text-white hover:bg-white/10")}>
+            <Link key={path} to={path} onClick={onNavClick}
+              className={"flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all " + (active ? "bg-white text-[#1B2B5E] font-semibold shadow-sm" : "text-blue-100 hover:text-white hover:bg-white/10")}>
               <Icon size={17} /><span>{label}</span>{active && <ChevronRight size={13} className="ml-auto" />}
             </Link>
           )
@@ -48,7 +49,17 @@ function Sidebar({ pathname, onSignOut }) {
 }
 
 export default function AdminLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  // Default: open on desktop (lg+), always closed on mobile
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024)
+
+  // Close sidebar when resizing to mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) setSidebarOpen(false)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   const [notifOpen, setNotifOpen] = useState(false)
   const { pathname } = useLocation()
   const { signOut, user } = useAuthStore()
@@ -73,7 +84,7 @@ export default function AdminLayout({ children }) {
   return (
     <div className="flex h-screen bg-[#F4F6FA] overflow-hidden">
       <AnimatePresence initial={false}>
-        {sidebarOpen && <Sidebar pathname={pathname} onSignOut={handleSignOut} />}
+        {sidebarOpen && <Sidebar pathname={pathname} onSignOut={handleSignOut} onNavClick={() => { if (window.innerWidth < 1024) setSidebarOpen(false) }} />}
       </AnimatePresence>
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 flex-shrink-0 shadow-sm">
