@@ -20,7 +20,7 @@ export const useAdminStore = create((set, get) => ({
     set({ loading: true })
     const { data, error } = await supabase
       .from("orders")
-      .select("*, order_items(*, products(name, images, price, category, custom_id)), payment_screenshot_url, upi_ref, payment_verified, payment_method, users(email)")
+      .select("*, order_items(*, products(name, images, price, category, custom_id)), payment_screenshot_url, upi_ref, payment_verified, payment_method")
       .order("created_at", { ascending: false })
     if (error) console.error("Load orders error:", error.message)
     set({ orders: data || [], loading: false })
