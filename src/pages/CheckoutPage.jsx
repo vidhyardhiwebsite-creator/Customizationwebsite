@@ -18,6 +18,15 @@ const getQRUrl = (upiId, amount) =>
 
 const EMPTY_ADDR = { label: "Home", full_name: "", phone: "", address1: "", address2: "", city: "", state: "", pincode: "", is_default: false }
 
+const INDIAN_STATES = [
+  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat",
+  "Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh",
+  "Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan",
+  "Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal",
+  "Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"
+]
+
 function NewAddressForm({ onSave, onCancel, saving }) {
   const [form, setForm] = useState(EMPTY_ADDR)
   const [errors, setErrors] = useState({})
@@ -45,12 +54,19 @@ function NewAddressForm({ onSave, onCancel, saving }) {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2"><label className={lbl}>Full Name *</label><input value={form.full_name} onChange={e=>setForm(f=>({...f,full_name:e.target.value}))} placeholder="Your name" className={inp} />{errors.full_name&&<p className="text-red-400 text-xs mt-0.5">{errors.full_name}</p>}</div>
-        <div><label className={lbl}>Phone *</label><input value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value}))} placeholder="10-digit number" className={inp} />{errors.phone&&<p className="text-red-400 text-xs mt-0.5">{errors.phone}</p>}</div>
+        <div><label className={lbl}>Phone *</label><input value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value.replace(/\D/g,"").slice(0,10)}))} placeholder="10-digit number" maxLength={10} inputMode="numeric" type="tel" className={inp} />{errors.phone&&<p className="text-red-400 text-xs mt-0.5">{errors.phone}</p>}</div>
         <div className="col-span-2"><label className={lbl}>Address Line 1 *</label><input value={form.address1} onChange={e=>setForm(f=>({...f,address1:e.target.value}))} placeholder="House/Flat, Street" className={inp} />{errors.address1&&<p className="text-red-400 text-xs mt-0.5">{errors.address1}</p>}</div>
         <div className="col-span-2"><label className={lbl}>Address Line 2</label><input value={form.address2} onChange={e=>setForm(f=>({...f,address2:e.target.value}))} placeholder="Landmark (optional)" className={inp} /></div>
         <div><label className={lbl}>City *</label><input value={form.city} onChange={e=>setForm(f=>({...f,city:e.target.value}))} placeholder="City" className={inp} />{errors.city&&<p className="text-red-400 text-xs mt-0.5">{errors.city}</p>}</div>
-        <div><label className={lbl}>State *</label><input value={form.state} onChange={e=>setForm(f=>({...f,state:e.target.value}))} placeholder="State" className={inp} />{errors.state&&<p className="text-red-400 text-xs mt-0.5">{errors.state}</p>}</div>
-        <div><label className={lbl}>PIN Code *</label><input value={form.pincode} onChange={e=>setForm(f=>({...f,pincode:e.target.value}))} placeholder="6-digit PIN" className={inp} />{errors.pincode&&<p className="text-red-400 text-xs mt-0.5">{errors.pincode}</p>}</div>
+        <div>
+          <label className={lbl}>State *</label>
+          <select value={form.state} onChange={e=>setForm(f=>({...f,state:e.target.value}))} className={inp}>
+            <option value="">Select State</option>
+            {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+          {errors.state&&<p className="text-red-400 text-xs mt-0.5">{errors.state}</p>}
+        </div>
+        <div><label className={lbl}>PIN Code *</label><input value={form.pincode} onChange={e=>setForm(f=>({...f,pincode:e.target.value.replace(/\D/g,"").slice(0,6)}))} placeholder="6-digit PIN" maxLength={6} inputMode="numeric" type="tel" className={inp} />{errors.pincode&&<p className="text-red-400 text-xs mt-0.5">{errors.pincode}</p>}</div>
       </div>
       <label className="flex items-center gap-2 text-xs text-gray-400 cursor-pointer">
         <input type="checkbox" checked={form.is_default} onChange={e => setForm(f => ({ ...f, is_default: e.target.checked }))} className="accent-[#D4AF37]" />
