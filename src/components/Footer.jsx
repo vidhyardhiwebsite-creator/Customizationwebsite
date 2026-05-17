@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#1B2B5E] text-white mt-16">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <h3 className="text-[#C9956C] text-xl font-bold mb-3" style={{ fontFamily: 'Georgia, serif' }}>✦ NaShe Jewels</h3>
@@ -51,17 +51,6 @@ export default function Footer() {
               <li><Link to="/refund-policy" className="text-blue-200 hover:text-[#C9956C] text-sm transition-colors">Refund Policy</Link></li>
               <li><Link to="/privacy-policy" className="text-blue-200 hover:text-[#C9956C] text-sm transition-colors">Privacy Policy</Link></li>
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="text-white text-sm font-semibold mb-3 uppercase tracking-wider">Stay Updated</h4>
-            <p className="text-blue-200 text-xs mb-3">Get new arrivals and exclusive offers.</p>
-            <form onSubmit={e => e.preventDefault()} className="flex flex-col gap-2">
-              <input type="email" placeholder="your@email.com"
-                className="bg-[#2A3F7E] border border-[#3A5090] rounded-lg px-3 py-2 text-sm text-white placeholder-blue-300 focus:outline-none focus:border-[#C9956C]" />
-              <button type="submit" className="px-4 py-2 bg-[#C9956C] text-white text-sm font-semibold rounded-lg hover:bg-[#DDB08A] transition-all">Subscribe</button>
-            </form>
           </div>
         </div>
 

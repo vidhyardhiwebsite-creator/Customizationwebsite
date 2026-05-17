@@ -109,7 +109,7 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
             </div>
-            <Link to="/contact" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm font-medium transition-colors">Contact</Link>
+            <Link to="/contact" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm font-medium transition-colors">Contact Us</Link>
           </div>
 
           {/* Desktop Search — always visible */}
@@ -267,7 +267,7 @@ export default function Navbar() {
                 {CATEGORIES.map(cat => (
                   <Link key={cat} to={`/products?category=${encodeURIComponent(cat)}`} className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-1.5 pl-3" onClick={closeAll}>{cat}</Link>
                 ))}
-                <Link to="/contact" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1 font-medium" onClick={closeAll}>Contact</Link>
+                <Link to="/contact" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1 font-medium" onClick={closeAll}>Contact Us</Link>
                 {user && (
                   <div className="border-t border-[#E8E0D5] mt-3 pt-3">
                     <p className="text-[#8A8AAA] text-xs uppercase tracking-wider px-1 mb-1">Account</p>
