@@ -8,10 +8,10 @@ import { uploadProductImages, deleteProductImage, isVideoUrl } from "../../servi
 import { supabase } from "../../lib/supabase"
 import toast from "react-hot-toast"
 
-const isVideoUrl = (url) => url && /\.(mp4|mov|webm|ogg)(\?|$)/i.test(url)
-
 // Only Bangles have sizes - admin types them as comma-separated values
 const BANGLE_CATEGORY = "Bangles"
+
+const EMPTY_FORM = {
   name: "", price: "", category: CATEGORIES[0], description: "",
   size: "", stock: "", tags: [], images: []
 }
