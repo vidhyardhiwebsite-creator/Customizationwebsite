@@ -21,13 +21,13 @@ function Sidebar({ pathname, onSignOut, onNavClick, onToggle }) {
     <motion.aside initial={{ width: 0, opacity: 0 }} animate={{ width: 240, opacity: 1 }} exit={{ width: 0, opacity: 0 }} transition={{ duration: 0.2 }}
       className="flex-shrink-0 bg-[#1B2B5E] flex flex-col overflow-hidden">
       <div className="p-5 border-b border-white/10">
-        <div
-          className="flex items-center gap-2 cursor-pointer select-none"
-          onClick={onToggle}
-          title="Toggle sidebar"
+        <Link
+          to="/admin"
+          onClick={onNavClick}
+          className="flex items-center gap-2 select-none"
         >
           <span className="text-white font-bold text-lg hover:text-blue-200 transition-colors" style={{ fontFamily: "Georgia, serif" }}>NaShe Jewels</span>
-        </div>
+        </Link>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {NAV.map(({ path, label, icon: Icon }) => {
