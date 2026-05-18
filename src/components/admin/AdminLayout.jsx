@@ -83,9 +83,15 @@ export default function AdminLayout({ children }) {
     return () => { document.removeEventListener("mousedown", handler); document.removeEventListener("touchstart", handler) }
   }, [])
 
-  // Toggle notification panel — do NOT auto-clear on open
+  // Toggle notification panel — auto-clear after 3s when opened
   const handleBellClick = () => {
-    setNotifOpen(opening => !opening)
+    const opening = !notifOpen
+    setNotifOpen(opening)
+    if (opening && notifications.length > 0) {
+      setTimeout(() => {
+        useAdminStore.getState().notifications.forEach(n => clearNotification(n.id))
+      }, 3000)
+    }
   }
 
   const getNotifLink = (n) => {
