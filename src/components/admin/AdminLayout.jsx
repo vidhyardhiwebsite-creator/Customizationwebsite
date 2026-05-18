@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { LayoutDashboard, Package, ShoppingBag, BarChart3, Users, Bell, Menu, X, LogOut, ChevronRight, AlertTriangle, Store, Image } from "lucide-react"
 import { useAuthStore } from "../../store/authStore"
 import { useAdminStore } from "../../store/adminStore"
+import { supabase } from "../../lib/supabase"
 import toast from "react-hot-toast"
 
 const NAV = [
@@ -67,7 +68,7 @@ export default function AdminLayout({ children }) {
   const [profileOpen, setProfileOpen] = useState(false)
   const { pathname } = useLocation()
   const { signOut, user } = useAuthStore()
-  const { notifications, clearNotification } = useAdminStore()
+  const { notifications, clearNotification, addNotification } = useAdminStore()
   const navigate = useNavigate()
   const notifRef = useRef(null)
   const profileRef = useRef(null)
@@ -102,6 +103,28 @@ export default function AdminLayout({ children }) {
   }
 
   const handleSignOut = async () => { await signOut(); toast.success("Signed out"); navigate("/") }
+
+  // Realtime: fire notification when a new order is inserted
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-new-orders")
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "orders",
+      }, (payload) => {
+        const order = payload.new
+        const addrObj = (() => { try { return typeof order.address === "string" ? JSON.parse(order.address) : (order.address || {}) } catch { return {} } })()
+        const name = addrObj.full_name || "A customer"
+        const amount = order.total_amount ? `₹${Math.ceil(order.total_amount).toLocaleString("en-IN")}` : ""
+        const orderId = order.display_order_id || `#${String(order.id).slice(-6).toUpperCase()}`
+        addNotification(`🛍️ New order ${orderId} from ${name} ${amount}`, "info")
+        // Also reload orders in store
+        useAdminStore.getState().loadOrders()
+      })
+      .subscribe()
+    return () => supabase.removeChannel(channel)
+  }, [])
 
   return (
     <div className="flex h-screen bg-[#F4F6FA] overflow-hidden">
