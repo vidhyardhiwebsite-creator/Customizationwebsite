@@ -82,15 +82,9 @@ export default function AdminLayout({ children }) {
     return () => { document.removeEventListener("mousedown", handler); document.removeEventListener("touchstart", handler) }
   }, [])
 
-  // Auto-clear all notifications when panel opens, and navigate on click
+  // Toggle notification panel — do NOT auto-clear on open
   const handleBellClick = () => {
-    const opening = !notifOpen
-    setNotifOpen(opening)
-    if (opening) {
-      // Mark all as read immediately when panel opens — persist to localStorage
-      const ids = useAdminStore.getState().notifications.map(n => n.id)
-      ids.forEach(id => clearNotification(id))
-    }
+    setNotifOpen(opening => !opening)
   }
 
   const getNotifLink = (n) => {

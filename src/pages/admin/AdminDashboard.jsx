@@ -151,9 +151,8 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!stats || startupNotified) return
     useAdminStore.setState({ startupNotified: true })
-    if (typeof window !== 'undefined') localStorage.setItem('admin_startup_notified', 'true')
     if (stats.lowStockCount > 0) {
-      addNotification(`${stats.lowStockCount} products have low stock`, 'warning')
+      addNotification(`${stats.lowStockCount} products have low stock (< 10 items)`, 'warning')
     }
     if (stats.todayOrdersCount > 0) {
       addNotification(`${stats.todayOrdersCount} new orders today`, 'info')
