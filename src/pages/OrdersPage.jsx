@@ -6,20 +6,44 @@ import { supabase } from "../lib/supabase"
 import { formatINR, formatDate } from "../utils/format"
 
 const STATUS_STEPS = [
-  { key: "confirmed", label: "Confirmed", icon: CheckCircle, desc: "Your order has been confirmed" },
-  { key: "shipping", label: "Shipped", icon: Truck, desc: "Your order is on the way" },
-  { key: "delivered", label: "Delivered", icon: Package, desc: "Order delivered successfully" },
+  {
+    key: "confirmed", label: "Confirmed", icon: CheckCircle,
+    desc: "Your order has been confirmed",
+    activeColor: "bg-blue-500 border-blue-500",
+    doneColor: "bg-blue-500 border-blue-500",
+    activeText: "text-blue-600 font-semibold",
+    doneText: "text-blue-500 font-medium",
+    activeLine: "bg-blue-400",
+  },
+  {
+    key: "shipping", label: "Shipped", icon: Truck,
+    desc: "Your order is on the way",
+    activeColor: "bg-orange-500 border-orange-500",
+    doneColor: "bg-orange-500 border-orange-500",
+    activeText: "text-orange-600 font-semibold",
+    doneText: "text-orange-500 font-medium",
+    activeLine: "bg-orange-400",
+  },
+  {
+    key: "delivered", label: "Delivered", icon: Package,
+    desc: "Order delivered successfully",
+    activeColor: "bg-green-500 border-green-500",
+    doneColor: "bg-green-500 border-green-500",
+    activeText: "text-green-600 font-semibold",
+    doneText: "text-green-500 font-medium",
+    activeLine: "bg-green-400",
+  },
 ]
 
 function DeliveryTracker({ status }) {
   const currentIdx = STATUS_STEPS.findIndex(s => s.key === status)
   const isCancelled = status === "cancelled"
   return (
-    <div className="bg-[#FAF8F5] border border-[#E8E0D5] rounded-xl p-4 mt-3">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-[#4A4A6A] text-xs font-medium">Delivery Status</p>
+    <div className="bg-white border border-[#E8E0D5] rounded-xl p-5 mt-3 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[#1A1A2E] text-sm font-semibold">Order Status</p>
         {isCancelled && (
-          <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">Cancelled</span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-500 font-medium border border-red-200">Cancelled</span>
         )}
       </div>
       <div className="flex items-start gap-0">
@@ -27,20 +51,28 @@ function DeliveryTracker({ status }) {
           const done = !isCancelled && idx <= currentIdx
           const active = !isCancelled && idx === currentIdx
           const Icon = step.icon
+          const lineColor = done && idx < currentIdx ? step.activeLine : "bg-[#E8E0D5]"
           return (
             <div key={step.key} className="flex-1 flex flex-col items-center">
               <div className="flex items-center w-full">
-                <div className={`w-full h-0.5 ${idx === 0 ? "opacity-0" : done ? "bg-[#1B2B5E]" : "bg-[#E8E0D5]"}`} />
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all ${
-                  active ? "border-[#1B2B5E] bg-[#1B2B5E]/10" :
-                  done ? "border-green-500 bg-green-50" :
-                  "border-[#E8E0D5] bg-white"
+                {/* Left connector line */}
+                <div className={`w-full h-1 rounded-full ${idx === 0 ? "opacity-0" : done ? STATUS_STEPS[idx - 1].activeLine : "bg-[#E8E0D5]"}`} />
+                {/* Step circle */}
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all shadow-sm ${
+                  active ? step.activeColor :
+                  done ? step.doneColor :
+                  "border-[#D1D5DB] bg-[#F3F4F6]"
                 }`}>
-                  <Icon size={14} className={active ? "text-[#1B2B5E]" : done ? "text-green-500" : "text-[#8A8AAA]"} />
+                  <Icon size={16} className={done || active ? "text-white" : "text-[#9CA3AF]"} />
                 </div>
-                <div className={`w-full h-0.5 ${idx === STATUS_STEPS.length - 1 ? "opacity-0" : done && idx < currentIdx ? "bg-[#1B2B5E]" : "bg-[#E8E0D5]"}`} />
+                {/* Right connector line */}
+                <div className={`w-full h-1 rounded-full ${idx === STATUS_STEPS.length - 1 ? "opacity-0" : done && idx < currentIdx ? step.activeLine : "bg-[#E8E0D5]"}`} />
               </div>
-              <p className={`text-xs mt-1.5 text-center ${active ? "text-[#1B2B5E] font-medium" : done ? "text-green-600" : "text-[#8A8AAA]"}`}>
+              <p className={`text-xs mt-2 text-center ${
+                active ? step.activeText :
+                done ? step.doneText :
+                "text-[#9CA3AF]"
+              }`}>
                 {step.label}
               </p>
             </div>
@@ -48,7 +80,7 @@ function DeliveryTracker({ status }) {
         })}
       </div>
       {!isCancelled && currentIdx >= 0 && (
-        <p className="text-center text-xs text-gray-500 mt-3">{STATUS_STEPS[currentIdx].desc}</p>
+        <p className="text-center text-xs text-gray-400 mt-3 italic">{STATUS_STEPS[currentIdx].desc}</p>
       )}
     </div>
   )
