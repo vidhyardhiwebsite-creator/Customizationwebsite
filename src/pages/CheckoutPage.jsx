@@ -109,20 +109,20 @@ export default function CheckoutPage() {
   const [qrRevealed, setQrRevealed] = useState(false)
 
   useEffect(() => {
-    if (user) {
-      fetchAddresses(user.id).then(addrs => {
-        setAddresses(addrs)
-        // Only set default if nothing is selected yet — prevents resetting on re-render
-        setSelectedId(prev => {
-          if (prev && addrs.find(a => a.id === prev)) return prev
-          const def = addrs.find(a => a.is_default) || addrs[0]
-          return def ? def.id : null
-        })
-        if (addrs.length === 0) setShowNewForm(true)
-        setLoading(false)
-      }).catch(() => setLoading(false))
-    }
-  }, [user])
+    if (!user?.id) return
+    const userId = user.id
+    fetchAddresses(userId).then(addrs => {
+      setAddresses(addrs)
+      // Only set default if nothing is selected yet — prevents resetting on re-render or tab focus
+      setSelectedId(prev => {
+        if (prev && addrs.find(a => a.id === prev)) return prev
+        const def = addrs.find(a => a.is_default) || addrs[0]
+        return def ? def.id : null
+      })
+      if (addrs.length === 0) setShowNewForm(true)
+      setLoading(false)
+    }).catch(() => setLoading(false))
+  }, [user?.id])
 
   const handleSaveNew = async (form) => {
     setSavingAddr(true)
