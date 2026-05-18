@@ -325,13 +325,13 @@ export default function CheckoutPage() {
                               {Array(9).fill(0).map((_, i) => <div key={i} className="bg-white rounded-sm" />)}
                             </div>
                             <p className="text-[#1B2B5E] text-xs font-semibold">Tap to reveal QR</p>
-                            <p className="text-[#4A4A6A] text-xs">₹{grandTotal.toLocaleString("en-IN")}</p>
+                            <p className="text-[#4A4A6A] text-xs">₹{Math.ceil(grandTotal).toLocaleString("en-IN")}</p>
                           </div>
                           {/* Back — actual QR */}
                           <div style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                             className="absolute inset-0 bg-white p-2 rounded-xl flex flex-col items-center justify-center">
                             <img src={getQRUrl(UPI_ID, grandTotal)} alt="UPI QR Code" className="w-40 h-40 object-contain" />
-                            <p className="text-gray-500 text-xs mt-1">₹{grandTotal.toLocaleString("en-IN")}</p>
+                            <p className="text-gray-500 text-xs mt-1">₹{Math.ceil(grandTotal).toLocaleString("en-IN")}</p>
                           </div>
                         </div>
                         <p className="text-center text-xs text-gray-500 mt-2">{qrRevealed ? "Tap to hide" : "Tap to show QR"}</p>
@@ -354,7 +354,7 @@ export default function CheckoutPage() {
                       {(() => {
                         const selectedAddr = addresses.find(a => a.id === selectedId)
                         const shipping = getShippingCost(selectedAddr)
-                        return <p className="text-[#1A1A2E] text-2xl font-bold">₹{(total + shipping).toLocaleString("en-IN")}</p>
+                        return <p className="text-[#1A1A2E] text-2xl font-bold">₹{Math.ceil(total + shipping).toLocaleString("en-IN")}</p>
                       })()}
                     </div>
                     <div className="text-xs text-[#4A4A6A] space-y-1">
