@@ -14,7 +14,7 @@ const UPI_ID = "Q487529392@ybl"
 const ADMIN_WHATSAPP = "918639006849"
 // Generate QR dynamically from UPI ID using Google Charts API
 const getQRUrl = (upiId, amount) =>
-  `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${upiId}&pn=NaShe+Jewels&am=${amount}&cu=INR&tn=NaShe+Jewels+Order`)}`
+  `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${upiId}&pn=NaShe+Jewels&am=${Math.ceil(amount)}&cu=INR&tn=NaShe+Jewels+Order`)}`
 
 const EMPTY_ADDR = { label: "Home", full_name: "", phone: "", address1: "", address2: "", city: "", state: "", pincode: "", is_default: false }
 
@@ -112,8 +112,12 @@ export default function CheckoutPage() {
     if (user) {
       fetchAddresses(user.id).then(addrs => {
         setAddresses(addrs)
-        const def = addrs.find(a => a.is_default) || addrs[0]
-        if (def) setSelectedId(def.id)
+        // Only set default if nothing is selected yet — prevents resetting on re-render
+        setSelectedId(prev => {
+          if (prev && addrs.find(a => a.id === prev)) return prev
+          const def = addrs.find(a => a.is_default) || addrs[0]
+          return def ? def.id : null
+        })
         if (addrs.length === 0) setShowNewForm(true)
         setLoading(false)
       }).catch(() => setLoading(false))
@@ -229,8 +233,8 @@ export default function CheckoutPage() {
         <p className="text-[#4A4A6A] mb-2">Your order is pending payment verification.</p>
         <p className="text-[#8A8AAA] text-sm mb-8">We will confirm your order once payment is verified. You will be notified.</p>
         <div className="flex gap-4 justify-center">
-          <button onClick={() => navigate("/orders")} className="px-6 py-3 bg-[#D4AF37] text-black font-semibold rounded-lg hover:bg-[#F0D060] transition-all">View Orders</button>
-          <button onClick={() => navigate("/")} className="px-6 py-3 border border-[#D4AF37] text-[#D4AF37] rounded-lg hover:bg-[#D4AF37]/10 transition-all">Continue Shopping</button>
+          <button onClick={() => navigate("/orders")} className="px-6 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all">View Orders</button>
+          <button onClick={() => navigate("/")} className="px-6 py-3 border border-[#1B2B5E] text-[#1B2B5E] rounded-lg hover:bg-[#1B2B5E]/10 transition-all">Continue Shopping</button>
         </div>
       </div>
     )
