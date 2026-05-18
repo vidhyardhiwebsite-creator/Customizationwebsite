@@ -18,12 +18,32 @@ export const useAdminStore = create((set, get) => ({
 
   loadOrders: async () => {
     set({ loading: true })
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*, order_items(*, products(name, images, price, category, custom_id)), payment_screenshot_url, upi_ref, payment_verified, payment_method")
-      .order("created_at", { ascending: false })
-    if (error) console.error("Load orders error:", error.message)
-    set({ orders: data || [], loading: false })
+    const { data, error } = await supabase.rpc("get_all_orders")
+    if (error) {
+      console.error("Load orders error:", error.message)
+      // Fallback to direct query (for own orders at minimum)
+      const { data: fallback } = await supabase
+        .from("orders")
+        .select("*, order_items(*, products(name, images, price, category, custom_id)), payment_screenshot_url, upi_ref, payment_verified, payment_method")
+        .order("created_at", { ascending: false })
+      set({ orders: fallback || [], loading: false })
+      return
+    }
+    // Fetch order items separately via RPC and merge
+    const { data: items } = await supabase.rpc("get_all_order_items")
+    const itemsMap = {}
+    if (items) {
+      items.forEach(item => {
+        if (!itemsMap[item.order_id]) itemsMap[item.order_id] = []
+        itemsMap[item.order_id].push(item)
+      })
+    }
+    // Also fetch product details for order items
+    const ordersWithItems = (data || []).map(o => ({
+      ...o,
+      order_items: itemsMap[o.id] || []
+    }))
+    set({ orders: ordersWithItems, loading: false })
   },
 
   computeStats: () => {
@@ -133,9 +153,9 @@ export const useAdminStore = create((set, get) => ({
   },
 
   updateOrderStatus: async (id, status) => {
-    const { error } = await supabase.from("orders").update({ payment_status: status }).eq("id", id)
+    const { error } = await supabase.rpc("update_order_status", { p_order_id: id, p_status: status })
     if (error) throw new Error(error.message)
-    set(s => ({ orders: s.orders.map(o => o.id === id ? { ...o, payment_status: status } : o) }))
+    set(s => ({ orders: s.orders.map(o => o.id === id ? { ...o, order_status: status } : o) }))
   },
 
   addNotification: (msg, type = "info") => {
