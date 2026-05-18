@@ -7,6 +7,8 @@ import { useWishlistStore } from '../store/wishlistStore'
 import { formatINR } from '../utils/format'
 import toast from 'react-hot-toast'
 
+const isVideo = (url) => url && /\.(mp4|mov|webm|ogg)(\?|$)/i.test(url)
+
 export default function ProductCard({ product }) {
   const { user } = useAuthStore()
   const { addToCart } = useCartStore()
@@ -29,16 +31,28 @@ export default function ProductCard({ product }) {
     } catch (err) { toast.error(err.message || 'Failed to update wishlist') }
   }
 
-  const image = product.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80'
+  const media = product.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80'
+  const mediaIsVideo = isVideo(media)
 
   return (
     <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}
       className="group relative bg-white rounded-2xl overflow-hidden border border-[#E8E0D5] hover:border-[#C9956C]/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(27,43,94,0.12)]">
       <Link to={`/products/${product.id}`}>
         <div className="relative overflow-hidden aspect-square bg-[#FAF8F5]">
-          <img src={image} alt={product.name} loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
+          {mediaIsVideo ? (
+            <video
+              src={media}
+              muted
+              loop
+              playsInline
+              autoPlay
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          ) : (
+            <img src={media} alt={product.name} loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
+          )}
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
               <span className="text-[#1B2B5E] text-sm font-semibold bg-white px-3 py-1 rounded-full border border-[#1B2B5E]/20">Out of Stock</span>
