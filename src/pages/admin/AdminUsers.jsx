@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { Users, ShoppingBag, DollarSign, Search, Heart, ShoppingCart, ChevronDown, ChevronUp } from "lucide-react"
+import { useEffect, useState, useCallback } from "react"
+import { Users, ShoppingBag, DollarSign, Search, Heart, ShoppingCart, ChevronDown, ChevronUp, RefreshCw } from "lucide-react"
 import { useAdminStore } from "../../store/adminStore"
 import { formatINR } from "../../utils/format"
 import { supabase } from "../../lib/supabase"
@@ -12,42 +12,91 @@ export default function AdminUsers() {
   const [expanded, setExpanded] = useState(null)
   const [userDetails, setUserDetails] = useState({})
   const [loadingDetails, setLoadingDetails] = useState({})
+  const [allUsers, setAllUsers] = useState([])
+  const [loadingUsers, setLoadingUsers] = useState(false)
+
+  const fetchAllUsers = useCallback(async () => {
+    setLoadingUsers(true)
+    try {
+      // Fetch all unique user_ids from cart, wishlist, and orders
+      const [cartRes, wishlistRes] = await Promise.all([
+        supabase.from("cart").select("user_id, products(id, name, price, images, category, custom_id), quantity, id"),
+        supabase.from("wishlist").select("user_id, products(id, name, price, images, category, custom_id), id"),
+      ])
+
+      // Build user map from orders (for name/phone/spend data)
+      const userMap = {}
+      orders.forEach(o => {
+        const key = o.user_id || "unknown"
+        let addrObj = {}
+        try { addrObj = typeof o.address === "string" ? JSON.parse(o.address) : (o.address || {}) } catch {}
+        const name = addrObj.full_name || "Customer"
+        const phone = addrObj.phone || ""
+        if (!userMap[key]) userMap[key] = { userId: key, name, phone, orders: 0, totalSpent: 0, lastOrder: null, hasCart: false, hasWishlist: false }
+        userMap[key].orders += 1
+        if (o.payment_status === "paid") userMap[key].totalSpent += o.total_amount || 0
+        if (!userMap[key].lastOrder || new Date(o.created_at) > new Date(userMap[key].lastOrder)) userMap[key].lastOrder = o.created_at
+        if (phone && !userMap[key].phone) userMap[key].phone = phone
+      })
+
+      // Add users from cart who may not have ordered
+      const cartByUser = {}
+      ;(cartRes.data || []).forEach(row => {
+        const uid = row.user_id
+        if (!cartByUser[uid]) cartByUser[uid] = []
+        cartByUser[uid].push(row)
+        if (!userMap[uid]) userMap[uid] = { userId: uid, name: "Customer", phone: "", orders: 0, totalSpent: 0, lastOrder: null, hasCart: false, hasWishlist: false }
+        userMap[uid].hasCart = true
+      })
+
+      // Add users from wishlist who may not have ordered
+      const wishlistByUser = {}
+      ;(wishlistRes.data || []).forEach(row => {
+        const uid = row.user_id
+        if (!wishlistByUser[uid]) wishlistByUser[uid] = []
+        wishlistByUser[uid].push(row)
+        if (!userMap[uid]) userMap[uid] = { userId: uid, name: "Customer", phone: "", orders: 0, totalSpent: 0, lastOrder: null, hasCart: false, hasWishlist: false }
+        userMap[uid].hasWishlist = true
+      })
+
+      // Pre-populate userDetails with fetched cart/wishlist data
+      const detailsMap = {}
+      Object.keys(userMap).forEach(uid => {
+        detailsMap[uid] = {
+          cart: cartByUser[uid] || [],
+          wishlist: wishlistByUser[uid] || [],
+        }
+      })
+      setUserDetails(detailsMap)
+      setAllUsers(Object.values(userMap).sort((a, b) => b.totalSpent - a.totalSpent))
+    } catch (e) {
+      console.error("Failed to fetch users:", e)
+    }
+    setLoadingUsers(false)
+  }, [orders])
 
   useEffect(() => { loadOrders() }, [])
+  useEffect(() => { if (orders.length >= 0) fetchAllUsers() }, [orders.length])
 
-  const userMap = {}
-  orders.forEach(o => {
-    const key = o.user_id || "unknown"
-    let addrObj = {}
-    try { addrObj = typeof o.address === "string" ? JSON.parse(o.address) : (o.address || {}) } catch {}
-    const name = addrObj.full_name || "Customer"
-    const phone = addrObj.phone || ""
-    if (!userMap[key]) userMap[key] = { userId: key, name, phone, orders: 0, totalSpent: 0, lastOrder: null }
-    userMap[key].orders += 1
-    if (o.payment_status === "paid") userMap[key].totalSpent += o.total_amount || 0
-    if (!userMap[key].lastOrder || new Date(o.created_at) > new Date(userMap[key].lastOrder)) userMap[key].lastOrder = o.created_at
-    if (phone && !userMap[key].phone) userMap[key].phone = phone
-  })
-
-  const users = Object.values(userMap).sort((a, b) => b.totalSpent - a.totalSpent)
-    .filter(u => !search || u.name.toLowerCase().includes(search.toLowerCase()) || u.userId.includes(search))
+  const users = allUsers.filter(u => !search || u.name.toLowerCase().includes(search.toLowerCase()) || u.userId.includes(search))
 
   const loadUserDetails = async (userId) => {
-    if (userDetails[userId]) { setExpanded(expanded === userId ? null : userId); return }
-    setLoadingDetails(p => ({ ...p, [userId]: true }))
-    try {
-      const [cartRes, wishlistRes] = await Promise.all([
-        supabase.from("cart").select("*, products(id, name, price, images, category, custom_id)").eq("user_id", userId),
-        supabase.from("wishlist").select("*, products(id, name, price, images, category, custom_id)").eq("user_id", userId),
-      ])
-      console.log("Cart result:", cartRes)
-      console.log("Wishlist result:", wishlistRes)
-      setUserDetails(p => ({ ...p, [userId]: { cart: cartRes.data || [], wishlist: wishlistRes.data || [] } }))
-    } catch (e) {
-      console.error("Failed to load user details:", e)
-    }
-    setLoadingDetails(p => ({ ...p, [userId]: false }))
+    // Toggle expand — data already pre-loaded in fetchAllUsers
     setExpanded(expanded === userId ? null : userId)
+    // Refresh this user's data on expand
+    if (expanded !== userId) {
+      setLoadingDetails(p => ({ ...p, [userId]: true }))
+      try {
+        const [cartRes, wishlistRes] = await Promise.all([
+          supabase.from("cart").select("*, products(id, name, price, images, category, custom_id)").eq("user_id", userId),
+          supabase.from("wishlist").select("*, products(id, name, price, images, category, custom_id)").eq("user_id", userId),
+        ])
+        setUserDetails(p => ({ ...p, [userId]: { cart: cartRes.data || [], wishlist: wishlistRes.data || [] } }))
+      } catch (e) {
+        console.error("Failed to load user details:", e)
+      }
+      setLoadingDetails(p => ({ ...p, [userId]: false }))
+    }
   }
 
   const notifyWhatsApp = (user, type) => {
@@ -67,19 +116,25 @@ export default function AdminUsers() {
     else window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(`Customer ${user.name} has no phone on file`)}`, "_blank")
   }
 
-  const totalRevenue = users.reduce((s, u) => s + u.totalSpent, 0)
+  const totalRevenue = allUsers.reduce((s, u) => s + u.totalSpent, 0)
   const paidCount = orders.filter(o => o.payment_status === "paid").length
   const avgOrderValue = paidCount ? Math.round(totalRevenue / paidCount) : 0
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Users</h1>
-        <p className="text-gray-500 text-sm mt-1">Customer activity, cart & wishlist</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Users</h1>
+          <p className="text-gray-500 text-sm mt-1">Customer activity, cart & wishlist</p>
+        </div>
+        <button onClick={fetchAllUsers} disabled={loadingUsers}
+          className="flex items-center gap-2 px-3 py-2 bg-[#1B2B5E] text-white text-xs font-medium rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 transition-all">
+          <RefreshCw size={13} className={loadingUsers ? "animate-spin" : ""} /> Refresh
+        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-5"><Users size={18} className="text-[#1B2B5E] mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{users.length}</p><p className="text-gray-500 text-xs mt-1">Total Customers</p></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5"><Users size={18} className="text-[#1B2B5E] mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{allUsers.length}</p><p className="text-gray-500 text-xs mt-1">Total Customers</p></div>
         <div className="bg-white border border-gray-200 rounded-xl p-5"><DollarSign size={18} className="text-green-400 mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{formatINR(totalRevenue)}</p><p className="text-gray-500 text-xs mt-1">Total Revenue</p></div>
         <div className="bg-white border border-gray-200 rounded-xl p-5"><ShoppingBag size={18} className="text-blue-400 mb-3" /><p className="text-2xl font-bold text-[#1B2B5E]">{formatINR(avgOrderValue)}</p><p className="text-gray-500 text-xs mt-1">Avg Order Value</p></div>
       </div>
