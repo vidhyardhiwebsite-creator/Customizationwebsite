@@ -8,10 +8,10 @@ import { uploadProductImages, deleteProductImage, isVideoUrl } from "../../servi
 import { supabase } from "../../lib/supabase"
 import toast from "react-hot-toast"
 
+const isVideoUrl = (url) => url && /\.(mp4|mov|webm|ogg)(\?|$)/i.test(url)
+
 // Only Bangles have sizes - admin types them as comma-separated values
 const BANGLE_CATEGORY = "Bangles"
-
-const EMPTY_FORM = {
   name: "", price: "", category: CATEGORIES[0], description: "",
   size: "", stock: "", tags: [], images: []
 }
@@ -266,13 +266,24 @@ export default function AdminProducts() {
                 <tr key={p.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <img
-                        src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
-                        alt=""
-                        className="w-10 h-10 object-cover rounded-lg"
-                        loading="lazy"
-                        onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }}
-                      />
+                      {p.images?.[0] && isVideoUrl(p.images[0]) ? (
+                        <video
+                          src={p.images[0]}
+                          muted
+                          playsInline
+                          className="w-10 h-10 object-cover rounded-lg flex-shrink-0 bg-black"
+                          onMouseEnter={e => e.target.play()}
+                          onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }}
+                        />
+                      ) : (
+                        <img
+                          src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
+                          alt=""
+                          className="w-10 h-10 object-cover rounded-lg"
+                          loading="lazy"
+                          onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }}
+                        />
+                      )}
                       <div>
                         <p className="text-[#1A1A2E] text-xs font-medium">{p.name}</p>
                         {p.custom_id && <p className="text-[#1B2B5E] text-xs font-mono">{p.custom_id}</p>}
