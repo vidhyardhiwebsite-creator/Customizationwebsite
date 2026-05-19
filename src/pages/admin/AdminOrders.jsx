@@ -222,9 +222,9 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                   {/* Colorful step tracker — same as user panel */}
                   <div className="flex items-start gap-0 mb-2">
                     {[
-                      { key: "confirmed", label: "Confirmed", activeColor: "bg-blue-500", doneColor: "bg-blue-500", lineColor: "bg-blue-400", textColor: "text-blue-600" },
-                      { key: "shipping",  label: "Shipped",   activeColor: "bg-orange-500", doneColor: "bg-orange-500", lineColor: "bg-orange-400", textColor: "text-orange-600" },
-                      { key: "delivered", label: "Delivered", activeColor: "bg-green-500", doneColor: "bg-green-500", lineColor: "bg-green-400", textColor: "text-green-600" },
+                      { key: "confirmed", label: "Confirmed", activeColor: "bg-blue-500", doneColor: "bg-blue-500", lineColor: "bg-blue-400", textColor: "text-blue-500" },
+                      { key: "shipping",  label: "Shipped",   activeColor: "bg-orange-500", doneColor: "bg-orange-500", lineColor: "bg-orange-400", textColor: "text-orange-500" },
+                      { key: "delivered", label: "Delivered", activeColor: "bg-green-500", doneColor: "bg-green-500", lineColor: "bg-green-400", textColor: "text-green-500" },
                     ].map((step, idx) => {
                       const steps = ["confirmed","shipping","delivered"]
                       const currentIdx = steps.indexOf(order.order_status || "confirmed")

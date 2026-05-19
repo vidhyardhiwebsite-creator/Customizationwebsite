@@ -20,7 +20,7 @@ const STATUS_STEPS = [
     desc: "Your order is on the way",
     activeColor: "bg-orange-500 border-orange-500",
     doneColor: "bg-orange-500 border-orange-500",
-    activeText: "text-orange-600 font-semibold",
+    activeText: "text-orange-500 font-semibold",
     doneText: "text-orange-500 font-medium",
     activeLine: "bg-orange-400",
   },
