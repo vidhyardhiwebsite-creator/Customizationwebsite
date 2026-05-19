@@ -362,16 +362,12 @@ export default function AdminOrders() {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     const order = localOrders.find(o => o.id === orderId)
-    const { error, count } = await supabase
-      .from("orders")
-      .update({ order_status: newStatus }, { count: "exact" })
-      .eq("id", orderId)
+    const { error } = await supabase.rpc("admin_update_order_status", {
+      p_order_id: orderId,
+      p_status: newStatus
+    })
 
     if (error) { toast.error("Failed: " + error.message); return }
-    if (count === 0) {
-      toast.error("Update blocked — check Supabase RLS policy for orders table")
-      return
-    }
 
     setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, order_status: newStatus } : o))
     // Sync store so navigating away and back doesn't show stale data
@@ -399,10 +395,9 @@ export default function AdminOrders() {
   }
 
   const verifyPayment = async (orderId) => {
-    const { error } = await supabase.from("orders").update({ payment_status: "paid", payment_verified: true, order_status: "confirmed" }).eq("id", orderId)
+    const { error } = await supabase.rpc("admin_verify_payment", { p_order_id: orderId })
     if (!error) {
       setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, payment_status: "paid", payment_verified: true, order_status: "confirmed" } : o))
-      // Sync store so navigating away and back doesn't show stale data
       useAdminStore.setState(s => ({
         orders: s.orders.map(o => o.id === orderId ? { ...o, payment_status: "paid", payment_verified: true, order_status: "confirmed" } : o)
       }))
@@ -414,11 +409,10 @@ export default function AdminOrders() {
 
   const rejectPayment = async (orderId) => {
     const order = localOrders.find(o => o.id === orderId)
-    const { error } = await supabase.from("orders").update({ payment_status: "failed", order_status: "cancelled" }).eq("id", orderId)
+    const { error } = await supabase.rpc("admin_reject_payment", { p_order_id: orderId })
     if (error) { toast.error(error.message); return }
 
     setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, payment_status: "failed", order_status: "cancelled" } : o))
-    // Sync store so navigating away and back doesn't show stale data
     useAdminStore.setState(s => ({
       orders: s.orders.map(o => o.id === orderId ? { ...o, payment_status: "failed", order_status: "cancelled" } : o)
     }))
