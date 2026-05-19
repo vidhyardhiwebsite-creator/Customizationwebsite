@@ -103,33 +103,33 @@ function TrackingPanel({ order, onSave }) {
   }
 
   return (
-    <div className="bg-gray-50 border border-yellow-500/20 rounded-lg p-3 space-y-2">
-      <p className="text-yellow-500 text-xs font-semibold flex items-center gap-1">
-        <Truck size={12} className="text-yellow-500" /> Tracking Info
+    <div className="bg-orange-50 border-2 border-orange-400 rounded-xl p-4 space-y-3">
+      <p className="text-orange-600 text-sm font-bold flex items-center gap-2">
+        <Truck size={16} className="text-orange-500" /> Tracking Info
       </p>
       <input
         value={trackingId}
         onChange={e => setTrackingId(e.target.value)}
         placeholder="Tracking ID (required)"
         required
-        className="w-full bg-white border border-yellow-400 rounded-lg px-3 py-2 text-xs text-[#1A1A2E] placeholder-yellow-500 focus:outline-none focus:border-yellow-500 font-medium"
+        className="w-full bg-white border-2 border-orange-300 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] placeholder-orange-300 focus:outline-none focus:border-orange-500 font-medium"
       />
-      <label className="flex items-center gap-2 p-2 border border-dashed border-gray-200 hover:border-yellow-500/40 rounded-lg cursor-pointer transition-all">
+      <label className="flex items-center gap-2 p-2.5 border-2 border-dashed border-orange-300 hover:border-orange-500 rounded-lg cursor-pointer transition-all bg-white">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
-        <Upload size={13} className="text-yellow-400 flex-shrink-0" />
-        <span className="text-xs text-gray-400">{image ? image.name : "Upload tracking screenshot (optional)"}</span>
+        <Upload size={14} className="text-orange-500 flex-shrink-0" />
+        <span className="text-sm text-orange-500 font-medium">{image ? image.name : "Upload tracking screenshot (optional)"}</span>
       </label>
       {preview && (
         <div className="relative inline-block">
-          <img src={preview} alt="Tracking" className="h-20 rounded-lg border border-gray-200 object-cover" />
+          <img src={preview} alt="Tracking" className="h-24 rounded-lg border-2 border-orange-300 object-cover" />
           <button onClick={() => { setImage(null); setPreview(null) }}
-            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">-</button>
+            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow">×</button>
         </div>
       )}
       <button onClick={handleSave} disabled={saving}
-        className="w-full py-1.5 bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 text-xs rounded-lg hover:bg-yellow-500/30 disabled:opacity-50 flex items-center justify-center gap-1">
-        {saving && <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />}
-        Save Tracking Info
+        className="w-full py-2.5 bg-orange-500 border-2 border-orange-600 text-white text-sm font-bold rounded-lg hover:bg-orange-600 disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm transition-all">
+        {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+        {saving ? "Saving..." : "Save Tracking Info"}
       </button>
     </div>
   )
