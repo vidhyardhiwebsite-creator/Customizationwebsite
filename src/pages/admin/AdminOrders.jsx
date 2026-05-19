@@ -149,8 +149,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
 
   const getStatusBadge = () => {
     if (needsVerification) return { label: "⚠ Verify", color: "bg-orange-500/20 text-orange-400" }
-    if (isCancelled) return { label: "Cancelled", color: "bg-red-500/20 text-red-400" }
-    if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500/20 text-red-400" }
+    if (isCancelled) return { label: "Cancelled", color: "bg-red-500 text-white" }
+    if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500 text-white" }
     const s = order.order_status || "confirmed"
     if (s === "delivered") return { label: "Delivered", color: "bg-green-500 text-white" }
     if (s === "shipping") return { label: "Shipped", color: "bg-orange-500 text-white" }
@@ -175,7 +175,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
           <span className="text-[#1B2B5E] text-xs font-semibold">{formatINR(order.total_amount)}</span>
           <span
             className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge.color}`}
-            style={badge.label === "Delivered" ? { color: "#ffffff" } : undefined}
+            style={["Delivered", "Cancelled", "Failed"].includes(badge.label) ? { color: "#ffffff" } : undefined}
           >{badge.label}</span>
           {expanded ? <ChevronUp size={13} className="text-gray-400" /> : <ChevronDown size={13} className="text-gray-400" />}
         </div>
