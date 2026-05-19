@@ -86,8 +86,9 @@ export default function AdminLayout({ children }) {
   // Toggle notification panel — clear all when panel closes (admin has seen them)
   const handleBellClick = () => {
     if (notifOpen) {
-      // Closing — clear all notifications now
-      useAdminStore.getState().notifications.forEach(n => clearNotification(n.id))
+      // Closing — clear all notifications now (read from store directly to avoid stale closure)
+      const current = useAdminStore.getState().notifications
+      current.forEach(n => clearNotification(n.id))
     }
     setNotifOpen(o => !o)
   }
@@ -124,7 +125,7 @@ export default function AdminLayout({ children }) {
         const orderId = order.display_order_id || `#${String(order.id).slice(-6).toUpperCase()}`
         addNotification(`🛍️ New order ${orderId} from ${name} ${amount}`, "info")
         // Also reload orders in store
-        useAdminStore.getState().loadOrders()
+        useAdminStore.getState().loadOrders(true)
       })
       .subscribe()
     return () => supabase.removeChannel(channel)

@@ -8,15 +8,19 @@ export const useAdminStore = create((set, get) => ({
   loading: false,
   notifications: [],
   startupNotified: false,
+  productsLoaded: false,
+  ordersLoaded: false,
 
-  loadProducts: async () => {
+  loadProducts: async (force = false) => {
+    if (!force && get().productsLoaded) return
     set({ loading: true })
     const { data, error } = await supabase.from("products").select("*").order("created_at", { ascending: false })
     if (error) console.error("Load products error:", error.message)
-    set({ products: data || [], loading: false })
+    set({ products: data || [], loading: false, productsLoaded: true })
   },
 
-  loadOrders: async () => {
+  loadOrders: async (force = false) => {
+    if (!force && get().ordersLoaded) return
     set({ loading: true })
     const { data, error } = await supabase.rpc("get_all_orders")
     if (error) {
@@ -26,7 +30,7 @@ export const useAdminStore = create((set, get) => ({
         .from("orders")
         .select("*, order_items(*, products(name, images, price, category, custom_id)), payment_screenshot_url, upi_ref, payment_verified, payment_method")
         .order("created_at", { ascending: false })
-      set({ orders: fallback || [], loading: false })
+      set({ orders: fallback || [], loading: false, ordersLoaded: true })
       return
     }
     // Fetch order items separately via RPC and merge
@@ -43,7 +47,7 @@ export const useAdminStore = create((set, get) => ({
       ...o,
       order_items: itemsMap[o.id] || []
     }))
-    set({ orders: ordersWithItems, loading: false })
+    set({ orders: ordersWithItems, loading: false, ordersLoaded: true })
   },
 
   computeStats: () => {

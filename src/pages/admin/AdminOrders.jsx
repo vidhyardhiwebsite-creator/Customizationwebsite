@@ -104,8 +104,8 @@ function TrackingPanel({ order, onSave }) {
 
   return (
     <div className="bg-gray-50 border border-yellow-500/20 rounded-lg p-3 space-y-2">
-      <p className="text-yellow-600 text-xs font-semibold flex items-center gap-1">
-        <Truck size={12} /> Tracking Info
+      <p className="text-yellow-500 text-xs font-semibold flex items-center gap-1">
+        <Truck size={12} className="text-yellow-500" /> Tracking Info
       </p>
       <input
         value={trackingId}
@@ -152,8 +152,9 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
     if (isCancelled) return { label: "Cancelled", color: "bg-red-500/20 text-red-400" }
     if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500/20 text-red-400" }
     const s = order.order_status || "confirmed"
-    const m = { confirmed: "bg-blue-500/20 text-blue-400", shipping: "bg-yellow-500/20 text-yellow-400", delivered: "bg-green-500/20 text-green-400" }
-    return { label: s.charAt(0).toUpperCase() + s.slice(1), color: m[s] || "bg-gray-500/20 text-gray-400" }
+    if (s === "delivered") return { label: "Delivered", color: "bg-green-500 text-white" }
+    if (s === "shipping") return { label: "Shipped", color: "bg-yellow-500/20 text-yellow-400" }
+    return { label: "Confirmed", color: "bg-blue-500/20 text-blue-400" }
   }
 
   const badge = getStatusBadge()
@@ -172,7 +173,10 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
         </div>
         <div className="flex items-center gap-2 ml-2">
           <span className="text-[#1B2B5E] text-xs font-semibold">{formatINR(order.total_amount)}</span>
-          <span className={`text-xs px-1.5 py-0.5 rounded-full ${badge.color}`}>{badge.label}</span>
+          <span
+            className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge.color}`}
+            style={badge.label === "Delivered" ? { color: "#ffffff" } : undefined}
+          >{badge.label}</span>
           {expanded ? <ChevronUp size={13} className="text-gray-400" /> : <ChevronDown size={13} className="text-gray-400" />}
         </div>
       </div>
@@ -291,6 +295,32 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
   )
 }
 
+function Pagination({ total, page, pageSize, onPage }) {
+  const totalPages = Math.ceil(total / pageSize)
+  if (totalPages <= 1) return null
+  const pages = []
+  for (let i = 1; i <= totalPages; i++) pages.push(i)
+  return (
+    <div className="flex items-center justify-center gap-1 mt-3">
+      <button onClick={() => onPage(page - 1)} disabled={page === 1}
+        className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:border-[#1B2B5E] disabled:opacity-40">‹</button>
+      {pages.map(p => (
+        <button key={p} onClick={() => onPage(p)}
+          className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#1B2B5E] text-white border-[#1B2B5E]" : "border-gray-200 text-gray-500 hover:border-[#1B2B5E]"}`}>
+          {p}
+        </button>
+      ))}
+      <button onClick={() => onPage(page + 1)} disabled={page === totalPages}
+        className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:border-[#1B2B5E] disabled:opacity-40">›</button>
+    </div>
+  )
+}
+
+function paginate(arr, page, size) {
+  const start = (page - 1) * size
+  return arr.slice(start, start + size)
+}
+
 export default function AdminOrders() {
   const { orders, loadOrders } = useAdminStore()
   const [localOrders, setLocalOrders] = useState([])
@@ -299,6 +329,14 @@ export default function AdminOrders() {
   const [screenshotModal, setScreenshotModal] = useState(null)
   const [searchParams] = useSearchParams()
   const filterToday = searchParams.get("filter") === "today"
+
+  // Pagination
+  const PAGE_SIZE_OPTIONS = [5, 10, 20, 50]
+  const [pageSize, setPageSize] = useState(10)
+  const [ns0Page, setNs0Page] = useState(1)
+  const [ns1Page, setNs1Page] = useState(1)
+  const [otherPage, setOtherPage] = useState(1)
+  const [searchPage, setSearchPage] = useState(1)
 
   useEffect(() => { loadOrders() }, [])
   useEffect(() => {
@@ -328,7 +366,7 @@ export default function AdminOrders() {
       const phone = addr.phone?.replace(/\D/g, "")
       if (phone) {
         const waMsg = encodeURIComponent(
-          `❌ *Order Cancelled - NaShe Jewels*\n\nHi ${customerName},\n\nYour order *${orderId_}* has been cancelled.\nAmount: ${amount}\n\nIf you paid, your refund will be processed within 5-7 business days.\n\nFor queries: +91 8639006849\n\n✨ NaShe Jewels`
+          `*Order Cancelled - NaShe Jewels*\n\nHi ${customerName},\n\nYour order *${orderId_}* has been cancelled.\nAmount: ${amount}\n\nIf you paid, your refund will be processed within 5-7 business days.\n\nFor queries: +91 8639006849\n\nNaShe Jewels`
         )
         window.open(`https://wa.me/91${phone}?text=${waMsg}`, "_blank")
       } else {
@@ -360,7 +398,7 @@ export default function AdminOrders() {
       const phone = addr.phone?.replace(/\D/g, "")
       if (phone) {
         const waMsg = encodeURIComponent(
-          `❌ *Order Rejected - NaShe Jewels*\n\nHi ${customerName},\n\nYour order *${orderId_}* has been rejected due to payment verification failure.\nAmount: ${amount}\n\nIf you believe this is an error, contact us at +91 8639006849.\n\n✨ NaShe Jewels`
+          `*Order Rejected - NaShe Jewels*\n\nHi ${customerName},\n\nYour order *${orderId_}* has been rejected due to payment verification failure.\nAmount: ${amount}\n\nIf you believe this is an error, contact us at +91 8639006849.\n\nNaShe Jewels`
         )
         window.open(`https://wa.me/91${phone}?text=${waMsg}`, "_blank")
       }
@@ -368,7 +406,7 @@ export default function AdminOrders() {
   }
 
   const notifyCustomer = (order, addr) => {
-    const msg = encodeURIComponent(`📦 *Order Update - NaShe Jewels*\n\nHi ${addr.full_name || "Customer"},\nOrder ${order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()} status: ${order.order_status || "confirmed"}\nAmount: ₹${order.total_amount?.toLocaleString("en-IN")}\n\n✨ NaShe Jewels`)
+    const msg = encodeURIComponent(`*Order Update - NaShe Jewels*\n\nHi ${addr.full_name || "Customer"},\nOrder ${order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()} status: ${order.order_status || "confirmed"}\nAmount: Rs.${order.total_amount?.toLocaleString("en-IN")}\n\nNaShe Jewels`)
     const phone = addr.phone?.replace(/\D/g, "")
     if (phone) window.open(`https://wa.me/91${phone}?text=${msg}`, "_blank")
     else toast.error("No phone number")
@@ -400,31 +438,41 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>
-          {filterToday ? "Today's Orders" : "Orders"}
-        </h1>
-        <p className="text-gray-500 text-sm mt-0.5">{localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>
+            {filterToday ? "Today's Orders" : "Orders"}
+          </h1>
+          <p className="text-gray-500 text-sm mt-0.5">{localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-gray-500">Per page:</label>
+          <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setNs0Page(1); setNs1Page(1); setOtherPage(1); setSearchPage(1) }}
+            className="bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
+            {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </div>
       </div>
 
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by Order ID (e.g. NS0-001)"
+        <input value={search} onChange={e => { setSearch(e.target.value); setSearchPage(1) }} placeholder="Search by Order ID (e.g. NS0-001)"
           className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
       </div>
 
-      {/* Search results - flat list */}
+      {/* Search results - flat list with pagination */}
       {q && (
         <div>
           <p className="text-gray-500 text-xs mb-3">{filtered.length} result{filtered.length !== 1 ? "s" : ""} for &quot;{search}&quot;</p>
           {filtered.length === 0
             ? <p className="text-gray-600 text-sm text-center py-12">No orders found</p>
-            : filtered.map(order => (
+            : paginate(filtered, searchPage, pageSize).map(order => (
               <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                 onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
                 {...cardProps} />
             ))
           }
+          <Pagination total={filtered.length} page={searchPage} pageSize={pageSize} onPage={setSearchPage} />
         </div>
       )}
 
@@ -442,12 +490,13 @@ export default function AdminOrders() {
               </div>
               {ns0Orders.length === 0
                 ? <p className="text-gray-600 text-sm text-center py-8">No NS0 orders</p>
-                : ns0Orders.map(order => (
+                : paginate(ns0Orders, ns0Page, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
                     {...cardProps} />
                 ))
               }
+              <Pagination total={ns0Orders.length} page={ns0Page} pageSize={pageSize} onPage={setNs0Page} />
             </div>
 
             {/* NS1 - HYD */}
@@ -460,12 +509,13 @@ export default function AdminOrders() {
               </div>
               {ns1Orders.length === 0
                 ? <p className="text-gray-600 text-sm text-center py-8">No NS1 orders</p>
-                : ns1Orders.map(order => (
+                : paginate(ns1Orders, ns1Page, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
                     {...cardProps} />
                 ))
               }
+              <Pagination total={ns1Orders.length} page={ns1Page} pageSize={pageSize} onPage={setNs1Page} />
             </div>
           </div>
 
@@ -478,12 +528,13 @@ export default function AdminOrders() {
                 <span className="text-xs bg-[#1B2B5E]/20 text-[#1B2B5E] px-2 py-0.5 rounded-full">{otherOrders.length}</span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {otherOrders.map(order => (
+                {paginate(otherOrders, otherPage, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
                     {...cardProps} />
                 ))}
               </div>
+              <Pagination total={otherOrders.length} page={otherPage} pageSize={pageSize} onPage={setOtherPage} />
             </div>
           )}
         </>
