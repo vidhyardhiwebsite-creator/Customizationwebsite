@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 
 const ORDER_STATUSES = [
   { key: "confirmed", label: "Confirmed", color: "bg-blue-500 text-white border-blue-600" },
-  { key: "shipping", label: "Shipped", color: "bg-yellow-500 text-white border-yellow-600" },
+  { key: "shipping", label: "Shipped", color: "bg-orange-500 text-white border-orange-600" },
   { key: "delivered", label: "Delivered", color: "bg-green-500 text-white border-green-600" },
   { key: "cancelled", label: "Cancelled", color: "bg-red-500 text-white border-red-600" },
 ]
