@@ -355,6 +355,10 @@ export default function AdminOrders() {
     if (error) { toast.error(error.message); return }
 
     setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, order_status: newStatus } : o))
+    // Sync store so navigating away and back doesn't show stale data
+    useAdminStore.setState(s => ({
+      orders: s.orders.map(o => o.id === orderId ? { ...o, order_status: newStatus } : o)
+    }))
     toast.success("Status updated to " + newStatus)
 
     // When admin cancels — notify customer via WhatsApp
@@ -377,8 +381,16 @@ export default function AdminOrders() {
 
   const verifyPayment = async (orderId) => {
     const { error } = await supabase.from("orders").update({ payment_status: "paid", payment_verified: true, order_status: "confirmed" }).eq("id", orderId)
-    if (!error) { setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, payment_status: "paid", payment_verified: true, order_status: "confirmed" } : o)); toast.success("Payment verified!") }
-    else toast.error(error.message)
+    if (!error) {
+      setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, payment_status: "paid", payment_verified: true, order_status: "confirmed" } : o))
+      // Sync store so navigating away and back doesn't show stale data
+      useAdminStore.setState(s => ({
+        orders: s.orders.map(o => o.id === orderId ? { ...o, payment_status: "paid", payment_verified: true, order_status: "confirmed" } : o)
+      }))
+      toast.success("Payment verified!")
+    } else {
+      toast.error(error.message)
+    }
   }
 
   const rejectPayment = async (orderId) => {
@@ -387,6 +399,10 @@ export default function AdminOrders() {
     if (error) { toast.error(error.message); return }
 
     setLocalOrders(p => p.map(o => o.id === orderId ? { ...o, payment_status: "failed", order_status: "cancelled" } : o))
+    // Sync store so navigating away and back doesn't show stale data
+    useAdminStore.setState(s => ({
+      orders: s.orders.map(o => o.id === orderId ? { ...o, payment_status: "failed", order_status: "cancelled" } : o)
+    }))
     toast.success("Payment rejected")
 
     // Notify customer via WhatsApp
