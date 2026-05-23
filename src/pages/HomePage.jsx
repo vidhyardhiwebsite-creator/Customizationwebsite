@@ -14,16 +14,7 @@ import PromoBanners from "../components/PromoBanners"
 import ReviewsSection from "../components/ReviewsSection"
 import heroBgImg from "../assets/herobg.jpg"
 
-const categoryImages = {
-  "Earrings": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80",
-  "Necklaces": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80",
-  "Black Beads": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80",
-  "Tikka": "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=400&q=80",
-  "Champaswaram": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80",
-  "Maatilu": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80",
-  "Bracelets": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80",
-  "Bangles": "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=400&q=80",
-}
+const FALLBACK_CATEGORY_IMAGE = "https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80"
 
 const ICON_MAP = [
   <Shield size={20} />,
@@ -46,6 +37,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [features, setFeatures] = useState(DEFAULT_FEATURES)
   const [dynamicCategories, setDynamicCategories] = useState(CATEGORIES)
+  const [categoryImageMap, setCategoryImageMap] = useState({})
   const { items: recentItems } = useRecentlyViewedStore()
 
   useEffect(() => {
@@ -58,6 +50,31 @@ export default function HomePage() {
       // Build dynamic category list from actual products — includes any custom categories admin added
       const cats = [...new Set(data.map(p => p.category).filter(Boolean))]
       if (cats.length > 0) setDynamicCategories(cats.sort())
+
+      // Build category image map: use the most recently added product's image per category
+      // data is already sorted newest-first, so the first product per category is the most recent
+      // Prefer an image over a video — skip video URLs when looking for a category thumbnail
+      const isVideoUrl = (url) => url && /\.(mp4|mov|webm|ogg)(\?|$)/i.test(url)
+      const imgMap = {}
+      data.forEach(p => {
+        if (!p.category || imgMap[p.category]) return
+        const mediaList = Array.isArray(p.images)
+          ? p.images
+          : [p.image || p.images].filter(Boolean)
+        // Pick the first non-video media as the category thumbnail
+        const thumb = mediaList.find(m => m && !isVideoUrl(m))
+        if (thumb) imgMap[p.category] = thumb
+      })
+      // Second pass: if a category still has no image (all products only have videos),
+      // fall back to the first video so the card at least shows something via <video>
+      data.forEach(p => {
+        if (!p.category || imgMap[p.category]) return
+        const mediaList = Array.isArray(p.images)
+          ? p.images
+          : [p.image || p.images].filter(Boolean)
+        if (mediaList[0]) imgMap[p.category] = mediaList[0]
+      })
+      setCategoryImageMap(imgMap)
     })
     getSetting('features_bar').then(val => {
       if (val) { try { const p = JSON.parse(val); if (Array.isArray(p) && p.length) setFeatures(p) } catch {} }
@@ -167,21 +184,36 @@ export default function HomePage() {
           </div>
         </ScrollReveal>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {dynamicCategories.map((cat, i) => (
-            <ScrollReveal key={cat} delay={i * 0.06}>
-              <Link to={`/products?category=${encodeURIComponent(cat)}`}
-                className="group relative overflow-hidden rounded-xl aspect-square block">
-                <img src={categoryImages[cat] || `https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80`} alt={cat} loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={e => { e.target.src = "https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80" }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="text-white font-semibold text-sm">{cat}</p>
-                </div>
-                <div className="absolute inset-0 border-2 border-[#D4AF37]/0 group-hover:border-[#D4AF37]/60 rounded-xl transition-all duration-300" />
-              </Link>
-            </ScrollReveal>
-          ))}
+          {dynamicCategories.map((cat, i) => {
+            const media = categoryImageMap[cat] || FALLBACK_CATEGORY_IMAGE
+            const mediaIsVideo = /\.(mp4|mov|webm|ogg)(\?|$)/i.test(media)
+            return (
+              <ScrollReveal key={cat} delay={i * 0.06}>
+                <Link to={`/products?category=${encodeURIComponent(cat)}`}
+                  className="group relative overflow-hidden rounded-xl aspect-square block">
+                  {mediaIsVideo ? (
+                    <video
+                      src={media}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <img src={media} alt={cat} loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      onError={e => { e.target.src = FALLBACK_CATEGORY_IMAGE }} />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="text-white font-semibold text-sm">{cat}</p>
+                  </div>
+                  <div className="absolute inset-0 border-2 border-[#D4AF37]/0 group-hover:border-[#D4AF37]/60 rounded-xl transition-all duration-300" />
+                </Link>
+              </ScrollReveal>
+            )
+          })}
         </div>
       </section>
 
