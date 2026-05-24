@@ -33,6 +33,7 @@ const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'))
 const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'))
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
 const AdminBanners = lazy(() => import('./pages/admin/AdminBanners'))
+const AdminCategories = lazy(() => import('./pages/admin/AdminCategories'))
 
 const PageLoader = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -78,6 +79,7 @@ export default function App() {
                       <Route path="products" element={<AdminProducts />} />
                       <Route path="orders" element={<AdminOrders />} />
                       <Route path="banners" element={<AdminBanners />} />
+                      <Route path="categories" element={<AdminCategories />} />
                       <Route path="analytics" element={<AdminAnalytics />} />
                       <Route path="users" element={<AdminUsers />} />
                     </Routes>

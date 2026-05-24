@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Plus, Edit2, Trash2, Search, AlertTriangle, X, Upload, ImagePlus, Loader2 } from "lucide-react"
 import { useAdminStore } from "../../store/adminStore"
-import { CATEGORIES, TAGS } from "../../data/products"
+import { useCategoryStore } from "../../store/categoryStore"
+import { TAGS } from "../../data/products"
 import { formatINR } from "../../utils/format"
 import { uploadProductImages, deleteProductImage, isVideoUrl } from "../../services/storageService"
 import { supabase } from "../../lib/supabase"
@@ -12,7 +13,7 @@ import toast from "react-hot-toast"
 const BANGLE_CATEGORY = "Bangles"
 
 const EMPTY_FORM = {
-  name: "", price: "", category: CATEGORIES[0], description: "",
+  name: "", price: "", category: "Bangles", description: "",
   size: "", stock: "", tags: [], images: []
 }
 
@@ -129,6 +130,7 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
 
 export default function AdminProducts() {
   const { products, loadProducts, addProduct, updateProduct, deleteProduct } = useAdminStore()
+  const { categories, loadCategories } = useCategoryStore()
   const [search, setSearch] = useState("")
   const [modalOpen, setModalOpen] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
@@ -144,7 +146,7 @@ export default function AdminProducts() {
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(1)
 
-  useEffect(() => { loadProducts() }, [])
+  useEffect(() => { loadProducts(); loadCategories() }, [])
 
   // Build dynamic tag list: hardcoded defaults + any custom tags used across all products
   const allTags = [...new Set([...TAGS, ...products.flatMap(p => p.tags || [])])].sort()
@@ -159,7 +161,7 @@ export default function AdminProducts() {
 
   const openAdd = () => {
     setEditProduct(null)
-    setForm(EMPTY_FORM)
+    setForm({ ...EMPTY_FORM, category: categories[0] || "Bangles" })
     setErrors({})
     setModalOpen(true)
   }
@@ -167,7 +169,7 @@ export default function AdminProducts() {
   const openEdit = (p) => {
     setEditProduct(p)
     setForm({
-      name: p.name || "", price: String(p.price || ""), category: p.category || CATEGORIES[0],
+      name: p.name || "", price: String(p.price || ""), category: p.category || categories[0] || "Bangles",
       description: p.description || "", size: p.category === BANGLE_CATEGORY ? (p.size || "") : "",
       stock: String(p.stock || ""), tags: p.tags || [], images: p.images || []
     })
@@ -409,7 +411,7 @@ export default function AdminProducts() {
                     <label className="text-xs text-gray-400 mb-1 block">Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
                       className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
-                      {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                      {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   {form.category === BANGLE_CATEGORY && (

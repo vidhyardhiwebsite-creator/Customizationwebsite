@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { SlidersHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { fetchProducts } from '../services/productService'
 import { getSetting } from '../services/settingsService'
-import { CATEGORIES } from '../data/products'
+import { useCategoryStore } from '../store/categoryStore'
 import ProductCard from '../components/ProductCard'
 import SkeletonCard from '../components/SkeletonCard'
 
@@ -25,24 +25,26 @@ export default function ProductsPage() {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
   const [page, setPage] = useState(1)
+  const { categories, loadCategories } = useCategoryStore()
 
   const category = searchParams.get('category') || ''
   const search = searchParams.get('search') || ''
   const sort = searchParams.get('sort') || 'newest'
 
-  // Load admin-configured per-page setting
+  // Load admin-configured per-page setting and categories
   useEffect(() => {
     getSetting('products_per_page').then(val => {
       const n = parseInt(val)
       if (n && PAGE_SIZE_OPTIONS.includes(n)) setPageSize(n)
     }).catch(() => {})
+    loadCategories()
   }, [])
 
   // Reset to page 1 when filters change
   useEffect(() => { setPage(1) }, [category, search, sort, pageSize])
 
   // If search exactly matches a category name, treat it as a category filter
-  const matchedCategory = CATEGORIES.find(c => c.toLowerCase() === search.toLowerCase())
+  const matchedCategory = categories.find(c => c.toLowerCase() === search.toLowerCase())
 
   useEffect(() => {
     if (matchedCategory && !category) {
@@ -100,7 +102,7 @@ export default function ProductsPage() {
             >
               All
             </button>
-            {CATEGORIES.map(cat => (
+            {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setFilter('category', cat)}

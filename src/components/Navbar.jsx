@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ShoppingCart, Heart, Search, Menu, X, User, LogOut, ChevronDown, Package, Settings, Store } from "lucide-react"
 import { useAuthStore } from "../store/authStore"
 import { useCartStore } from "../store/cartStore"
-import { CATEGORIES } from "../data/products"
+import { useCategoryStore } from "../store/categoryStore"
 import { useAdminStore } from "../store/adminStore"
 import logoImg from "../assets/logo.png"
 import toast from "react-hot-toast"
@@ -19,6 +19,7 @@ export default function Navbar() {
   const { user, signOut } = useAuthStore()
   const cartCount = useCartStore(s => s.getCount())
   const { products, loadProducts } = useAdminStore()
+  const { categories, loadCategories } = useCategoryStore()
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const userRef = useRef(null)
@@ -28,6 +29,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!products.length) loadProducts()
+    loadCategories()
   }, [])
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function Navbar() {
                 {catOpen && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
                     className="absolute top-full left-0 mt-1 w-48 bg-white border border-[#E8E0D5] rounded-xl shadow-lg py-2">
-                    {CATEGORIES.map(cat => (
+                    {categories.map(cat => (
                       <Link key={cat} to={`/products?category=${encodeURIComponent(cat)}`}
                         className="block px-4 py-2 text-sm text-[#4A4A6A] hover:text-[#1B2B5E] hover:bg-[#FAF8F5] transition-colors"
                         onClick={() => setCatOpen(false)}>{cat}</Link>
@@ -269,7 +271,7 @@ export default function Navbar() {
                 <Link to="/" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1 font-medium" onClick={closeAll}>Home</Link>
                 <Link to="/products" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1 font-medium" onClick={closeAll}>All Jewelry</Link>
                 <p className="text-[#8A8AAA] text-xs uppercase tracking-wider px-1 mt-2 mb-1">Categories</p>
-                {CATEGORIES.map(cat => (
+                {categories.map(cat => (
                   <Link key={cat} to={`/products?category=${encodeURIComponent(cat)}`} className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-1.5 pl-3" onClick={closeAll}>{cat}</Link>
                 ))}
                 <Link to="/contact" className="text-[#4A4A6A] hover:text-[#1B2B5E] text-sm py-2 px-1 font-medium" onClick={closeAll}>Contact Us</Link>
