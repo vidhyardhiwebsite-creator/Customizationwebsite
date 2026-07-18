@@ -6,6 +6,7 @@ const ADMIN_EMAILS = [
   import.meta.env.VITE_ADMIN_EMAIL,
   "sailendrakondapalli@gmail.com",
   "adduriaswani@gmail.com",
+  "vidhyardhiwebsite@gmail.com",
 ].filter(Boolean).map(e => e.toLowerCase())
 
 export const isAdmin = (user) => {
