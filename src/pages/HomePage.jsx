@@ -496,16 +496,47 @@ export default function HomePage() {
             </p>
           </Reveal>
           <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,margin:"-50px"}}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
             {WHY_US.map(item=>(
               <motion.div key={item.title} variants={fadeUp}>
-                <div className="card-warm p-5 sm:p-6 h-full group">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl mb-3 sm:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                    style={{ background:"rgba(200,162,58,0.12)", border:"1px solid rgba(200,162,58,0.2)", color:"#A88422" }}>
+                <div style={{
+                  background: "#FFFFFF",
+                  border: "1px solid #E7DED1",
+                  borderRadius: 20,
+                  padding: "24px 20px",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                  boxShadow: "0 2px 12px rgba(44,36,27,0.05)",
+                  transition: "all 0.3s ease",
+                  overflow: "hidden",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(200,162,58,0.35)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(44,36,27,0.10)"; e.currentTarget.style.transform = "translateY(-3px)" }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "#E7DED1"; e.currentTarget.style.boxShadow = "0 2px 12px rgba(44,36,27,0.05)"; e.currentTarget.style.transform = "none" }}
+                >
+                  {/* Icon */}
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 14, flexShrink: 0,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    background: "rgba(200,162,58,0.1)",
+                    border: "1px solid rgba(200,162,58,0.2)",
+                    color: "#A88422",
+                  }}>
                     {item.icon}
                   </div>
-                  <h3 className="font-inter font-semibold text-[14px] text-[#2C241B] mb-2">{item.title}</h3>
-                  <p className="body-md text-[13px]">{item.desc}</p>
+                  {/* Title */}
+                  <p style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 600, fontSize: 14,
+                    color: "#2C241B", margin: 0, lineHeight: 1.3,
+                  }}>{item.title}</p>
+                  {/* Description */}
+                  <p style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: 13, color: "#6F655A",
+                    margin: 0, lineHeight: 1.6,
+                  }}>{item.desc}</p>
                 </div>
               </motion.div>
             ))}

@@ -21,13 +21,21 @@ function Sidebar({ pathname, onSignOut, onNavClick, onToggle }) {
   return (
     <motion.aside initial={{ width: 0, opacity: 0 }} animate={{ width: 240, opacity: 1 }} exit={{ width: 0, opacity: 0 }} transition={{ duration: 0.2 }}
       className="flex-shrink-0 bg-[#1B2B5E] flex flex-col overflow-hidden">
-      <div className="p-5 border-b border-white/10">
-        <Link
-          to="/admin"
-          onClick={onNavClick}
-          className="flex items-center gap-2 select-none"
-        >
-          <span className="text-white font-bold text-lg hover:text-blue-200 transition-colors" style={{ fontFamily: "Georgia, serif" }}>Vidhyrathi</span>
+      <div className="p-4 border-b border-white/10">
+        <Link to="/admin" onClick={onNavClick} className="flex items-center select-none">
+          <div style={{
+            width: 120, height: 52, overflow: "hidden",
+            display: "flex", alignItems: "flex-start",
+            borderRadius: 6,
+            padding: "2px 4px",
+            background: "rgba(255,255,255,0.08)",
+          }}>
+            <img
+              src="/logo.png"
+              alt="Vidhyrathi"
+              style={{ width: 120, height: "auto", display: "block", marginTop: "-6px" }}
+            />
+          </div>
         </Link>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">

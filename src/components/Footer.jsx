@@ -90,7 +90,17 @@ export default function Footer() {
               <img
                 src="/logo.png"
                 alt="Vidhyrathi"
-                style={{ height: 40, width: "auto", maxWidth: 160, objectFit: "contain", display: "block" }}
+                style={{
+                  height: 60,
+                  width: "auto",
+                  maxWidth: 180,
+                  objectFit: "contain",
+                  objectPosition: "left center",
+                  display: "block",
+                  borderRadius: 8,
+                  padding: "4px 8px",
+                  background: "rgba(255,255,255,0.08)",
+                }}
               />
             </Link>
             <p className="font-inter text-[14px] leading-relaxed mb-6 max-w-xs" style={{ color:"rgba(255,255,255,0.5)" }}>

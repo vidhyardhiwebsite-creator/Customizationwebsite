@@ -402,14 +402,45 @@ export default function Navbar() {
           ══════════════════════════════ */}
           <div style={{
             flex: "0 0 auto",
-            display: "flex", alignItems: "center", gap: 10,
+            display: "flex", alignItems: "center",
           }}>
-            <Link to="/" onClick={closeAll} style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}>
-              <img
-                src="/logo.png"
-                alt="Vidhyrathi"
-                style={{ height: 44, width: "auto", maxWidth: 160, objectFit: "contain", display: "block" }}
-              />
+            <Link to="/" onClick={closeAll} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
+              {/* Clipped V icon — only top portion of logo image */}
+              <div style={{
+                width: 52, height: 52,
+                overflow: "hidden",
+                flexShrink: 0,
+                marginLeft: 8,
+                display: "flex",
+                alignItems: "flex-start",
+              }}>
+                <img
+                  src="/logo.png"
+                  alt="Vidhyrathi"
+                  style={{ width: 52, height: "auto", display: "block", marginTop: "-4px" }}
+                />
+              </div>
+              {/* Brand name text */}
+              <div style={{ lineHeight: 1 }}>
+                <p style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontWeight: 700,
+                  fontSize: 20,
+                  color: "#2C241B",
+                  margin: 0,
+                  lineHeight: 1.15,
+                }}>Vidyarathi</p>
+                <p style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 9,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "#C8A23A",
+                  margin: 0,
+                  marginTop: 3,
+                }}>Personalized Gifts</p>
+              </div>
             </Link>
           </div>
 
