@@ -519,7 +519,7 @@ export default function Navbar() {
           <div style={{
             flex: "0 0 auto",
             display: "flex", alignItems: "center",
-            justifyContent: "flex-end", gap: 8,
+            justifyContent: "flex-end", gap: 6,
           }}>
 
             {/* Search — visible on mobile too */}
@@ -643,8 +643,8 @@ export default function Navbar() {
               Customize Gift
             </Link>
 
-            {/* Mobile menu toggle — always visible on small screens */}
-            <div style={{ flexShrink: 0, display: "block" }} className="lg:hidden">
+            {/* Mobile menu toggle — show only below lg breakpoint using inline style */}
+            <div style={{ flexShrink: 0, display: "flex" }}>
               <IconBtn
                 onClick={() => setMenuOpen(o => !o)}
                 title="Menu"
