@@ -361,6 +361,24 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", h)
   }, [])
 
+  /* ── Lock body scroll when mobile menu is open ── */
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden"
+      document.body.style.position = "fixed"
+      document.body.style.width = "100%"
+    } else {
+      document.body.style.overflow = ""
+      document.body.style.position = ""
+      document.body.style.width = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+      document.body.style.position = ""
+      document.body.style.width = ""
+    }
+  }, [menuOpen])
+
   const handleSignOut = async () => {
     await signOut()
     toast.success("Signed out")
@@ -634,16 +652,20 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "100%", opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
-              overflow: "hidden", position: "fixed",
-              top: 80, left: 0, right: 0, zIndex: 99,
+              position: "fixed",
+              top: 80, left: 0, right: 0,
+              bottom: 0,
+              zIndex: 200,
               background: "#FFFFFF",
-              borderBottom: "1px solid #E7DED1",
-              boxShadow: "0 8px 32px rgba(44,36,27,0.1)",
+              borderTop: "1px solid #E7DED1",
+              boxShadow: "0 8px 32px rgba(44,36,27,0.15)",
+              overflowY: "auto",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             <div className="px-5 py-6 sm:px-10" style={{ maxWidth: 1280, margin: "0 auto" }}>
