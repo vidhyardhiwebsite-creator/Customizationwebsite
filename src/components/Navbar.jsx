@@ -371,11 +371,11 @@ export default function Navbar() {
 
   /* ── shared icon button style ── */
   const iconStyle = {
-    width: 38, height: 38, borderRadius: "50%",
+    width: 32, height: 32, borderRadius: "50%",
     background: "#FFFFFF", border: "1px solid #ECE5DA",
     display: "inline-flex", alignItems: "center", justifyContent: "center",
     cursor: "pointer", flexShrink: 0, color: "#4A4036",
-    boxShadow: "0 1px 6px rgba(44,36,27,0.07)",
+    boxShadow: "0 1px 4px rgba(44,36,27,0.07)",
     textDecoration: "none", transition: "all 0.22s ease",
   }
 
@@ -427,17 +427,16 @@ export default function Navbar() {
             <Link to="/" onClick={closeAll} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
               {/* Clipped V icon — only top portion of logo image */}
               <div style={{
-                width: 52, height: 52,
+                width: 40, height: 40,
                 overflow: "hidden",
                 flexShrink: 0,
-                marginLeft: 8,
                 display: "flex",
                 alignItems: "flex-start",
               }}>
                 <img
                   src="/logo.png"
                   alt="Vidhyrathi"
-                  style={{ width: 52, height: "auto", display: "block", marginTop: "-4px" }}
+                  style={{ width: 40, height: "auto", display: "block", marginTop: "-3px" }}
                 />
               </div>
               {/* Brand name text */}
@@ -445,7 +444,7 @@ export default function Navbar() {
                 <p style={{
                   fontFamily: "'Playfair Display', Georgia, serif",
                   fontWeight: 700,
-                  fontSize: 20,
+                  fontSize: 16,
                   color: "#2C241B",
                   margin: 0,
                   lineHeight: 1.15,
@@ -453,12 +452,12 @@ export default function Navbar() {
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 600,
-                  fontSize: 9,
-                  letterSpacing: "0.2em",
+                  fontSize: 8,
+                  letterSpacing: "0.18em",
                   textTransform: "uppercase",
                   color: "#C8A23A",
                   margin: 0,
-                  marginTop: 3,
+                  marginTop: 2,
                 }}>Personalized Gifts</p>
               </div>
             </Link>
@@ -534,7 +533,7 @@ export default function Navbar() {
             {/* Search */}
             <div style={{ position: "relative", flexShrink: 0 }}>
               <button onClick={() => setSearchOpen(o => !o)} title="Search" style={iconStyle}>
-                <Search size={17} />
+                <Search size={15} />
               </button>
               <AnimatePresence>
                 {searchOpen && <SearchOverlay products={products} navigate={navigate} onClose={() => setSearchOpen(false)} />}
@@ -543,17 +542,17 @@ export default function Navbar() {
 
             {/* Wishlist */}
             <Link to={user ? "/wishlist" : "/login"} title="Wishlist" style={iconStyle}>
-              <Heart size={17} />
+              <Heart size={15} />
             </Link>
 
             {/* Cart */}
             <Link to="/cart" title="Cart" style={{ ...iconStyle, position: "relative" }}>
-              <ShoppingCart size={17} />
+              <ShoppingCart size={15} />
               {cartCount > 0 && (
                 <span style={{
                   position: "absolute", top: -2, right: -2,
-                  minWidth: 16, height: 16, padding: "0 3px",
-                  borderRadius: 999, fontSize: 9, fontWeight: 800,
+                  minWidth: 14, height: 14, padding: "0 2px",
+                  borderRadius: 999, fontSize: 8, fontWeight: 800,
                   fontFamily: "'Inter',sans-serif",
                   background: "linear-gradient(135deg,#D4AF37,#B8860B)",
                   color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
@@ -612,17 +611,17 @@ export default function Navbar() {
               onClick={() => setMenuOpen(o => !o)}
               title="Menu"
               style={{
-                width: 38, height: 38, borderRadius: "50%",
+                width: 32, height: 32, borderRadius: "50%",
                 background: "#FFFFFF", border: "1px solid #ECE5DA",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 cursor: "pointer", flexShrink: 0, flexGrow: 0,
                 color: "#4A4036",
-                boxShadow: "0 1px 6px rgba(44,36,27,0.07)",
+                boxShadow: "0 1px 4px rgba(44,36,27,0.07)",
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "#C8A23A"; e.currentTarget.style.color = "#C8A23A" }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "#ECE5DA"; e.currentTarget.style.color = "#4A4036" }}
             >
-              {menuOpen ? <X size={19} /> : <Menu size={19} />}
+              {menuOpen ? <X size={16} /> : <Menu size={16} />}
             </button>
 
           </div>
