@@ -86,37 +86,44 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="container-lux" style={{ paddingTop: 64, paddingBottom: 96 }}>
+        <div className="container-lux" style={{ paddingTop: 48, paddingBottom: 80 }}>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 480px), 1fr))",
-            gap: 40,
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
+            gap: 32,
             alignItems: "start",
           }}>
 
             {/* ── LEFT: contact info + social ── */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
 
-              {/* Info cards */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
+              {/* Info cards — 1 col on mobile, 2 col on sm+ */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                gap: 12,
+                marginBottom: 28,
+              }}>
                 {CONTACT_INFO.map((c, i) => (
                   <div key={i} style={{
                     background: "#FFFFFF",
                     border: "1px solid #E7DED1",
                     borderRadius: 16,
-                    padding: "20px 18px",
+                    padding: "16px 18px",
                     display: "flex",
-                    flexDirection: "column",
-                    gap: 12,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    gap: 14,
                     boxShadow: "0 2px 12px rgba(44,36,27,0.05)",
                     transition: "box-shadow 0.25s, border-color 0.25s",
+                    minWidth: 0,
                   }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(200,162,58,0.35)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(44,36,27,0.09)" }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = "#E7DED1"; e.currentTarget.style.boxShadow = "0 2px 12px rgba(44,36,27,0.05)" }}
                   >
                     {/* Icon */}
                     <div style={{
-                      width: 40, height: 40, borderRadius: 12,
+                      width: 38, height: 38, borderRadius: 10,
                       background: "rgba(200,162,58,0.1)",
                       border: "1px solid rgba(200,162,58,0.2)",
                       display: "flex", alignItems: "center", justifyContent: "center",
@@ -124,18 +131,19 @@ export default function ContactPage() {
                     }}>
                       {c.icon}
                     </div>
-                    <div>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8F857A", marginBottom: 4 }}>
+                    {/* Text */}
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8F857A", marginBottom: 4, margin: "0 0 4px" }}>
                         {c.label}
                       </p>
                       {c.href ? (
-                        <a href={c.href} style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 600, color: "#2C241B", textDecoration: "none" }}
+                        <a href={c.href} style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: "#2C241B", textDecoration: "none", wordBreak: "break-word" }}
                           onMouseEnter={e => e.currentTarget.style.color = "#C8A23A"}
                           onMouseLeave={e => e.currentTarget.style.color = "#2C241B"}>
                           {c.value}
                         </a>
                       ) : (
-                        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 600, color: "#2C241B", margin: 0 }}>{c.value}</p>
+                        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: "#2C241B", margin: 0, wordBreak: "break-word" }}>{c.value}</p>
                       )}
                     </div>
                   </div>
@@ -195,8 +203,8 @@ export default function ContactPage() {
               <div style={{
                 background: "#FFFFFF",
                 border: "1px solid #E7DED1",
-                borderRadius: 24,
-                padding: "40px 36px",
+                borderRadius: 20,
+                padding: "clamp(24px, 5vw, 40px) clamp(20px, 4vw, 36px)",
                 boxShadow: "0 4px 32px rgba(44,36,27,0.08)",
               }}>
                 {/* Top gold line */}
@@ -216,8 +224,8 @@ export default function ContactPage() {
                 )}
 
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                  {/* Name + Email row */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  {/* Name + Email row — stacks on mobile */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: 16 }}>
                     <div>
                       <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: "#6F655A", display: "block", marginBottom: 6 }}>
                         Name <span style={{ color: "#D9534F" }}>*</span>
