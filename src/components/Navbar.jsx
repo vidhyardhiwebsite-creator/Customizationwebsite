@@ -122,11 +122,18 @@ function SearchOverlay({ products, navigate, onClose }) {
       transition={{ duration: 0.2 }}
       ref={ref}
       style={{
-        position: "absolute", top: "calc(100% + 8px)", right: 0,
-        width: 300, zIndex: 200,
+        position: "fixed",
+        top: 80,          /* exactly below 80px navbar */
+        left: 0,
+        right: 0,
+        zIndex: 500,
+        padding: "12px 16px",
+        background: "#F8F5F0",
+        borderBottom: "1px solid #E7DED1",
+        boxShadow: "0 8px 24px rgba(44,36,27,0.12)",
       }}
     >
-      <form onSubmit={go} style={{ position: "relative" }}>
+      <form onSubmit={go} style={{ position: "relative", maxWidth: 640, margin: "0 auto" }}>
         <Search size={15} style={{
           position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)",
           color: "#8F857A", pointerEvents: "none",
@@ -135,21 +142,21 @@ function SearchOverlay({ products, navigate, onClose }) {
           autoFocus type="text" value={q} onChange={onChange}
           placeholder="Search gifts…"
           style={{
-            width: "100%", paddingLeft: 40, paddingRight: q ? 36 : 16,
-            paddingTop: 11, paddingBottom: 11,
-            borderRadius: 999, border: "1px solid #E7DED1",
+            width: "100%", paddingLeft: 42, paddingRight: q ? 38 : 16,
+            paddingTop: 13, paddingBottom: 13,
+            borderRadius: 999, border: "1.5px solid #E7DED1",
             background: "#FFFFFF", color: "#2C241B",
-            fontSize: 14, fontFamily: "'Inter',sans-serif",
-            outline: "none", boxShadow: "0 2px 16px rgba(44,36,27,0.1)",
-            transition: "border-color 0.2s",
+            fontSize: 15, fontFamily: "'Inter',sans-serif",
+            outline: "none", boxShadow: "0 2px 12px rgba(44,36,27,0.08)",
+            transition: "border-color 0.2s, box-shadow 0.2s",
           }}
-          onFocus={e => e.target.style.borderColor = "#C8A23A"}
-          onBlur={e => e.target.style.borderColor = "#E7DED1"}
+          onFocus={e => { e.target.style.borderColor = "#C8A23A"; e.target.style.boxShadow = "0 0 0 3px rgba(200,162,58,0.1)" }}
+          onBlur={e => { e.target.style.borderColor = "#E7DED1"; e.target.style.boxShadow = "0 2px 12px rgba(44,36,27,0.08)" }}
         />
         {q && (
           <button type="button" onClick={() => { setQ(""); setHits([]) }}
-            style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", color: "#8F857A", background: "none", border: "none" }}>
-            <X size={13} />
+            style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", color: "#8F857A", background: "none", border: "none", cursor: "pointer" }}>
+            <X size={14} />
           </button>
         )}
       </form>
@@ -158,7 +165,9 @@ function SearchOverlay({ products, navigate, onClose }) {
         {hits.length > 0 && (
           <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
             style={{
-              marginTop: 6, background: "#FFFFFF", border: "1px solid #E7DED1",
+              marginTop: 8,
+              maxWidth: 640, margin: "8px auto 0",
+              background: "#FFFFFF", border: "1px solid #E7DED1",
               borderRadius: 16, overflow: "hidden",
               boxShadow: "0 8px 32px rgba(44,36,27,0.12)",
             }}>
@@ -167,7 +176,7 @@ function SearchOverlay({ products, navigate, onClose }) {
                 onClick={() => { navigate(`/products/${p.id}`); onClose() }}
                 style={{
                   width: "100%", display: "flex", alignItems: "center", gap: 12,
-                  padding: "10px 16px", background: "none", border: "none",
+                  padding: "12px 16px", background: "none", border: "none",
                   textAlign: "left", cursor: "pointer", transition: "background 0.15s",
                 }}
                 onMouseEnter={e => e.currentTarget.style.background = "#F8F5F0"}
@@ -396,7 +405,6 @@ export default function Navbar() {
           justifyContent: "space-between",
           gap: 8,
           boxSizing: "border-box",
-          overflow: "hidden",
         }}>
 
           {/* ══════════════════════════════
@@ -635,12 +643,11 @@ export default function Navbar() {
               Customize Gift
             </Link>
 
-            {/* Mobile menu toggle */}
-            <div style={{ marginLeft: 0, flexShrink: 0 }}>
+            {/* Mobile menu toggle — always visible on small screens */}
+            <div style={{ flexShrink: 0, display: "block" }} className="lg:hidden">
               <IconBtn
                 onClick={() => setMenuOpen(o => !o)}
                 title="Menu"
-                className="lg:hidden menu-btn"
               >
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </IconBtn>
