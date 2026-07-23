@@ -369,6 +369,16 @@ export default function Navbar() {
 
   const closeAll = () => { setMenuOpen(false); setUserOpen(false); setSearchOpen(false); setCatOpen(false) }
 
+  /* ── shared icon button style ── */
+  const iconStyle = {
+    width: 38, height: 38, borderRadius: "50%",
+    background: "#FFFFFF", border: "1px solid #ECE5DA",
+    display: "inline-flex", alignItems: "center", justifyContent: "center",
+    cursor: "pointer", flexShrink: 0, color: "#4A4036",
+    boxShadow: "0 1px 6px rgba(44,36,27,0.07)",
+    textDecoration: "none", transition: "all 0.22s ease",
+  }
+
   /* ── nav bar background ── */
   const navStyle = {
     position: "sticky", top: 0, zIndex: 100,
@@ -519,139 +529,101 @@ export default function Navbar() {
           <div style={{
             flex: "0 0 auto",
             display: "flex", alignItems: "center",
-            justifyContent: "flex-end", gap: 6,
+            justifyContent: "flex-end", gap: 4,
           }}>
-
-            {/* Search — visible on mobile too */}
+            {/* Search */}
             <div style={{ position: "relative", flexShrink: 0 }}>
-              <IconBtn
-                onClick={() => setSearchOpen(o => !o)}
-                title="Search"
-              >
-                <Search size={18} />
-              </IconBtn>
+              <button onClick={() => setSearchOpen(o => !o)} title="Search" style={iconStyle}>
+                <Search size={17} />
+              </button>
               <AnimatePresence>
-                {searchOpen && (
-                  <SearchOverlay
-                    products={products}
-                    navigate={navigate}
-                    onClose={() => setSearchOpen(false)}
-                  />
-                )}
+                {searchOpen && <SearchOverlay products={products} navigate={navigate} onClose={() => setSearchOpen(false)} />}
               </AnimatePresence>
             </div>
 
-            {/* Wishlist — visible on mobile too */}
-            <div style={{ flexShrink: 0 }}>
-              <IconBtn to={user ? "/wishlist" : "/login"} title="Wishlist">
-                <Heart size={18} />
-              </IconBtn>
-            </div>
+            {/* Wishlist */}
+            <Link to={user ? "/wishlist" : "/login"} title="Wishlist" style={iconStyle}>
+              <Heart size={17} />
+            </Link>
 
             {/* Cart */}
-            <div style={{ flexShrink: 0 }}>
-              <IconBtn to="/cart" title="Cart" badge={cartCount}>
-                <ShoppingCart size={18} />
-              </IconBtn>
-            </div>
+            <Link to="/cart" title="Cart" style={{ ...iconStyle, position: "relative" }}>
+              <ShoppingCart size={17} />
+              {cartCount > 0 && (
+                <span style={{
+                  position: "absolute", top: -2, right: -2,
+                  minWidth: 16, height: 16, padding: "0 3px",
+                  borderRadius: 999, fontSize: 9, fontWeight: 800,
+                  fontFamily: "'Inter',sans-serif",
+                  background: "linear-gradient(135deg,#D4AF37,#B8860B)",
+                  color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {cartCount > 9 ? "9+" : cartCount}
+                </span>
+              )}
+            </Link>
 
-            {/* Login / Avatar */}
-            {user ? (
-              <div className="hidden lg:block" style={{ position: "relative", flexShrink: 0 }} ref={userRef}>
-                <button
-                  onClick={() => setUserOpen(o => !o)}
-                  title="Account"
-                  style={{
-                    width: 40, height: 40, borderRadius: "50%",
-                    background: "#FFFFFF", border: "1px solid #ECE5DA",
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    cursor: "pointer", flexShrink: 0,
-                    boxShadow: "0 1px 6px rgba(44,36,27,0.07)",
-                    overflow: "hidden", padding: 0,
-                    transition: "all 0.22s ease",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#C8A23A"; e.currentTarget.style.transform = "translateY(-2px)" }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = "#ECE5DA"; e.currentTarget.style.transform = "none" }}
-                >
-                  {user.user_metadata?.avatar_url
-                    ? <img src={user.user_metadata.avatar_url} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
-                    : <User size={18} style={{ color: "#4A4036" }} />}
-                </button>
-                <AnimatePresence>
-                  {userOpen && (
-                    <UserDropdown
-                      user={user} isAdmin={isAdmin} isOnAdmin={isOnAdmin}
-                      onSignOut={handleSignOut} onClose={() => setUserOpen(false)}
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <Link to="/login"
-                className="hidden lg:inline-block"
-                style={{
-                  fontSize: 14, fontWeight: 500, fontFamily: "'Inter',sans-serif",
-                  color: "#4A4036", textDecoration: "none",
-                  letterSpacing: "0.01em", flexShrink: 0, padding: "0 4px",
-                  transition: "color 0.2s ease", whiteSpace: "nowrap",
-                }}
+            {/* Login (desktop only) */}
+            {!user && (
+              <Link to="/login" className="hidden lg:inline-block"
+                style={{ fontSize: 14, fontWeight: 500, fontFamily: "'Inter',sans-serif", color: "#4A4036", textDecoration: "none", padding: "0 4px", whiteSpace: "nowrap", flexShrink: 0 }}
                 onMouseEnter={e => e.currentTarget.style.color = "#C8A23A"}
-                onMouseLeave={e => e.currentTarget.style.color = "#4A4036"}
-              >
+                onMouseLeave={e => e.currentTarget.style.color = "#4A4036"}>
                 Login
               </Link>
             )}
 
-            {/* Admin toggle (desktop only, minimal) */}
+            {/* Avatar (desktop only) */}
+            {user && (
+              <div className="hidden lg:block" style={{ position: "relative", flexShrink: 0 }} ref={userRef}>
+                <button onClick={() => setUserOpen(o => !o)} title="Account" style={{ ...iconStyle, overflow: "hidden", padding: 0 }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#C8A23A" }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "#ECE5DA" }}>
+                  {user.user_metadata?.avatar_url
+                    ? <img src={user.user_metadata.avatar_url} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
+                    : <User size={17} style={{ color: "#4A4036" }} />}
+                </button>
+                <AnimatePresence>
+                  {userOpen && <UserDropdown user={user} isAdmin={isAdmin} isOnAdmin={isOnAdmin} onSignOut={handleSignOut} onClose={() => setUserOpen(false)} />}
+                </AnimatePresence>
+              </div>
+            )}
+
+            {/* Admin (desktop only) */}
             {isAdmin && (
-              <Link to={isOnAdmin ? "/" : "/admin"}
-                className="hidden lg:inline-flex items-center gap-1"
-                style={{
-                  fontSize: 11, fontWeight: 600, fontFamily: "'Inter',sans-serif",
-                  color: "#C8A23A", textDecoration: "none",
-                  padding: "4px 10px", borderRadius: 999,
-                  border: "1px solid rgba(200,162,58,0.35)",
-                  transition: "all 0.2s ease", flexShrink: 0,
-                  whiteSpace: "nowrap",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(200,162,58,0.08)" }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent" }}
-              >
-                {isOnAdmin ? <><Store size={10} /> User</> : <><Settings size={10} /> Admin</>}
+              <Link to={isOnAdmin ? "/" : "/admin"} className="hidden lg:inline-flex"
+                style={{ fontSize: 11, fontWeight: 600, fontFamily: "'Inter',sans-serif", color: "#C8A23A", textDecoration: "none", padding: "4px 10px", borderRadius: 999, border: "1px solid rgba(200,162,58,0.35)", whiteSpace: "nowrap", flexShrink: 0 }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(200,162,58,0.08)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                {isOnAdmin ? "User" : "Admin"}
               </Link>
             )}
 
-            {/* Customize Gift CTA */}
-            <Link to="/products" onClick={closeAll}
-              className="hidden md:inline-flex items-center justify-center"
-              style={{
-                height: 42, padding: "0 20px",
-                borderRadius: 999,
-                background: "linear-gradient(135deg, #D4AF37, #B8860B)",
-                color: "#FFFFFF",
-                fontSize: 13, fontWeight: 600,
-                fontFamily: "'Inter',sans-serif",
-                letterSpacing: "0.02em",
-                textDecoration: "none",
-                whiteSpace: "nowrap", flexShrink: 0,
-                boxShadow: "0 3px 14px rgba(200,162,58,0.35)",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "linear-gradient(135deg, #E4C55A, #C9971A)"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 6px 22px rgba(200,162,58,0.45)" }}
-              onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg, #D4AF37, #B8860B)"; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 3px 14px rgba(200,162,58,0.35)" }}
-            >
+            {/* Customize CTA (tablet+ only) */}
+            <Link to="/products" onClick={closeAll} className="hidden md:inline-flex"
+              style={{ height: 40, padding: "0 18px", borderRadius: 999, background: "linear-gradient(135deg, #D4AF37, #B8860B)", color: "#FFFFFF", fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif", textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, alignItems: "center", justifyContent: "center" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "linear-gradient(135deg, #E4C55A, #C9971A)"; e.currentTarget.style.transform = "translateY(-2px)" }}
+              onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg, #D4AF37, #B8860B)"; e.currentTarget.style.transform = "none" }}>
               Customize Gift
             </Link>
 
-            {/* Mobile menu toggle — show only below lg breakpoint using inline style */}
-            <div style={{ flexShrink: 0, display: "flex" }}>
-              <IconBtn
-                onClick={() => setMenuOpen(o => !o)}
-                title="Menu"
-              >
-                {menuOpen ? <X size={20} /> : <Menu size={20} />}
-              </IconBtn>
-            </div>
+            {/* ── Hamburger — ALWAYS visible ── */}
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              title="Menu"
+              style={{
+                width: 38, height: 38, borderRadius: "50%",
+                background: "#FFFFFF", border: "1px solid #ECE5DA",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", flexShrink: 0, flexGrow: 0,
+                color: "#4A4036",
+                boxShadow: "0 1px 6px rgba(44,36,27,0.07)",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "#C8A23A"; e.currentTarget.style.color = "#C8A23A" }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "#ECE5DA"; e.currentTarget.style.color = "#4A4036" }}
+            >
+              {menuOpen ? <X size={19} /> : <Menu size={19} />}
+            </button>
 
           </div>
         </div>
