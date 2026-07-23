@@ -91,7 +91,7 @@ export default function App() {
 
           {/* Storefront routes */}
           <Route path="/*" element={
-            <div className="min-h-screen flex flex-col" style={{ background: '#F8F5F0' }}>
+            <div className="min-h-screen flex flex-col" style={{ background: '#F8F5F0', overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
               <Navbar />
               <main className="flex-1">
                 <ErrorBoundary>

@@ -387,14 +387,16 @@ export default function Navbar() {
     <>
       <nav style={navStyle}>
         {/* ── max-width container ── */}
-        <div className="px-4 sm:px-6 lg:px-8 xl:px-10" style={{
+        <div className="px-3 sm:px-5 lg:px-8 xl:px-10" style={{
           maxWidth: 1360, width: "100%",
           margin: "0 auto",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: 12,
+          gap: 8,
+          boxSizing: "border-box",
+          overflow: "hidden",
         }}>
 
           {/* ══════════════════════════════
@@ -512,8 +514,8 @@ export default function Navbar() {
             justifyContent: "flex-end", gap: 8,
           }}>
 
-            {/* Search icon + overlay */}
-            <div className="hidden lg:block" style={{ position: "relative", flexShrink: 0 }}>
+            {/* Search — visible on mobile too */}
+            <div style={{ position: "relative", flexShrink: 0 }}>
               <IconBtn
                 onClick={() => setSearchOpen(o => !o)}
                 title="Search"
@@ -531,8 +533,8 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Wishlist */}
-            <div className="hidden lg:block" style={{ flexShrink: 0 }}>
+            {/* Wishlist — visible on mobile too */}
+            <div style={{ flexShrink: 0 }}>
               <IconBtn to={user ? "/wishlist" : "/login"} title="Wishlist">
                 <Heart size={18} />
               </IconBtn>
