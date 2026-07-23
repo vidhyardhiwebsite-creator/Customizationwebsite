@@ -658,121 +658,216 @@ export default function Navbar() {
             transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
               position: "fixed",
-              top: 80, left: 0, right: 0,
-              bottom: 0,
-              zIndex: 200,
+              top: 0, left: 0, right: 0, bottom: 0,
+              zIndex: 300,
               background: "#FFFFFF",
-              borderTop: "1px solid #E7DED1",
-              boxShadow: "0 8px 32px rgba(44,36,27,0.15)",
               overflowY: "auto",
               WebkitOverflowScrolling: "touch",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <div className="px-5 py-6 sm:px-10" style={{ maxWidth: 1280, margin: "0 auto" }}>
+            {/* ── Header row: Logo + Icons + Close ── */}
+            <div style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "16px 20px",
+              borderBottom: "1px solid #F3EEE6",
+              flexShrink: 0,
+            }}>
+              {/* Logo + Name */}
+              <Link to="/" onClick={closeAll} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+                <div style={{ width: 40, height: 40, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "flex-start" }}>
+                  <img src="/logo.png" alt="Vidhyrathi" style={{ width: 40, height: "auto", display: "block", marginTop: "-3px" }} />
+                </div>
+                <div>
+                  <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 16, color: "#2C241B", margin: 0, lineHeight: 1.2 }}>Vidyarathi</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "#C8A23A", margin: 0 }}>Personalized Gifts</p>
+                </div>
+              </Link>
 
-              {/* Mobile search */}
-              <div style={{ position: "relative", marginBottom: 20 }}>
-                <Search size={15} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#8F857A", pointerEvents: "none" }} />
-                <input
-                  type="text"
-                  placeholder="Search personalised gifts…"
-                  onKeyDown={e => { if (e.key === "Enter" && e.target.value.trim()) { navigate(`/products?search=${encodeURIComponent(e.target.value.trim())}`); closeAll() } }}
-                  style={{
-                    width: "100%", paddingLeft: 42, paddingRight: 16,
-                    paddingTop: 12, paddingBottom: 12,
-                    borderRadius: 999, border: "1px solid #E7DED1",
-                    background: "#F8F5F0", color: "#2C241B",
-                    fontSize: 14, fontFamily: "'Inter',sans-serif", outline: "none",
-                  }}
-                  onFocus={e => e.target.style.borderColor = "#C8A23A"}
-                  onBlur={e => e.target.style.borderColor = "#E7DED1"}
-                />
+              {/* Right icons row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+                <Link to={user ? "/wishlist" : "/login"} onClick={closeAll} style={{ color: "#6F655A", display: "flex" }}>
+                  <Heart size={20} />
+                </Link>
+                <Link to="/cart" onClick={closeAll} style={{ color: "#6F655A", display: "flex", position: "relative" }}>
+                  <ShoppingCart size={20} />
+                  {cartCount > 0 && (
+                    <span style={{ position: "absolute", top: -4, right: -4, width: 14, height: 14, borderRadius: "50%", background: "linear-gradient(135deg,#D4AF37,#B8860B)", color: "#fff", fontSize: 8, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {cartCount > 9 ? "9+" : cartCount}
+                    </span>
+                  )}
+                </Link>
+                <button onClick={() => { closeAll(); setSearchOpen(true) }} style={{ color: "#6F655A", background: "none", border: "none", display: "flex", padding: 0, cursor: "pointer" }}>
+                  <Search size={20} />
+                </button>
+                {/* Close button */}
+                <button onClick={closeAll} style={{
+                  width: 32, height: 32, borderRadius: "50%",
+                  background: "rgba(200,162,58,0.1)",
+                  border: "1.5px solid rgba(200,162,58,0.35)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", color: "#C8A23A",
+                }}>
+                  <X size={17} />
+                </button>
               </div>
+            </div>
 
-              {/* Nav links */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {NAV_LINKS.map(link => (
+            {/* ── Nav links ── */}
+            <div style={{ padding: "12px 20px 0", flex: 1 }}>
+              {NAV_LINKS.map(link => {
+                const isActive = pathname === link.to || (link.to !== "/" && pathname.startsWith(link.to.split("?")[0]))
+                return (
                   <Link key={link.label} to={link.to} onClick={closeAll}
                     style={{
-                      padding: "12px 4px", fontSize: 16, fontWeight: 500,
-                      fontFamily: "'Inter',sans-serif", color: "#4A4036",
-                      textDecoration: "none", borderBottom: "1px solid #F3EEE6",
-                      display: "flex", alignItems: "center", justifyContent: "space-between",
-                      transition: "color 0.2s",
+                      display: "block",
+                      padding: "14px 16px",
+                      marginBottom: 4,
+                      borderRadius: 12,
+                      fontFamily: "'Inter',sans-serif",
+                      fontSize: 16, fontWeight: isActive ? 600 : 400,
+                      color: isActive ? "#C8A23A" : "#2C241B",
+                      textDecoration: "none",
+                      background: isActive ? "rgba(200,162,58,0.08)" : "transparent",
+                      transition: "all 0.2s",
                     }}
-                    onMouseEnter={e => e.currentTarget.style.color = "#C8A23A"}
-                    onMouseLeave={e => e.currentTarget.style.color = "#4A4036"}
+                    onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "#F8F5F0"; e.currentTarget.style.color = "#C8A23A" } }}
+                    onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2C241B" } }}
                   >
                     {link.label}
                   </Link>
-                ))}
-              </div>
+                )
+              })}
 
-              {/* Category quick links */}
-              {categories.length > 0 && (
-                <div style={{ marginTop: 20 }}>
-                  <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#C8A23A", fontFamily: "'Inter',sans-serif", marginBottom: 10 }}>
-                    Categories
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    {categories.slice(0, 8).map(cat => (
-                      <Link key={cat} to={`/products?category=${encodeURIComponent(cat)}`} onClick={closeAll}
-                        style={{
-                          padding: "6px 14px", borderRadius: 999,
-                          border: "1px solid #E7DED1", background: "#F8F5F0",
-                          fontSize: 13, fontFamily: "'Inter',sans-serif", color: "#6F655A",
-                          textDecoration: "none", transition: "all 0.2s",
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = "#C8A23A"; e.currentTarget.style.color = "#C8A23A" }}
-                        onMouseLeave={e => { e.currentTarget.style.borderColor = "#E7DED1"; e.currentTarget.style.color = "#6F655A" }}
-                      >
-                        {cat}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Mobile CTAs */}
-              <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
-                <Link to="/products" onClick={closeAll}
+              {/* Categories */}
+              {categories.slice(0, 8).map(cat => (
+                <Link key={cat} to={`/products?category=${encodeURIComponent(cat)}`} onClick={closeAll}
                   style={{
-                    flex: 1, height: 48, borderRadius: 999, textAlign: "center",
-                    background: "linear-gradient(135deg, #D4AF37, #B8860B)",
-                    color: "#FFFFFF", fontSize: 14, fontWeight: 600,
-                    fontFamily: "'Inter',sans-serif", textDecoration: "none",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    boxShadow: "0 3px 14px rgba(200,162,58,0.35)",
-                  }}>
-                  Customize Now
+                    display: "block",
+                    padding: "13px 16px",
+                    marginBottom: 2,
+                    borderRadius: 12,
+                    fontFamily: "'Inter',sans-serif",
+                    fontSize: 15, fontWeight: 400,
+                    color: "#6F655A",
+                    textDecoration: "none",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "#F8F5F0"; e.currentTarget.style.color = "#C8A23A" }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#6F655A" }}
+                >
+                  {cat}
                 </Link>
-                {!user && (
+              ))}
+            </div>
+
+            {/* ── User section at bottom ── */}
+            <div style={{
+              padding: "16px 20px 32px",
+              borderTop: "1px solid #F3EEE6",
+              marginTop: 12,
+              flexShrink: 0,
+            }}>
+              {user ? (
+                <>
+                  {/* Avatar + name */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                      background: "linear-gradient(135deg, #D4AF37, #A88422)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      overflow: "hidden",
+                    }}>
+                      {user.user_metadata?.avatar_url
+                        ? <img src={user.user_metadata.avatar_url} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        : <span style={{ fontFamily: "'Playfair Display',serif", fontWeight: 900, fontSize: 18, color: "#fff" }}>
+                            {(user.user_metadata?.full_name || user.email || "U")[0].toUpperCase()}
+                          </span>}
+                    </div>
+                    <div>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "#2C241B", margin: 0, lineHeight: 1.3 }}>
+                        {user.user_metadata?.full_name || user.user_metadata?.name || "Welcome"}
+                      </p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#8F857A", margin: 0 }}>{user.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Account links */}
+                  {[
+                    { to: "/orders",   icon: <Package size={17} />,  label: "My Orders" },
+                    { to: "/wishlist", icon: <Heart size={17} />,    label: "Wishlist" },
+                    { to: "/profile",  icon: <User size={17} />,     label: "My Profile" },
+                  ].map(item => (
+                    <Link key={item.to} to={item.to} onClick={closeAll}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 14,
+                        padding: "13px 4px",
+                        fontFamily: "'Inter',sans-serif", fontSize: 15,
+                        color: "#2C241B", textDecoration: "none",
+                        borderBottom: "1px solid #F8F5F0",
+                        transition: "color 0.2s",
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.color = "#C8A23A"}
+                      onMouseLeave={e => e.currentTarget.style.color = "#2C241B"}
+                    >
+                      <span style={{ color: "#8F857A" }}>{item.icon}</span>
+                      {item.label}
+                    </Link>
+                  ))}
+
+                  {isAdmin && (
+                    <Link to={isOnAdmin ? "/" : "/admin"} onClick={closeAll}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 14,
+                        padding: "13px 4px",
+                        fontFamily: "'Inter',sans-serif", fontSize: 15, fontWeight: 600,
+                        color: "#C8A23A", textDecoration: "none",
+                        borderBottom: "1px solid #F8F5F0",
+                      }}>
+                      <Settings size={17} style={{ color: "#C8A23A" }} />
+                      {isOnAdmin ? "← User View" : "Admin Panel"}
+                    </Link>
+                  )}
+
+                  <button onClick={handleSignOut}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 14,
+                      padding: "13px 4px", marginTop: 4,
+                      fontFamily: "'Inter',sans-serif", fontSize: 15,
+                      color: "#D9534F", background: "none", border: "none",
+                      cursor: "pointer", width: "100%",
+                    }}>
+                    <LogOut size={17} style={{ color: "#D9534F" }} />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <div style={{ display: "flex", gap: 12 }}>
                   <Link to="/login" onClick={closeAll}
                     style={{
-                      flex: 1, height: 48, borderRadius: 999, textAlign: "center",
+                      flex: 1, height: 48, borderRadius: 999,
+                      background: "linear-gradient(135deg, #D4AF37, #B8860B)",
+                      color: "#FFFFFF", fontSize: 14, fontWeight: 600,
+                      fontFamily: "'Inter',sans-serif", textDecoration: "none",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      boxShadow: "0 3px 14px rgba(200,162,58,0.3)",
+                    }}>
+                    Login
+                  </Link>
+                  <Link to="/products" onClick={closeAll}
+                    style={{
+                      flex: 1, height: 48, borderRadius: 999,
                       background: "transparent", color: "#8B5E3C",
                       fontSize: 14, fontWeight: 600,
                       fontFamily: "'Inter',sans-serif", textDecoration: "none",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       border: "1.5px solid #8B5E3C",
                     }}>
-                    Login
+                    Customize
                   </Link>
-                )}
-                {user && (
-                  <button onClick={handleSignOut}
-                    style={{
-                      flex: 1, height: 48, borderRadius: 999,
-                      background: "transparent", color: "#D9534F",
-                      fontSize: 14, fontWeight: 600,
-                      fontFamily: "'Inter',sans-serif",
-                      border: "1.5px solid #D9534F", cursor: "pointer",
-                    }}>
-                    Sign Out
-                  </button>
-                )}
-              </div>
-
+                </div>
+              )}
             </div>
           </motion.div>
         )}

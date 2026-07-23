@@ -12,7 +12,7 @@ import { getSetting, setSetting } from '../../services/settingsService'
 import { supabase } from '../../lib/supabase'
 import toast from 'react-hot-toast'
 
-const GOLD_COLORS = ['#1B2B5E', '#2A3F7E', '#3D5A99', '#4E6FA8', '#1A3A6B', '#0F1A3A', '#5B7DB1', '#6B8EC4']
+const GOLD_COLORS = ['#C8A23A', '#A88422', '#8B5E3C', '#2C241B', '#D4AF37', '#6F655A', '#E4C55A', '#B8860B']
 
 // Hero Video Manager component
 function HeroVideoManager() {
@@ -66,9 +66,9 @@ function HeroVideoManager() {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-        <Video size={16} className="text-[#1B2B5E]" /> Hero Video
+    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+      <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
+        <Video size={16} className="text-[#2C241B]" /> Hero Video
       </h3>
       {currentUrl && (
         <video src={currentUrl} className="w-full h-32 object-cover rounded-lg mb-4 bg-gray-50" muted />
@@ -80,23 +80,24 @@ function HeroVideoManager() {
           <label className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#1B2B5E]/30 rounded-lg cursor-pointer hover:border-[#D4AF37]/60 transition-all">
             <input type="file" accept="video/*" className="hidden" onChange={handleFileUpload} disabled={uploading} />
             {uploading
-              ? <><Loader2 size={15} className="text-[#1B2B5E] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
-              : <><Upload size={15} className="text-[#1B2B5E]" /><span className="text-gray-400 text-sm">Choose video file</span></>
+              ? <><Loader2 size={15} className="text-[#2C241B] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
+              : <><Upload size={15} className="text-[#2C241B]" /><span className="text-gray-400 text-sm">Choose video file</span></>
             }
           </label>
         </div>
         {/* Or paste URL */}
         <div>
           <label className="text-xs text-gray-400 mb-1 block">Or paste video URL</label>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               value={manualUrl}
               onChange={e => setManualUrl(e.target.value)}
               placeholder="https://..."
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]"
+              className="flex-1 min-w-0 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#C8A23A]"
+              style={{ maxWidth: "100%" }}
             />
             <button onClick={handleSaveUrl} disabled={saving || !manualUrl.trim()}
-              className="px-4 py-2 bg-[#1B2B5E] text-white text-sm font-medium rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 flex items-center gap-1">
+              className="px-4 py-2 bg-[#C8A23A] text-white text-sm font-medium rounded-lg hover:bg-[#A88422] disabled:opacity-60 flex items-center gap-1 flex-shrink-0">
               {saving && <Loader2 size={13} className="animate-spin" />}
               Save
             </button>
@@ -108,20 +109,35 @@ function HeroVideoManager() {
 }
 
 const StatCard = ({ icon: Icon, label, value, sub, color = 'gold', to }) => (
-  <Link to={to || '#'} className="cursor-pointer">
+  <Link to={to || '#'} style={{ textDecoration: "none" }}>
     <motion.div
-      whileHover={{ y: -2, boxShadow: '0 4px 20px rgba(27,43,94,0.12)' }}
+      whileHover={{ y: -3, boxShadow: "0 8px 28px rgba(44,36,27,0.12)" }}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white border border-gray-200 rounded-xl p-5 cursor-pointer transition-all hover:border-[#1B2B5E]/30 h-full min-h-[130px] flex flex-col justify-between"
+      style={{
+        background: "#FFFFFF",
+        border: "1px solid #E7DED1",
+        borderRadius: 16,
+        padding: "16px",
+        cursor: "pointer",
+        transition: "all 0.3s",
+        minHeight: 110,
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+        boxShadow: "0 2px 12px rgba(44,36,27,0.06)",
+      }}
     >
-      <div className={`p-2 rounded-lg w-fit ${color === 'gold' ? 'bg-[#1B2B5E]/15' : color === 'green' ? 'bg-green-500/15' : color === 'red' ? 'bg-red-500/15' : 'bg-blue-500/15'}`}>
-        <Icon size={18} className={color === 'gold' ? 'text-[#1B2B5E]' : color === 'green' ? 'text-green-400' : color === 'red' ? 'text-red-400' : 'text-blue-400'} />
+      <div style={{
+        width: 36, height: 36, borderRadius: 10,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        background: color === 'green' ? "rgba(46,125,50,0.1)" : color === 'red' ? "rgba(217,83,79,0.1)" : "rgba(200,162,58,0.12)",
+        marginBottom: 8,
+      }}>
+        <Icon size={18} style={{ color: color === 'green' ? "#2E7D32" : color === 'red' ? "#D9534F" : "#C8A23A" }} />
       </div>
       <div>
-        <p className="text-2xl font-bold text-[#1B2B5E] mb-1">{value}</p>
-        <p className="text-gray-400 text-sm">{label}</p>
-        {sub && <p className="text-xs text-gray-600 mt-1">{sub}</p>}
+        <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: "clamp(16px, 3.5vw, 24px)", color: "#2C241B", margin: "0 0 2px", lineHeight: 1.1, wordBreak: "break-word" }}>{value}</p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#8F857A", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</p>
+        {sub && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "#C8A23A", margin: "4px 0 0", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</p>}
       </div>
     </motion.div>
   </Link>
@@ -170,25 +186,28 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: 'Georgia, serif' }}>Dashboard</h1>
+        <h1 className="text-2xl font-bold text-[#2C241B]" style={{ fontFamily: 'Georgia, serif' }}>Dashboard</h1>
         <p className="text-gray-500 text-sm mt-1">Welcome back. Here's what's happening.</p>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard icon={ShoppingBag} label="Total Orders" value={stats.totalOrders} sub={`${stats.paidOrders} paid`} color="gold" to="/admin/orders" />
-        <StatCard icon={DollarSign} label="Total Revenue" value={formatINR(stats.totalRevenue)} sub="from paid orders" color="green" to="/admin/analytics" />
-        <StatCard icon={Package} label="Products" value={stats.totalProducts} color="blue" to="/admin/products" />
-        <StatCard icon={AlertTriangle} label="Low Stock" value={stats.lowStockCount} sub="< 10 items" color="red" to="/admin/products" />
-        <StatCard icon={Clock} label="Today's Orders" value={stats.todayOrdersCount} color="gold" to="/admin/orders?filter=today" />
+      {/* Stat Cards — 2 col mobile, 3 col tablet, 5 col desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <StatCard icon={ShoppingBag} label="Total Orders"   value={stats.totalOrders}         sub={`${stats.paidOrders} paid`}    color="gold"  to="/admin/orders" />
+        <StatCard icon={DollarSign}  label="Total Revenue"  value={formatINR(stats.totalRevenue)} sub="from paid orders"             color="green" to="/admin/analytics" />
+        <StatCard icon={Package}     label="Products"       value={stats.totalProducts}                                             color="blue"  to="/admin/products" />
+        <StatCard icon={AlertTriangle} label="Low Stock"   value={stats.lowStockCount}        sub="< 10 items"                    color="red"   to="/admin/products" />
+        {/* Last card spans full width on mobile (col-span-2), normal on sm+ */}
+        <div className="col-span-2 sm:col-span-1">
+          <StatCard icon={Clock} label="Today's Orders" value={stats.todayOrdersCount} color="gold" to="/admin/orders?filter=today" />
+        </div>
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Orders + Revenue Line Chart */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-            <TrendingUp size={16} className="text-[#1B2B5E]" /> Orders (Last 14 Days)
+        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+          <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
+            <TrendingUp size={16} className="text-[#2C241B]" /> Orders (Last 14 Days)
           </h3>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={stats.last14Days}>
@@ -196,21 +215,21 @@ export default function AdminDashboard() {
               <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 10 }} />
               <YAxis tick={{ fill: '#666', fontSize: 10 }} />
               <Tooltip content={<ChartTooltip />} />
-              <Line type="monotone" dataKey="orders" stroke="#1B2B5E" strokeWidth={2} dot={{ fill: '#1B2B5E', r: 3 }} name="orders" />
+              <Line type="monotone" dataKey="orders" stroke="#C8A23A" strokeWidth={2} dot={{ fill: '#1B2B5E', r: 3 }} name="orders" />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Revenue Bar Chart */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-[#1B2B5E] font-medium mb-4">Revenue (Last 14 Days)</h3>
+        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+          <h3 className="text-[#2C241B] font-medium mb-4">Revenue (Last 14 Days)</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={stats.last14Days}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 10 }} />
               <YAxis tick={{ fill: '#666', fontSize: 10 }} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
               <Tooltip content={<ChartTooltip />} />
-              <Bar dataKey="revenue" fill="#1B2B5E" radius={[3, 3, 0, 0]} name="revenue" />
+              <Bar dataKey="revenue" fill="#C8A23A" radius={[3, 3, 0, 0]} name="revenue" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -219,8 +238,8 @@ export default function AdminDashboard() {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Category Pie */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-[#1B2B5E] font-medium mb-4">Category Sales</h3>
+        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+          <h3 className="text-[#2C241B] font-medium mb-4">Category Sales</h3>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie data={stats.categorySales} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" nameKey="name">
@@ -233,26 +252,26 @@ export default function AdminDashboard() {
         </div>
 
         {/* City Distribution */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-[#1B2B5E] font-medium mb-4">Orders by City</h3>
+        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+          <h3 className="text-[#2C241B] font-medium mb-4">Orders by City</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stats.cityData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis type="number" tick={{ fill: '#666', fontSize: 10 }} />
               <YAxis dataKey="city" type="category" tick={{ fill: '#999', fontSize: 10 }} width={70} />
               <Tooltip contentStyle={{ background: '#fff', border: '1px solid rgba(27,43,94,0.2)', borderRadius: 8, fontSize: 11 }} />
-              <Bar dataKey="count" fill="#2A3F7E" radius={[0, 3, 3, 0]} />
+              <Bar dataKey="count" fill="#A88422" radius={[0, 3, 3, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Top Products */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-[#1B2B5E] font-medium mb-4">Top Products</h3>
+        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+          <h3 className="text-[#2C241B] font-medium mb-4">Top Products</h3>
           <div className="space-y-2">
             {stats.topProducts.slice(0, 6).map((p, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-[#1B2B5E] text-xs w-4">{i + 1}</span>
+                <span className="text-[#2C241B] text-xs w-4">{i + 1}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-gray-600 text-xs truncate">{p.name}</p>
                   <div className="h-1.5 bg-gray-50 rounded-full mt-1">
@@ -272,7 +291,7 @@ export default function AdminDashboard() {
       {/* Low Stock Alert */}
       {stats.lowStockProducts?.length > 0 && (
         <div className="bg-white border border-red-500/20 rounded-xl p-5">
-          <h3 className="text-[#1B2B5E] font-medium mb-3 flex items-center gap-2">
+          <h3 className="text-[#2C241B] font-medium mb-3 flex items-center gap-2">
             <AlertTriangle size={16} className="text-red-400" /> Low Stock Alert
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -307,8 +326,8 @@ export default function AdminDashboard() {
         return (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-[#1B2B5E] font-medium">Recent Orders <span className="text-gray-400 text-xs font-normal ml-1">({orders.length} total)</span></h3>
-              <Link to="/admin/orders" className="text-xs text-[#1B2B5E] hover:underline font-medium">View all →</Link>
+              <h3 className="text-[#2C241B] font-medium">Recent Orders <span className="text-gray-400 text-xs font-normal ml-1">({orders.length} total)</span></h3>
+              <Link to="/admin/orders" className="text-xs text-[#2C241B] hover:underline font-medium">View all →</Link>
             </div>
             {!hasAny && (
               <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-gray-400 text-sm">No orders in the last 3 days</div>
@@ -317,7 +336,7 @@ export default function AdminDashboard() {
               <div key={label} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                 {/* Day header */}
                 <div className="flex items-center justify-between px-4 py-2.5 bg-[#F4F6FA] border-b border-gray-200">
-                  <span className="text-[#1B2B5E] text-xs font-semibold">{label}</span>
+                  <span className="text-[#2C241B] text-xs font-semibold">{label}</span>
                   <span className="text-gray-400 text-xs">{dayOrders.length} order{dayOrders.length !== 1 ? "s" : ""} &middot; {formatINR(dayOrders.filter(o => o.payment_status === "paid").reduce((s, o) => s + (o.total_amount || 0), 0))} revenue</span>
                 </div>
                 {/* Orders table */}
@@ -338,9 +357,9 @@ export default function AdminDashboard() {
                         const customerName = addr.full_name || o.users?.email || "Guest"
                         return (
                           <tr key={o.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-2.5 text-[#1B2B5E] text-xs font-mono font-semibold">{o.display_order_id || "#" + String(o.id).slice(-6).toUpperCase()}</td>
+                            <td className="px-4 py-2.5 text-[#2C241B] text-xs font-mono font-semibold">{o.display_order_id || "#" + String(o.id).slice(-6).toUpperCase()}</td>
                             <td className="px-4 py-2.5 text-gray-600 text-xs truncate max-w-[120px]">{customerName}</td>
-                            <td className="px-4 py-2.5 text-[#1B2B5E] text-xs font-medium">{formatINR(o.total_amount)}</td>
+                            <td className="px-4 py-2.5 text-[#2C241B] text-xs font-medium">{formatINR(o.total_amount)}</td>
                             <td className="px-4 py-2.5">
                               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                                 o.payment_status === "paid"
@@ -366,7 +385,7 @@ export default function AdminDashboard() {
               </div>
             ))}
             <div className="text-center">
-              <Link to="/admin/orders" className="text-xs text-[#1B2B5E] hover:underline">View all {orders.length} orders →</Link>
+              <Link to="/admin/orders" className="text-xs text-[#2C241B] hover:underline">View all {orders.length} orders →</Link>
             </div>
           </div>
         )
@@ -404,8 +423,8 @@ function FeaturesBarManager() {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <h3 className="text-[#1B2B5E] font-medium mb-1 flex items-center gap-2">
+    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+      <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2">
         ✦ Homepage Trust Badges
       </h3>
       <p className="text-xs text-gray-400 mb-4">Edit the 4 feature badges shown below the hero on the homepage.</p>
@@ -414,10 +433,10 @@ function FeaturesBarManager() {
           <div key={f.id} className="bg-gray-50 rounded-lg p-3 space-y-2">
             <input value={f.title} onChange={e => update(f.id, 'title', e.target.value)}
               placeholder="Title e.g. Fast Shipping"
-              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]" />
+              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#C8A23A]" />
             <input value={f.desc} onChange={e => update(f.id, 'desc', e.target.value)}
               placeholder="Description e.g. Across India"
-              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-500 focus:outline-none focus:border-[#1B2B5E]" />
+              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-500 focus:outline-none focus:border-[#C8A23A]" />
           </div>
         ))}
       </div>
@@ -469,9 +488,9 @@ function OfferBannerManager() {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <h3 className="text-[#1B2B5E] font-medium mb-4 flex items-center gap-2">
-        <span className="text-[#1B2B5E]">🏷️</span> Offer Banner
+    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+      <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
+        <span className="text-[#2C241B]">🏷️</span> Offer Banner
         <span className="text-xs text-gray-500 font-normal ml-1">- scrolling banner below navbar</span>
       </h3>
 
@@ -533,8 +552,8 @@ function ProductsPerPageManager() {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <h3 className="text-[#1B2B5E] font-medium mb-1 flex items-center gap-2">
+    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
+      <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2">
         <Package size={15} /> Products Per Page
         <span className="text-xs text-gray-500 font-normal ml-1">- controls user-facing /products page</span>
       </h3>
@@ -548,7 +567,7 @@ function ProductsPerPageManager() {
             className={`px-5 py-2 rounded-lg text-sm font-semibold border transition-all ${
               value === n
                 ? 'bg-[#1B2B5E] text-white border-[#1B2B5E]'
-                : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-[#1B2B5E] hover:text-[#1B2B5E]'
+                : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-[#1B2B5E] hover:text-[#2C241B]'
             } disabled:opacity-60`}
           >
             {n}
@@ -556,7 +575,8 @@ function ProductsPerPageManager() {
         ))}
         {saving && <span className="text-xs text-gray-400">Saving...</span>}
       </div>
-      <p className="text-gray-400 text-xs mt-3">Current: <span className="text-[#1B2B5E] font-semibold">{value} products per page</span></p>
+      <p className="text-gray-400 text-xs mt-3">Current: <span className="text-[#2C241B] font-semibold">{value} products per page</span></p>
     </div>
   )
 }
+
