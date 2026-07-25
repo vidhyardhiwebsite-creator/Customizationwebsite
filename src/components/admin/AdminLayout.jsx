@@ -297,7 +297,7 @@ export default function AdminLayout({ children }) {
         </header>
 
         {/* ── Page content ── */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 bg-[#F8F5F0]">
+        <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', background: '#F8F5F0', padding: 'clamp(16px, 3vw, 32px)', minWidth: 0 }}>
           {children}
         </main>
       </div>

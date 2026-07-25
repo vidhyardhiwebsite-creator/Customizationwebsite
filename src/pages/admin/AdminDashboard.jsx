@@ -337,7 +337,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         <StatCard icon={ShoppingBag} label="Total Orders"   value={stats.totalOrders}         sub={`${stats.paidOrders} paid`}    color="gold"  to="/admin/orders" />
         <StatCard icon={DollarSign}  label="Total Revenue"  value={formatINR(stats.totalRevenue)} sub="from paid orders"             color="green" to="/admin/analytics" />
-        <StatCard icon={Package}     label="Products"       value={stats.totalProducts}                                             color="blue"  to="/admin/products" />
+        <StatCard icon={Package}     label="Products"       value={stats.totalProducts}                                             color="gold"  to="/admin/products" />
         <StatCard icon={AlertTriangle} label="Low Stock"   value={stats.lowStockCount}        sub="< 10 items"                    color="red"   to="/admin/products" />
         {/* Last card spans full width on mobile (col-span-2), normal on sm+ */}
         <div className="col-span-2 sm:col-span-1">
@@ -346,17 +346,17 @@ export default function AdminDashboard() {
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* Orders + Revenue Line Chart */}
-        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-          <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
-            <TrendingUp size={16} className="text-[#2C241B]" /> Orders (Last 14 Days)
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
+          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <TrendingUp size={15} style={{ color: '#C8A23A' }} /> Orders (Last 14 Days)
           </h3>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={stats.last14Days}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 10 }} />
-              <YAxis tick={{ fill: '#666', fontSize: 10 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3EEE6" />
+              <XAxis dataKey="date" tick={{ fill: '#8F857A', fontSize: 10 }} />
+              <YAxis tick={{ fill: '#8F857A', fontSize: 10 }} />
               <Tooltip content={<ChartTooltip />} />
               <Line type="monotone" dataKey="orders" stroke="#C8A23A" strokeWidth={2} dot={{ fill: '#C8A23A', r: 3 }} name="orders" />
             </LineChart>
@@ -364,13 +364,13 @@ export default function AdminDashboard() {
         </div>
 
         {/* Revenue Bar Chart */}
-        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-          <h3 className="text-[#2C241B] font-medium mb-4">Revenue (Last 14 Days)</h3>
-          <ResponsiveContainer width="100%" height={220}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
+          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Revenue (Last 14 Days)</h3>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stats.last14Days}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 10 }} />
-              <YAxis tick={{ fill: '#666', fontSize: 10 }} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3EEE6" />
+              <XAxis dataKey="date" tick={{ fill: '#8F857A', fontSize: 10 }} />
+              <YAxis tick={{ fill: '#8F857A', fontSize: 10 }} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
               <Tooltip content={<ChartTooltip />} />
               <Bar dataKey="revenue" fill="#C8A23A" radius={[3, 3, 0, 0]} name="revenue" />
             </BarChart>
@@ -379,10 +379,10 @@ export default function AdminDashboard() {
       </div>
 
       {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
         {/* Category Pie */}
-        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-          <h3 className="text-[#2C241B] font-medium mb-4">Category Sales</h3>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
+          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Category Sales</h3>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie data={stats.categorySales} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" nameKey="name">
@@ -395,13 +395,13 @@ export default function AdminDashboard() {
         </div>
 
         {/* City Distribution */}
-        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-          <h3 className="text-[#2C241B] font-medium mb-4">Orders by City</h3>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
+          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Orders by City</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stats.cityData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis type="number" tick={{ fill: '#666', fontSize: 10 }} />
-              <YAxis dataKey="city" type="category" tick={{ fill: '#999', fontSize: 10 }} width={70} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3EEE6" />
+              <XAxis type="number" tick={{ fill: '#8F857A', fontSize: 10 }} />
+              <YAxis dataKey="city" type="category" tick={{ fill: '#8F857A', fontSize: 10 }} width={70} />
               <Tooltip content={<ChartTooltip />} />
               <Bar dataKey="count" fill="#A88422" radius={[0, 3, 3, 0]} />
             </BarChart>
@@ -409,22 +409,19 @@ export default function AdminDashboard() {
         </div>
 
         {/* Top Products */}
-        <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-          <h3 className="text-[#2C241B] font-medium mb-4">Top Products</h3>
-          <div className="space-y-2">
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
+          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Top Products</h3>
+          <div className="space-y-3">
             {stats.topProducts.slice(0, 6).map((p, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-[#2C241B] text-xs w-4">{i + 1}</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: '#C8A23A', width: 16, flexShrink: 0 }}>{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[#6F655A] text-xs truncate">{p.name}</p>
-                  <div className="h-1.5 bg-[#F3EEE6] rounded-full mt-1">
-                    <div
-                      className="h-full bg-[#C8A23A] rounded-full"
-                      style={{ width: `${(p.qty / stats.topProducts[0].qty) * 100}%` }}
-                    />
+                  <p style={{ fontSize: 11, color: '#6F655A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0 }}>{p.name}</p>
+                  <div style={{ height: 5, background: '#F3EEE6', borderRadius: 3, marginTop: 4 }}>
+                    <div style={{ height: '100%', background: 'linear-gradient(90deg, #C8A23A, #A88422)', borderRadius: 3, width: `${(p.qty / stats.topProducts[0].qty) * 100}%` }} />
                   </div>
                 </div>
-                <span className="text-[#8F857A] text-xs">{p.qty}</span>
+                <span style={{ fontSize: 11, color: '#8F857A', flexShrink: 0 }}>{p.qty}</span>
               </div>
             ))}
           </div>

@@ -526,17 +526,17 @@ export default function AdminOrders() {
       {/* Normal two-column layout */}
       {!q && (
         <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6" style={{ minWidth: 0 }}>
             {/* NS0 - Home */}
-            <div>
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-blue-500/30">
-                <div className="w-3 h-3 rounded-full bg-blue-500" />
-                <h2 className="text-[#C8A23A] font-semibold">NS0 — Home</h2>
-                <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{ns0Orders.length}</span>
-                <span className="text-xs text-orange-400 ml-auto">{ns0Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid #E7DED1' }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#C8A23A', flexShrink: 0 }} />
+                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: 0 }}>NS0 — Home</h2>
+                <span style={{ fontSize: 10, background: 'rgba(200,162,58,0.1)', color: '#A88422', padding: '2px 8px', borderRadius: 20, fontWeight: 700 }}>{ns0Orders.length}</span>
+                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto' }}>{ns0Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
               </div>
               {ns0Orders.length === 0
-                ? <p className="text-[#6F655A] text-sm text-center py-8">No NS0 orders</p>
+                ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS0 orders</p>
                 : paginate(ns0Orders, ns0Page, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
@@ -548,15 +548,15 @@ export default function AdminOrders() {
             </div>
 
             {/* NS1 - HYD */}
-            <div>
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-purple-500/30">
-                <div className="w-3 h-3 rounded-full bg-purple-500" />
-                <h2 className="text-[#C8A23A] font-semibold">NS1 — HYD</h2>
-                <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">{ns1Orders.length}</span>
-                <span className="text-xs text-orange-400 ml-auto">{ns1Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid #E7DED1' }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#A88422', flexShrink: 0 }} />
+                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: 0 }}>NS1 — HYD</h2>
+                <span style={{ fontSize: 10, background: 'rgba(168,132,34,0.1)', color: '#A88422', padding: '2px 8px', borderRadius: 20, fontWeight: 700 }}>{ns1Orders.length}</span>
+                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto' }}>{ns1Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
               </div>
               {ns1Orders.length === 0
-                ? <p className="text-[#6F655A] text-sm text-center py-8">No NS1 orders</p>
+                ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS1 orders</p>
                 : paginate(ns1Orders, ns1Page, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
