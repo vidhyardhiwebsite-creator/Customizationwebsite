@@ -67,13 +67,13 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
 
   return (
     <div className="col-span-2">
-      <label className="text-xs text-gray-400 mb-2 block">Product Images & Videos (max 4) — Videos max 30s, muted on display</label>
+      <label className="text-xs text-[#8F857A] mb-2 block">Product Images & Videos (max 4) — Videos max 30s, muted on display</label>
       {images.length < 4 && (
         <div
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-[#1B2B5E]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-gray-50"
+          className="border-2 border-dashed border-[#C8A23A]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-[#F8F5F0]"
         >
           <input
             ref={inputRef}
@@ -84,15 +84,15 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
             onChange={e => handleFiles(e.target.files)}
           />
           {uploading ? (
-            <div className="flex items-center justify-center gap-2 text-[#1B2B5E]">
+            <div className="flex items-center justify-center gap-2 text-[#C8A23A]">
               <Loader2 size={20} className="animate-spin" />
               <span className="text-sm">Uploading...</span>
             </div>
           ) : (
             <>
-              <ImagePlus size={28} className="text-[#1B2B5E]/50 mx-auto mb-2" />
-              <p className="text-gray-400 text-sm">Drop images or videos here or click to browse</p>
-              <p className="text-gray-600 text-xs mt-1">Images: JPG, PNG, WEBP (max 5MB) · Videos: MP4, MOV, WEBM (max 30s, 50MB)</p>
+              <ImagePlus size={28} className="text-[#C8A23A]/50 mx-auto mb-2" />
+              <p className="text-[#8F857A] text-sm">Drop images or videos here or click to browse</p>
+              <p className="text-[#6F655A] text-xs mt-1">Images: JPG, PNG, WEBP (max 5MB) · Videos: MP4, MOV, WEBM (max 30s, 50MB)</p>
             </>
           )}
         </div>
@@ -103,12 +103,12 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
             <div key={i} className="relative group">
               {isVideoUrl(url) ? (
                 <video src={url} muted playsInline
-                  className="w-20 h-20 object-cover rounded-lg border border-gray-200 bg-black"
+                  className="w-20 h-20 object-cover rounded-lg border border-[#E7DED1] bg-black"
                   onMouseEnter={e => e.target.play()}
                   onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }}
                 />
               ) : (
-                <img src={url} alt="" className="w-20 h-20 object-cover rounded-lg border border-gray-200" loading="lazy"
+                <img src={url} alt="" className="w-20 h-20 object-cover rounded-lg border border-[#E7DED1]" loading="lazy"
                   onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
               )}
               <button
@@ -264,31 +264,36 @@ export default function AdminProducts() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>Products</h1>
-          <p className="text-gray-500 text-sm mt-1">{products.length} total products</p>
+          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 22, fontWeight: 700, color: '#2C241B', margin: 0 }}>Products</h1>
+          <p style={{ fontSize: 13, color: '#8F857A', marginTop: 4 }}>{products.length} total products</p>
         </div>
-        <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all text-sm">
+        <button onClick={openAdd} style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '8px 18px', background: 'linear-gradient(135deg, #D4AF37, #B8860B)',
+          color: '#FFFFFF', fontSize: 13, fontWeight: 600, borderRadius: 10,
+          border: 'none', cursor: 'pointer',
+        }}>
           <Plus size={16} /> Add Product
         </button>
       </div>
 
       <div className="relative">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8F857A]" />
         <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search products..."
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
+          className="w-full bg-white border border-[#E7DED1] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <div className="bg-white border border-[#E7DED1] rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-200">
+            <thead className="border-b border-[#E7DED1]">
               <tr>{["Product","Category","Price","Stock","Tags","Actions"].map(h => (
-                <th key={h} className="text-left text-gray-500 text-xs px-4 py-3 font-medium">{h}</th>
+                <th key={h} className="text-left text-[#8F857A] text-xs px-4 py-3 font-medium">{h}</th>
               ))}</tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-[#F3EEE6]">
               {pagedProducts.map(p => (
-                <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={p.id} className="hover:bg-[#F8F5F0] transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {p.images?.[0] && isVideoUrl(p.images[0]) ? (
@@ -310,14 +315,14 @@ export default function AdminProducts() {
                         />
                       )}
                       <div>
-                        <p className="text-[#1A1A2E] text-xs font-medium">{p.name}</p>
-                        {p.custom_id && <p className="text-[#1B2B5E] text-xs font-mono">{p.custom_id}</p>}
-                        <p className="text-gray-400 text-xs">{p.size}</p>
+                        <p className="text-[#2C241B] text-xs font-medium">{p.name}</p>
+                        {p.custom_id && <p className="text-[#C8A23A] text-xs font-mono">{p.custom_id}</p>}
+                        <p className="text-[#8F857A] text-xs">{p.size}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">{p.category}</td>
-                  <td className="px-4 py-3 text-[#1B2B5E] text-xs font-medium">{formatINR(p.price)}</td>
+                  <td className="px-4 py-3 text-[#8F857A] text-xs">{p.category}</td>
+                  <td className="px-4 py-3 text-[#C8A23A] text-xs font-medium">{formatINR(p.price)}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium ${p.stock < 10 ? "text-red-400" : p.stock < 20 ? "text-yellow-400" : "text-green-400"}`}>
                       {p.stock < 10 && <AlertTriangle size={11} className="inline mr-1" />}{p.stock}
@@ -326,14 +331,14 @@ export default function AdminProducts() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
                       {(p.tags || []).map(t => (
-                        <span key={t} className="text-xs px-1.5 py-0.5 bg-[#1B2B5E]/10 text-[#1B2B5E] rounded">{t}</span>
+                        <span key={t} className="text-xs px-1.5 py-0.5 bg-[#C8A23A]/10 text-[#C8A23A] rounded">{t}</span>
                       ))}
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <button onClick={() => openEdit(p)} className="text-gray-400 hover:text-[#1B2B5E] transition-colors p-1"><Edit2 size={14} /></button>
-                      <button onClick={() => setDeleteConfirm(p.id)} className="text-gray-400 hover:text-red-400 transition-colors p-1"><Trash2 size={14} /></button>
+                      <button onClick={() => openEdit(p)} className="text-[#8F857A] hover:text-[#C8A23A] transition-colors p-1"><Edit2 size={14} /></button>
+                      <button onClick={() => setDeleteConfirm(p.id)} className="text-[#8F857A] hover:text-red-400 transition-colors p-1"><Trash2 size={14} /></button>
                     </div>
                   </td>
                 </tr>
@@ -347,28 +352,28 @@ export default function AdminProducts() {
       {(totalPages > 1 || filtered.length > 0) && (
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#8F857A]">
               {pageSize === 9999
                 ? `Showing all ${filtered.length}`
                 : `Showing ${Math.min((page - 1) * pageSize + 1, filtered.length)}–${Math.min(page * pageSize, filtered.length)} of ${filtered.length}`}
             </p>
             <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
-              className="bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
+              className="bg-white border border-[#E7DED1] rounded-lg px-2 py-1 text-xs text-[#2C241B] focus:outline-none focus:border-[#C8A23A]">
               {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n === 9999 ? "All" : n}</option>)}
             </select>
           </div>
           {totalPages > 1 && (
             <div className="flex items-center gap-1">
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:border-[#1B2B5E] disabled:opacity-40">‹</button>
+                className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">‹</button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                 <button key={p} onClick={() => setPage(p)}
-                  className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#1B2B5E] text-white border-[#1B2B5E]" : "border-gray-200 text-gray-500 hover:border-[#1B2B5E]"}`}>
+                  className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#C8A23A] text-white border-[#C8A23A]" : "border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A]"}`}>
                   {p}
                 </button>
               ))}
               <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:border-[#1B2B5E] disabled:opacity-40">›</button>
+                className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">›</button>
             </div>
           )}
         </div>
@@ -381,90 +386,90 @@ export default function AdminProducts() {
             className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
             onClick={e => e.target === e.currentTarget && !uploading && setModalOpen(false)}>
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white border border-gray-200 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-5 border-b border-gray-200">
-                <h2 className="text-[#1B2B5E] font-semibold">{editProduct ? "Edit Product" : "Add New Product"}</h2>
-                <button onClick={() => !uploading && setModalOpen(false)} className="text-gray-400 hover:text-[#1A1A2E] p-1"><X size={18} /></button>
+              className="bg-white border border-[#E7DED1] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-5 border-b border-[#E7DED1]">
+                <h2 className="text-[#C8A23A] font-semibold">{editProduct ? "Edit Product" : "Add New Product"}</h2>
+                <button onClick={() => !uploading && setModalOpen(false)} className="text-[#8F857A] hover:text-[#2C241B] p-1"><X size={18} /></button>
               </div>
               <div className="p-5 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2">
-                    <label className="text-xs text-gray-400 mb-1 block">
-                      Product ID <span className="text-gray-600">(e.g. NS0.1, NS1.5)</span>
+                    <label className="text-xs text-[#8F857A] mb-1 block">
+                      Product ID <span className="text-[#6F655A]">(e.g. NS0.1, NS1.5)</span>
                       {editProduct && <span className="ml-2 text-[#C9956C] font-medium">· locked after creation</span>}
                     </label>
                     <input
                       value={form.custom_id || ""}
                       onChange={e => !editProduct && setForm(f => ({ ...f, custom_id: e.target.value }))}
                       readOnly={!!editProduct}
-                      className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#1B2B5E] ${
+                      className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#C8A23A] ${
                         editProduct
-                          ? "bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed select-none"
-                          : "bg-white border-gray-200 text-[#1A1A2E]"
+                          ? "bg-[#F8F5F0] border-gray-100 text-[#8F857A] cursor-not-allowed select-none"
+                          : "bg-white border-[#E7DED1] text-[#2C241B]"
                       }`}
                       placeholder="e.g. VR0.1"
                     />
-                    {!editProduct && <p className="text-gray-600 text-xs mt-0.5">Leave empty to auto-generate</p>}
-                    {editProduct && form.custom_id && <p className="text-gray-400 text-xs mt-0.5">ID is permanent and cannot be changed after creation.</p>}
+                    {!editProduct && <p className="text-[#6F655A] text-xs mt-0.5">Leave empty to auto-generate</p>}
+                    {editProduct && form.custom_id && <p className="text-[#8F857A] text-xs mt-0.5">ID is permanent and cannot be changed after creation.</p>}
                   </div>
 
                   <div className="col-span-2">
-                    <label className="text-xs text-gray-400 mb-1 block">Product Name *</label>
+                    <label className="text-xs text-[#8F857A] mb-1 block">Product Name *</label>
                     <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
+                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
                       placeholder="e.g. Custom Photo Mug" />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Price (₹) *</label>
+                    <label className="text-xs text-[#8F857A] mb-1 block">Price (₹) *</label>
                     <input type="number" min="0" step="1" value={form.price} onChange={e => setForm(f => ({ ...f, price: Math.floor(Number(e.target.value)) || "" }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
+                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
                       placeholder="2499" />
                     {errors.price && <p className="text-red-400 text-xs mt-1">{errors.price}</p>}
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Stock *</label>
+                    <label className="text-xs text-[#8F857A] mb-1 block">Stock *</label>
                     <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
+                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
                       placeholder="15" />
                     {errors.stock && <p className="text-red-400 text-xs mt-1">{errors.stock}</p>}
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Category</label>
+                    <label className="text-xs text-[#8F857A] mb-1 block">Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
+                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]">
                       {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Available Sizes <span className="text-gray-500">(optional)</span></label>
+                    <label className="text-xs text-[#8F857A] mb-1 block">Available Sizes <span className="text-[#8F857A]">(optional)</span></label>
                     <input
                       value={form.size}
                       onChange={e => setForm(f => ({ ...f, size: e.target.value }))}
                       placeholder="e.g. S, M, L, XL or Free Size"
-                      className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]"
+                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
                     />
-                    <p className="text-gray-600 text-xs mt-0.5">Comma-separated sizes (leave blank if not applicable).</p>
+                    <p className="text-[#6F655A] text-xs mt-0.5">Comma-separated sizes (leave blank if not applicable).</p>
                   </div>
                   <div className="col-span-2">
-                    <label className="text-xs text-gray-400 mb-1 block">Description</label>
+                    <label className="text-xs text-[#8F857A] mb-1 block">Description</label>
                     <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                      rows={3} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E] resize-none"
+                      rows={3} className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A] resize-none"
                       placeholder="Product description..." />
                   </div>
                   <div className="col-span-2">
-                    <label className="text-xs text-gray-400 mb-2 block">Tags</label>
+                    <label className="text-xs text-[#8F857A] mb-2 block">Tags</label>
                     <div className="flex flex-wrap gap-2 mb-2">
                       {allTags.map(tag => (
                         <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#1B2B5E] text-white" : "bg-gray-50 text-gray-400 border border-gray-200 hover:border-[#1B2B5E]/50"}`}>
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#C8A23A] text-white" : "bg-[#F8F5F0] text-[#8F857A] border border-[#E7DED1] hover:border-[#C8A23A]/50"}`}>
                           {tag}
                         </button>
                       ))}
                       {/* Custom tags typed in this session but not yet in allTags */}
                       {form.tags.filter(t => !allTags.includes(t)).map(tag => (
                         <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className="px-3 py-1 rounded-full text-xs font-medium bg-[#1B2B5E] text-white flex items-center gap-1">
+                          className="px-3 py-1 rounded-full text-xs font-medium bg-[#C8A23A] text-white flex items-center gap-1">
                           {tag} <X size={10} />
                         </button>
                       ))}
@@ -485,7 +490,7 @@ export default function AdminProducts() {
                             e.target.value = ""
                           }
                         }}
-                        className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs text-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:border-[#1B2B5E]"
+                        className="flex-1 bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-1.5 text-xs text-[#2C241B] placeholder-gray-400 focus:outline-none focus:border-[#C8A23A]"
                       />
                       <button
                         type="button"
@@ -497,41 +502,41 @@ export default function AdminProducts() {
                           }
                           input.value = ""
                         }}
-                        className="px-3 py-1.5 bg-[#1B2B5E] text-white rounded-lg text-xs font-bold hover:bg-[#2A3F7E] transition-all"
+                        className="px-3 py-1.5 bg-[#C8A23A] text-white rounded-lg text-xs font-bold hover:bg-[#A88422] transition-all"
                       >
                         +
                       </button>
                     </div>
                   </div>
                   {/* ── Customization Options ── */}
-                  <div className="col-span-2 border border-[#4DB6AC]/30 rounded-xl p-4 bg-[#f0fafa] space-y-3">
-                    <p className="text-sm font-semibold text-[#1A1A2E] flex items-center gap-2">
+                  <div className="col-span-2 border border-[#C8A23A]/30 rounded-xl p-4 bg-[#FAF8F3] space-y-3">
+                    <p className="text-sm font-semibold text-[#2C241B] flex items-center gap-2">
                       🎨 Personalization Options
-                      <span className="text-xs text-gray-400 font-normal">— enable if customers can customise this product</span>
+                      <span className="text-xs text-[#8F857A] font-normal">— enable if customers can customise this product</span>
                     </p>
 
                     {/* Allow custom name/text */}
                     <div className="flex items-center justify-between gap-3 bg-white rounded-lg px-3 py-2.5 border border-[#E8E0D5]">
                       <div>
-                        <p className="text-sm text-[#1A1A2E] font-medium">Custom Name / Text</p>
-                        <p className="text-xs text-gray-400">Customer types a name, message or text to print</p>
+                        <p className="text-sm text-[#2C241B] font-medium">Custom Name / Text</p>
+                        <p className="text-xs text-[#8F857A]">Customer types a name, message or text to print</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => setForm(f => ({ ...f, allow_custom_name: !f.allow_custom_name }))}
-                        className={`w-12 h-6 rounded-full transition-all flex-shrink-0 relative ${form.allow_custom_name ? 'bg-[#4DB6AC]' : 'bg-gray-300'}`}
+                        className={`w-12 h-6 rounded-full transition-all flex-shrink-0 relative ${form.allow_custom_name ? 'bg-[#C8A23A]' : 'bg-gray-300'}`}
                       >
                         <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${form.allow_custom_name ? 'left-6' : 'left-0.5'}`} />
                       </button>
                     </div>
                     {form.allow_custom_name && (
                       <div>
-                        <label className="text-xs text-gray-400 mb-1 block">Label shown to customer</label>
+                        <label className="text-xs text-[#8F857A] mb-1 block">Label shown to customer</label>
                         <input
                           value={form.custom_name_label}
                           onChange={e => setForm(f => ({ ...f, custom_name_label: e.target.value }))}
                           placeholder="e.g. Enter name to print, Your message..."
-                          className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#4DB6AC]"
+                          className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
                         />
                       </div>
                     )}
@@ -539,25 +544,25 @@ export default function AdminProducts() {
                     {/* Allow custom photo */}
                     <div className="flex items-center justify-between gap-3 bg-white rounded-lg px-3 py-2.5 border border-[#E8E0D5]">
                       <div>
-                        <p className="text-sm text-[#1A1A2E] font-medium">Custom Photo Upload</p>
-                        <p className="text-xs text-gray-400">Customer uploads a photo to be printed on product</p>
+                        <p className="text-sm text-[#2C241B] font-medium">Custom Photo Upload</p>
+                        <p className="text-xs text-[#8F857A]">Customer uploads a photo to be printed on product</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => setForm(f => ({ ...f, allow_custom_photo: !f.allow_custom_photo }))}
-                        className={`w-12 h-6 rounded-full transition-all flex-shrink-0 relative ${form.allow_custom_photo ? 'bg-[#4DB6AC]' : 'bg-gray-300'}`}
+                        className={`w-12 h-6 rounded-full transition-all flex-shrink-0 relative ${form.allow_custom_photo ? 'bg-[#C8A23A]' : 'bg-gray-300'}`}
                       >
                         <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${form.allow_custom_photo ? 'left-6' : 'left-0.5'}`} />
                       </button>
                     </div>
                     {form.allow_custom_photo && (
                       <div>
-                        <label className="text-xs text-gray-400 mb-1 block">Label shown to customer</label>
+                        <label className="text-xs text-[#8F857A] mb-1 block">Label shown to customer</label>
                         <input
                           value={form.custom_photo_label}
                           onChange={e => setForm(f => ({ ...f, custom_photo_label: e.target.value }))}
                           placeholder="e.g. Upload your photo, Upload couple photo..."
-                          className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#4DB6AC]"
+                          className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
                         />
                       </div>
                     )}
@@ -573,11 +578,11 @@ export default function AdminProducts() {
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button onClick={() => !uploading && setModalOpen(false)}
-                    className="flex-1 py-2.5 border border-gray-200 text-gray-400 rounded-lg text-sm hover:border-[#1B2B5E]/50 transition-all">
+                    className="flex-1 py-2.5 border border-[#E7DED1] text-[#8F857A] rounded-lg text-sm hover:border-[#C8A23A]/50 transition-all">
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving || uploading}
-                    className="flex-1 py-2.5 bg-[#1B2B5E] text-white font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+                    className="flex-1 py-2.5 bg-[#C8A23A] text-white font-semibold rounded-lg text-sm hover:bg-[#A88422] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
                     {(saving || uploading) && <Loader2 size={14} className="animate-spin" />}
                     {editProduct ? "Update Product" : "Add Product"}
                   </button>
@@ -596,10 +601,10 @@ export default function AdminProducts() {
           <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }}
               className="bg-white border border-red-500/20 rounded-xl p-6 max-w-sm w-full text-center">
               <Trash2 size={32} className="text-red-400 mx-auto mb-3" />
-              <h3 className="text-[#1B2B5E] font-semibold mb-2">Delete Product?</h3>
-              <p className="text-gray-400 text-sm mb-5">Images will also be deleted from storage. This cannot be undone.</p>
+              <h3 className="text-[#C8A23A] font-semibold mb-2">Delete Product?</h3>
+              <p className="text-[#8F857A] text-sm mb-5">Images will also be deleted from storage. This cannot be undone.</p>
               <div className="flex gap-3">
-                <button onClick={() => setDeleteConfirm(null)} disabled={deleting} className="flex-1 py-2 border border-gray-200 text-gray-400 rounded-lg text-sm disabled:opacity-50">Cancel</button>
+                <button onClick={() => setDeleteConfirm(null)} disabled={deleting} className="flex-1 py-2 border border-[#E7DED1] text-[#8F857A] rounded-lg text-sm disabled:opacity-50">Cancel</button>
                 <button onClick={() => handleDelete(deleteConfirm)} disabled={deleting}
                   className="flex-1 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-all disabled:opacity-60 flex items-center justify-center gap-2">
                   {deleting && <Loader2 size={14} className="animate-spin" />}
@@ -613,3 +618,5 @@ export default function AdminProducts() {
     </div>
   )
 }
+
+

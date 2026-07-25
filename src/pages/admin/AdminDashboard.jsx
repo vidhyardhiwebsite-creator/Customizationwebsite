@@ -71,29 +71,29 @@ function HeroVideoManager() {
         <Video size={16} className="text-[#2C241B]" /> Hero Video
       </h3>
       {currentUrl && (
-        <video src={currentUrl} className="w-full h-32 object-cover rounded-lg mb-4 bg-gray-50" muted />
+        <video src={currentUrl} className="w-full h-32 object-cover rounded-lg mb-4 bg-[#F8F5F0]" muted />
       )}
       <div className="space-y-3">
         {/* Upload from device */}
         <div>
-          <label className="text-xs text-gray-400 mb-1 block">Upload from device (max 50MB)</label>
-          <label className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#1B2B5E]/30 rounded-lg cursor-pointer hover:border-[#D4AF37]/60 transition-all">
+          <label className="text-xs text-[#8F857A] mb-1 block">Upload from device (max 50MB)</label>
+          <label className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#C8A23A]/30 rounded-lg cursor-pointer hover:border-[#C8A23A]/60 transition-all">
             <input type="file" accept="video/*" className="hidden" onChange={handleFileUpload} disabled={uploading} />
             {uploading
-              ? <><Loader2 size={15} className="text-[#2C241B] animate-spin" /><span className="text-gray-400 text-sm">Uploading...</span></>
-              : <><Upload size={15} className="text-[#2C241B]" /><span className="text-gray-400 text-sm">Choose video file</span></>
+              ? <><Loader2 size={15} className="text-[#2C241B] animate-spin" /><span className="text-[#8F857A] text-sm">Uploading...</span></>
+              : <><Upload size={15} className="text-[#2C241B]" /><span className="text-[#8F857A] text-sm">Choose video file</span></>
             }
           </label>
         </div>
         {/* Or paste URL */}
         <div>
-          <label className="text-xs text-gray-400 mb-1 block">Or paste video URL</label>
+          <label className="text-xs text-[#8F857A] mb-1 block">Or paste video URL</label>
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               value={manualUrl}
               onChange={e => setManualUrl(e.target.value)}
               placeholder="https://..."
-              className="flex-1 min-w-0 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#C8A23A]"
+              className="flex-1 min-w-0 bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]"
               style={{ maxWidth: "100%" }}
             />
             <button onClick={handleSaveUrl} disabled={saving || !manualUrl.trim()}
@@ -146,8 +146,8 @@ const StatCard = ({ icon: Icon, label, value, sub, color = 'gold', to }) => (
 const ChartTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs">
-      <p className="text-gray-400 mb-1">{label}</p>
+    <div className="bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-2 text-xs">
+      <p className="text-[#8F857A] mb-1">{label}</p>
       {payload.map((p, i) => (
         <p key={i} style={{ color: p.color }}>{p.name}: {p.name === 'revenue' ? formatINR(p.value) : p.value}</p>
       ))}
@@ -178,7 +178,7 @@ export default function AdminDashboard() {
   if (!stats) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-[#1B2B5E] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#C8A23A] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -186,8 +186,8 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#2C241B]" style={{ fontFamily: 'Georgia, serif' }}>Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1">Welcome back. Here's what's happening.</p>
+        <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 22, fontWeight: 700, color: '#2C241B', margin: 0 }}>Dashboard</h1>
+        <p style={{ fontSize: 13, color: '#8F857A', marginTop: 4 }}>Welcome back. Here's what's happening.</p>
       </div>
 
       {/* Stat Cards — 2 col mobile, 3 col tablet, 5 col desktop */}
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
               <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 10 }} />
               <YAxis tick={{ fill: '#666', fontSize: 10 }} />
               <Tooltip content={<ChartTooltip />} />
-              <Line type="monotone" dataKey="orders" stroke="#C8A23A" strokeWidth={2} dot={{ fill: '#1B2B5E', r: 3 }} name="orders" />
+              <Line type="monotone" dataKey="orders" stroke="#C8A23A" strokeWidth={2} dot={{ fill: '#C8A23A', r: 3 }} name="orders" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -245,8 +245,8 @@ export default function AdminDashboard() {
               <Pie data={stats.categorySales} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" nameKey="name">
                 {stats.categorySales.map((_, i) => <Cell key={i} fill={GOLD_COLORS[i % GOLD_COLORS.length]} />)}
               </Pie>
-              <Tooltip formatter={(v) => formatINR(v)} contentStyle={{ background: '#fff', border: '1px solid rgba(27,43,94,0.2)', borderRadius: 8, fontSize: 11 }} />
-              <Legend iconSize={8} wrapperStyle={{ fontSize: 11, color: '#999' }} />
+              <Tooltip content={<ChartTooltip />} />
+              <Legend iconSize={8} wrapperStyle={{ fontSize: 11, color: '#8F857A' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -259,7 +259,7 @@ export default function AdminDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis type="number" tick={{ fill: '#666', fontSize: 10 }} />
               <YAxis dataKey="city" type="category" tick={{ fill: '#999', fontSize: 10 }} width={70} />
-              <Tooltip contentStyle={{ background: '#fff', border: '1px solid rgba(27,43,94,0.2)', borderRadius: 8, fontSize: 11 }} />
+              <Tooltip content={<ChartTooltip />} />
               <Bar dataKey="count" fill="#A88422" radius={[0, 3, 3, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -273,15 +273,15 @@ export default function AdminDashboard() {
               <div key={i} className="flex items-center gap-2">
                 <span className="text-[#2C241B] text-xs w-4">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-gray-600 text-xs truncate">{p.name}</p>
-                  <div className="h-1.5 bg-gray-50 rounded-full mt-1">
+                  <p className="text-[#6F655A] text-xs truncate">{p.name}</p>
+                  <div className="h-1.5 bg-[#F3EEE6] rounded-full mt-1">
                     <div
-                      className="h-full bg-[#1B2B5E] rounded-full"
+                      className="h-full bg-[#C8A23A] rounded-full"
                       style={{ width: `${(p.qty / stats.topProducts[0].qty) * 100}%` }}
                     />
                   </div>
                 </div>
-                <span className="text-gray-500 text-xs">{p.qty}</span>
+                <span className="text-[#8F857A] text-xs">{p.qty}</span>
               </div>
             ))}
           </div>
@@ -296,8 +296,8 @@ export default function AdminDashboard() {
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {stats.lowStockProducts.slice(0, 8).map(p => (
-              <div key={p.id} className="bg-gray-50 rounded-lg p-3">
-                <p className="text-[#1A1A2E] text-xs font-medium truncate">{p.name}</p>
+              <div key={p.id} className="bg-[#F8F5F0] rounded-lg p-3">
+                <p className="text-[#2C241B] text-xs font-medium truncate">{p.name}</p>
                 <p className="text-red-400 text-xs mt-1">{p.stock} left</p>
               </div>
             ))}
@@ -326,39 +326,39 @@ export default function AdminDashboard() {
         return (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-[#2C241B] font-medium">Recent Orders <span className="text-gray-400 text-xs font-normal ml-1">({orders.length} total)</span></h3>
+              <h3 className="text-[#2C241B] font-medium">Recent Orders <span className="text-[#8F857A] text-xs font-normal ml-1">({orders.length} total)</span></h3>
               <Link to="/admin/orders" className="text-xs text-[#2C241B] hover:underline font-medium">View all →</Link>
             </div>
             {!hasAny && (
-              <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-gray-400 text-sm">No orders in the last 3 days</div>
+              <div className="bg-white border border-[#E7DED1] rounded-xl p-8 text-center text-[#8F857A] text-sm">No orders in the last 3 days</div>
             )}
             {days.map(({ label, orders: dayOrders }) => dayOrders.length === 0 ? null : (
-              <div key={label} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <div key={label} className="bg-white border border-[#E7DED1] rounded-xl overflow-hidden">
                 {/* Day header */}
-                <div className="flex items-center justify-between px-4 py-2.5 bg-[#F4F6FA] border-b border-gray-200">
+                <div className="flex items-center justify-between px-4 py-2.5 bg-[#F8F5F0] border-b border-[#E7DED1]">
                   <span className="text-[#2C241B] text-xs font-semibold">{label}</span>
-                  <span className="text-gray-400 text-xs">{dayOrders.length} order{dayOrders.length !== 1 ? "s" : ""} &middot; {formatINR(dayOrders.filter(o => o.payment_status === "paid").reduce((s, o) => s + (o.total_amount || 0), 0))} revenue</span>
+                  <span className="text-[#8F857A] text-xs">{dayOrders.length} order{dayOrders.length !== 1 ? "s" : ""} &middot; {formatINR(dayOrders.filter(o => o.payment_status === "paid").reduce((s, o) => s + (o.total_amount || 0), 0))} revenue</span>
                 </div>
                 {/* Orders table */}
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-gray-100">
-                        <th className="text-left text-gray-400 text-xs px-4 py-2 font-medium">Order ID</th>
-                        <th className="text-left text-gray-400 text-xs px-4 py-2 font-medium">Customer</th>
-                        <th className="text-left text-gray-400 text-xs px-4 py-2 font-medium">Amount</th>
-                        <th className="text-left text-gray-400 text-xs px-4 py-2 font-medium">Status</th>
-                        <th className="text-left text-gray-400 text-xs px-4 py-2 font-medium">Time</th>
+                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Order ID</th>
+                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Customer</th>
+                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Amount</th>
+                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Status</th>
+                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Time</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className="divide-y divide-[#F8F5F0]">
                       {dayOrders.map(o => {
                         const addr = (() => { try { return typeof o.address === "object" ? o.address : JSON.parse(o.address || "{}") } catch { return {} } })()
                         const customerName = addr.full_name || o.users?.email || "Guest"
                         return (
-                          <tr key={o.id} className="hover:bg-gray-50 transition-colors">
+                          <tr key={o.id} className="hover:bg-[#F8F5F0] transition-colors">
                             <td className="px-4 py-2.5 text-[#2C241B] text-xs font-mono font-semibold">{o.display_order_id || "#" + String(o.id).slice(-6).toUpperCase()}</td>
-                            <td className="px-4 py-2.5 text-gray-600 text-xs truncate max-w-[120px]">{customerName}</td>
+                            <td className="px-4 py-2.5 text-[#6F655A] text-xs truncate max-w-[120px]">{customerName}</td>
                             <td className="px-4 py-2.5 text-[#2C241B] text-xs font-medium">{formatINR(o.total_amount)}</td>
                             <td className="px-4 py-2.5">
                               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
@@ -375,7 +375,7 @@ export default function AdminDashboard() {
                                   : "Pending"}
                               </span>
                             </td>
-                            <td className="px-4 py-2.5 text-gray-400 text-xs">{new Date(o.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</td>
+                            <td className="px-4 py-2.5 text-[#8F857A] text-xs">{new Date(o.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</td>
                           </tr>
                         )
                       })}
@@ -427,21 +427,22 @@ function FeaturesBarManager() {
       <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2">
         ✦ Homepage Trust Badges
       </h3>
-      <p className="text-xs text-gray-400 mb-4">Edit the 4 feature badges shown below the hero on the homepage.</p>
+      <p className="text-xs text-[#8F857A] mb-4">Edit the 4 feature badges shown below the hero on the homepage.</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
         {features.map(f => (
-          <div key={f.id} className="bg-gray-50 rounded-lg p-3 space-y-2">
+          <div key={f.id} className="bg-[#F8F5F0] rounded-lg p-3 space-y-2">
             <input value={f.title} onChange={e => update(f.id, 'title', e.target.value)}
               placeholder="Title e.g. Fast Shipping"
-              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#1A1A2E] focus:outline-none focus:border-[#C8A23A]" />
+              className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-1.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]" />
             <input value={f.desc} onChange={e => update(f.id, 'desc', e.target.value)}
               placeholder="Description e.g. Across India"
-              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-500 focus:outline-none focus:border-[#C8A23A]" />
+              className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-1.5 text-sm text-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
           </div>
         ))}
       </div>
       <button onClick={() => save(features)} disabled={saving}
-        className="px-4 py-2 bg-[#1B2B5E] text-white text-sm font-semibold rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 transition-all">
+        className="px-4 py-2 text-white text-sm font-semibold rounded-lg disabled:opacity-60 transition-all"
+        style={{ background: 'linear-gradient(135deg, #D4AF37, #B8860B)', borderRadius: 10, border: 'none', cursor: 'pointer' }}>
         {saving ? 'Saving...' : 'Save Changes'}
       </button>
     </div>
@@ -491,32 +492,33 @@ function OfferBannerManager() {
     <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
       <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
         <span className="text-[#2C241B]">🏷️</span> Offer Banner
-        <span className="text-xs text-gray-500 font-normal ml-1">- scrolling banner below navbar</span>
+        <span className="text-xs text-[#8F857A] font-normal ml-1">- scrolling banner below navbar</span>
       </h3>
 
       {/* Current offers */}
       <div className="space-y-2 mb-4">
         {offers.map(o => (
-          <div key={o.id} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2">
-            <span className="flex-1 text-sm text-gray-600 truncate">{o.text}</span>
-            <span className="text-xs text-gray-600 shrink-0">{o.link}</span>
-            <button onClick={() => removeOffer(o.id)} className="text-gray-600 hover:text-red-400 transition-colors ml-1 shrink-0">&times;</button>
+          <div key={o.id} className="flex items-center gap-2 bg-[#F8F5F0] rounded-lg px-3 py-2">
+            <span className="flex-1 text-sm text-[#6F655A] truncate">{o.text}</span>
+            <span className="text-xs text-[#6F655A] shrink-0">{o.link}</span>
+            <button onClick={() => removeOffer(o.id)} className="text-[#6F655A] hover:text-red-400 transition-colors ml-1 shrink-0">&times;</button>
           </div>
         ))}
-        {offers.length === 0 && <p className="text-gray-400 text-xs">No offers. Add one below.</p>}
+        {offers.length === 0 && <p className="text-[#8F857A] text-xs">No offers. Add one below.</p>}
       </div>
 
       {/* Add new offer */}
       <div className="space-y-2">
         <input value={newText} onChange={e => setNewText(e.target.value)}
           placeholder="Offer text e.g. 🚚 Free Shipping on all orders!"
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
+          className="w-full bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
         <div className="flex gap-2">
           <input value={newLink} onChange={e => setNewLink(e.target.value)}
             placeholder="Link e.g. /products"
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
+            className="flex-1 bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
           <button onClick={addOffer} disabled={saving || !newText.trim()}
-            className="px-4 py-2 bg-[#1B2B5E] text-white text-sm font-semibold rounded-lg hover:bg-[#2A3F7E] disabled:opacity-60 transition-all">
+            className="px-4 py-2 text-white text-sm font-semibold rounded-lg disabled:opacity-60 transition-all"
+            style={{ background: 'linear-gradient(135deg, #D4AF37, #B8860B)', borderRadius: 10, border: 'none', cursor: 'pointer' }}>
             {saving ? '...' : '+ Add'}
           </button>
         </div>
@@ -555,9 +557,9 @@ function ProductsPerPageManager() {
     <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
       <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2">
         <Package size={15} /> Products Per Page
-        <span className="text-xs text-gray-500 font-normal ml-1">- controls user-facing /products page</span>
+        <span className="text-xs text-[#8F857A] font-normal ml-1">- controls user-facing /products page</span>
       </h3>
-      <p className="text-gray-400 text-xs mb-4">Choose how many products are shown per page on the shop.</p>
+      <p className="text-[#8F857A] text-xs mb-4">Choose how many products are shown per page on the shop.</p>
       <div className="flex items-center gap-3 flex-wrap">
         {PAGE_SIZE_OPTIONS.map(n => (
           <button
@@ -566,17 +568,20 @@ function ProductsPerPageManager() {
             disabled={saving}
             className={`px-5 py-2 rounded-lg text-sm font-semibold border transition-all ${
               value === n
-                ? 'bg-[#1B2B5E] text-white border-[#1B2B5E]'
-                : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-[#1B2B5E] hover:text-[#2C241B]'
+                ? 'text-white border-[#C8A23A]'
+                : 'bg-[#F8F5F0] text-[#6F655A] border-[#E7DED1] hover:border-[#C8A23A] hover:text-[#2C241B]'
             } disabled:opacity-60`}
+            style={value === n ? { background: 'linear-gradient(135deg, #D4AF37, #B8860B)' } : {}}
           >
             {n}
           </button>
         ))}
-        {saving && <span className="text-xs text-gray-400">Saving...</span>}
+        {saving && <span className="text-xs text-[#8F857A]">Saving...</span>}
       </div>
-      <p className="text-gray-400 text-xs mt-3">Current: <span className="text-[#2C241B] font-semibold">{value} products per page</span></p>
+      <p className="text-[#8F857A] text-xs mt-3">Current: <span className="text-[#2C241B] font-semibold">{value} products per page</span></p>
     </div>
   )
 }
+
+
 

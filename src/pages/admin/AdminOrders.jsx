@@ -42,14 +42,14 @@ function StatusDropdown({ orderId, currentStatus, onStatusUpdate }) {
         {open && (
           <motion.div
             initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
-            className="absolute top-full mt-1 right-0 z-20 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xl min-w-[130px]"
+            className="absolute top-full mt-1 right-0 z-20 bg-white border border-[#E7DED1] rounded-xl overflow-hidden shadow-xl min-w-[130px]"
           >
             {ORDER_STATUSES.map(s => (
               <button key={s.key} onClick={() => handleSelect(s.key)}
-                className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-gray-50 transition-colors ${s.key === currentStatus ? "opacity-50 cursor-default" : ""}`}>
+                className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-[#F8F5F0] transition-colors ${s.key === currentStatus ? "opacity-50 cursor-default" : ""}`}>
                 <span className={`w-2 h-2 rounded-full border ${s.color}`} />
-                <span className="text-gray-500">{s.label}</span>
-                {s.key === currentStatus && <span className="ml-auto text-gray-500">✓</span>}
+                <span className="text-[#8F857A]">{s.label}</span>
+                {s.key === currentStatus && <span className="ml-auto text-[#8F857A]">✓</span>}
               </button>
             ))}
           </motion.div>
@@ -112,7 +112,7 @@ function TrackingPanel({ order, onSave }) {
         onChange={e => setTrackingId(e.target.value)}
         placeholder="Tracking ID (required)"
         required
-        className="w-full bg-white border-2 border-orange-300 rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] placeholder-orange-300 focus:outline-none focus:border-orange-500 font-medium"
+        className="w-full bg-white border-2 border-orange-300 rounded-lg px-3 py-2.5 text-sm text-[#2C241B] placeholder-orange-300 focus:outline-none focus:border-orange-500 font-medium"
       />
       <label className="flex items-center gap-2 p-2.5 border-2 border-dashed border-orange-300 hover:border-orange-500 rounded-lg cursor-pointer transition-all bg-white">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
@@ -144,7 +144,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
     if (needsVerification) return "border-orange-500/40 bg-orange-500/5"
     if (isCancelled) return "border-red-500/20"
     if (order.payment_status === "paid") return "border-green-500/20"
-    return "border-gray-200"
+    return "border-[#E7DED1]"
   }
 
   const getStatusBadge = () => {
@@ -161,30 +161,30 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
 
   return (
     <div className={`border rounded-xl overflow-hidden mb-3 ${getStatusColor()}`}>
-      <div className="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50" onClick={onToggle}>
+      <div className="flex items-center justify-between p-3 cursor-pointer hover:bg-[#F8F5F0]" onClick={onToggle}>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1">
-            <span className="text-gray-400 text-xs">Order</span>
-            <p className="text-[#1B2B5E] text-xs font-mono font-bold truncate">
+            <span className="text-[#8F857A] text-xs">Order</span>
+            <p className="text-[#C8A23A] text-xs font-mono font-bold truncate">
               {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
             </p>
           </div>
-          <p className="text-gray-500 text-xs mt-0.5">{addr.full_name || "Customer"} &middot; {formatDate(order.created_at)}</p>
+          <p className="text-[#8F857A] text-xs mt-0.5">{addr.full_name || "Customer"} &middot; {formatDate(order.created_at)}</p>
         </div>
         <div className="flex items-center gap-2 ml-2">
-          <span className="text-[#1B2B5E] text-xs font-semibold">{formatINR(order.total_amount)}</span>
+          <span className="text-[#C8A23A] text-xs font-semibold">{formatINR(order.total_amount)}</span>
           <span
             className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge.color}`}
             style={["Delivered", "Cancelled", "Failed"].includes(badge.label) ? { color: "#ffffff" } : undefined}
           >{badge.label}</span>
-          {expanded ? <ChevronUp size={13} className="text-gray-400" /> : <ChevronDown size={13} className="text-gray-400" />}
+          {expanded ? <ChevronUp size={13} className="text-[#8F857A]" /> : <ChevronDown size={13} className="text-[#8F857A]" />}
         </div>
       </div>
 
       <AnimatePresence>
         {expanded && (
           <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
-            <div className="border-t border-gray-200 p-3 space-y-3">
+            <div className="border-t border-[#E7DED1] p-3 space-y-3">
               {needsVerification && (
                 <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3 space-y-3">
                   <p className="text-orange-400 text-xs font-semibold flex items-center gap-1"><AlertTriangle size={12} /> Payment Verification Required</p>
@@ -202,7 +202,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                       </button>
                     </div>
                   )}
-                  {order.upi_ref && <p className="text-gray-500 text-xs">UPI Ref: <span className="font-mono text-[#1A1A2E]">{order.upi_ref}</span></p>}
+                  {order.upi_ref && <p className="text-[#8F857A] text-xs">UPI Ref: <span className="font-mono text-[#2C241B]">{order.upi_ref}</span></p>}
                   <div className="grid grid-cols-2 gap-2">
                     <button onClick={() => onVerify(order.id)}
                       className="py-2.5 bg-green-500 border border-green-600 text-white text-sm font-bold rounded-lg hover:bg-green-600 transition-all shadow-sm">
@@ -217,8 +217,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
               )}
 
               {order.payment_status === "paid" && (
-                <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
-                  <p className="text-[#1A1A2E] text-xs font-semibold">Order Status</p>
+                <div className="bg-white border border-[#E7DED1] rounded-xl p-4 space-y-3">
+                  <p className="text-[#2C241B] text-xs font-semibold">Order Status</p>
                   {/* Colorful step tracker — same as user panel */}
                   <div className="flex items-start gap-0 mb-2">
                     {[
@@ -233,22 +233,22 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                       return (
                         <div key={step.key} className="flex-1 flex flex-col items-center">
                           <div className="flex items-center w-full">
-                            <div className={`w-full h-1 rounded-full ${idx === 0 ? "opacity-0" : done ? (idx === 1 ? "bg-blue-400" : "bg-orange-400") : "bg-gray-200"}`} />
-                            <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all shadow-sm ${done || active ? `${step.activeColor} border-transparent` : "border-gray-200 bg-gray-100"}`}>
-                              {step.key === "confirmed" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-4 h-4 ${done || active ? "text-white" : "text-gray-400"}`}><polyline points="20 6 9 17 4 12"/></svg>}
-                              {step.key === "shipping" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`w-4 h-4 ${done || active ? "text-white" : "text-gray-400"}`}><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
-                              {step.key === "delivered" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-4 h-4 ${done || active ? "text-white" : "text-gray-400"}`}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>}
+                            <div className={`w-full h-1 rounded-full ${idx === 0 ? "opacity-0" : done ? (idx === 1 ? "bg-blue-400" : "bg-orange-400") : "bg-[#E7DED1]"}`} />
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all shadow-sm ${done || active ? `${step.activeColor} border-transparent` : "border-[#E7DED1] bg-[#F3EEE6]"}`}>
+                              {step.key === "confirmed" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-4 h-4 ${done || active ? "text-white" : "text-[#8F857A]"}`}><polyline points="20 6 9 17 4 12"/></svg>}
+                              {step.key === "shipping" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`w-4 h-4 ${done || active ? "text-white" : "text-[#8F857A]"}`}><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
+                              {step.key === "delivered" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-4 h-4 ${done || active ? "text-white" : "text-[#8F857A]"}`}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>}
                             </div>
-                            <div className={`w-full h-1 rounded-full ${idx === 2 ? "opacity-0" : done && idx < currentIdx ? step.lineColor : "bg-gray-200"}`} />
+                            <div className={`w-full h-1 rounded-full ${idx === 2 ? "opacity-0" : done && idx < currentIdx ? step.lineColor : "bg-[#E7DED1]"}`} />
                           </div>
-                          <p className={`text-xs mt-1.5 text-center font-medium ${active ? step.textColor : done ? step.textColor + " opacity-70" : "text-gray-400"}`}>{step.label}</p>
+                          <p className={`text-xs mt-1.5 text-center font-medium ${active ? step.textColor : done ? step.textColor + " opacity-70" : "text-[#8F857A]"}`}>{step.label}</p>
                         </div>
                       )
                     })}
                   </div>
                   {/* Status dropdown to change */}
                   <div className="flex items-center justify-between pt-1 border-t border-gray-100">
-                    <span className="text-gray-400 text-xs">Change status:</span>
+                    <span className="text-[#8F857A] text-xs">Change status:</span>
                     <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
                   </div>
                 </div>
@@ -261,22 +261,22 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
 
               <div className="space-y-1">
                 {order.order_items?.map(item => (
-                  <div key={item.id} className="bg-gray-50 rounded p-1.5">
+                  <div key={item.id} className="bg-[#F8F5F0] rounded p-1.5">
                     <div className="flex items-center gap-2">
                       {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-7 h-7 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
                       <div className="flex-1 min-w-0">
-                        <p className="text-[#1A1A2E] text-xs truncate">{item.products?.name}</p>
+                        <p className="text-[#2C241B] text-xs truncate">{item.products?.name}</p>
                         {item.products?.custom_id && (
-                          <p className="text-[#1B2B5E] text-xs font-mono">Product ID: {item.products.custom_id}</p>
+                          <p className="text-[#C8A23A] text-xs font-mono">Product ID: {item.products.custom_id}</p>
                         )}
-                        <p className="text-gray-500 text-xs">x{item.quantity} &middot; {formatINR(item.price)}</p>
+                        <p className="text-[#8F857A] text-xs">x{item.quantity} &middot; {formatINR(item.price)}</p>
                       </div>
                     </div>
                     {/* Customization data */}
                     {(item.custom_name || item.custom_photo_url) && (
                       <div className="mt-1.5 ml-9 border-l-2 border-[#4DB6AC] pl-2 space-y-1">
                         {item.custom_name && (
-                          <p className="text-xs text-[#1A1A2E]">
+                          <p className="text-xs text-[#2C241B]">
                             <span className="text-[#4DB6AC] font-medium">✏ Text:</span> {item.custom_name}
                           </p>
                         )}
@@ -299,8 +299,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
               </div>
 
               {addr.full_name && (
-                <div className="bg-gray-50 rounded-lg p-2 text-xs text-gray-400">
-                  <p className="text-[#1A1A2E]">{addr.full_name} &middot; {addr.phone}</p>
+                <div className="bg-[#F8F5F0] rounded-lg p-2 text-xs text-[#8F857A]">
+                  <p className="text-[#2C241B]">{addr.full_name} &middot; {addr.phone}</p>
                   <p>{addr.address1}, {addr.city} &middot; {addr.pincode}</p>
                 </div>
               )}
@@ -327,24 +327,24 @@ function Pagination({ total, page, pageSize, onPage, onPageSize, pageSizeOptions
   return (
     <div className="flex items-center justify-between flex-wrap gap-2 mt-3">
       <div className="flex items-center gap-2">
-        <p className="text-xs text-gray-500">{showingText}</p>
+        <p className="text-xs text-[#8F857A]">{showingText}</p>
         <select value={pageSize} onChange={e => onPageSize(Number(e.target.value))}
-          className="bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs text-[#1A1A2E] focus:outline-none focus:border-[#1B2B5E]">
+          className="bg-white border border-[#E7DED1] rounded-lg px-2 py-1 text-xs text-[#2C241B] focus:outline-none focus:border-[#C8A23A]">
           {pageSizeOptions.map(n => <option key={n} value={n}>{n === 9999 ? "All" : n}</option>)}
         </select>
       </div>
       {totalPages > 1 && (
         <div className="flex items-center gap-1">
           <button onClick={() => onPage(page - 1)} disabled={page === 1}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:border-[#1B2B5E] disabled:opacity-40">‹</button>
+            className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">‹</button>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
             <button key={p} onClick={() => onPage(p)}
-              className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#1B2B5E] text-white border-[#1B2B5E]" : "border-gray-200 text-gray-500 hover:border-[#1B2B5E]"}`}>
+              className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#C8A23A] text-white border-[#C8A23A]" : "border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A]"}`}>
               {p}
             </button>
           ))}
           <button onClick={() => onPage(page + 1)} disabled={page === totalPages}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:border-[#1B2B5E] disabled:opacity-40">›</button>
+            className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">›</button>
         </div>
       )}
     </div>
@@ -493,25 +493,25 @@ export default function AdminOrders() {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold text-[#1B2B5E]" style={{ fontFamily: "Georgia, serif" }}>
+          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 22, fontWeight: 700, color: '#2C241B', margin: 0 }}>
             {filterToday ? "Today's Orders" : "Orders"}
           </h1>
-          <p className="text-gray-500 text-sm mt-0.5">{localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
+          <p style={{ fontSize: 13, color: '#8F857A', marginTop: 4 }}>{localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
         </div>
       </div>
 
       <div className="relative">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8F857A]" />
         <input value={search} onChange={e => { setSearch(e.target.value); setSearchPage(1) }} placeholder="Search by Order ID (e.g. NS0-001)"
-          className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-gray-600 focus:outline-none focus:border-[#1B2B5E]" />
+          className="w-full bg-white border border-[#E7DED1] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
       </div>
 
       {/* Search results - flat list with pagination */}
       {q && (
         <div>
-          <p className="text-gray-500 text-xs mb-3">{filtered.length} result{filtered.length !== 1 ? "s" : ""} for &quot;{search}&quot;</p>
+          <p className="text-[#8F857A] text-xs mb-3">{filtered.length} result{filtered.length !== 1 ? "s" : ""} for &quot;{search}&quot;</p>
           {filtered.length === 0
-            ? <p className="text-gray-600 text-sm text-center py-12">No orders found</p>
+            ? <p className="text-[#6F655A] text-sm text-center py-12">No orders found</p>
             : paginate(filtered, searchPage, pageSize).map(order => (
               <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                 onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
@@ -531,12 +531,12 @@ export default function AdminOrders() {
             <div>
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-blue-500/30">
                 <div className="w-3 h-3 rounded-full bg-blue-500" />
-                <h2 className="text-[#1B2B5E] font-semibold">NS0 — Home</h2>
+                <h2 className="text-[#C8A23A] font-semibold">NS0 — Home</h2>
                 <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{ns0Orders.length}</span>
                 <span className="text-xs text-orange-400 ml-auto">{ns0Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
               </div>
               {ns0Orders.length === 0
-                ? <p className="text-gray-600 text-sm text-center py-8">No NS0 orders</p>
+                ? <p className="text-[#6F655A] text-sm text-center py-8">No NS0 orders</p>
                 : paginate(ns0Orders, ns0Page, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
@@ -551,12 +551,12 @@ export default function AdminOrders() {
             <div>
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-purple-500/30">
                 <div className="w-3 h-3 rounded-full bg-purple-500" />
-                <h2 className="text-[#1B2B5E] font-semibold">NS1 — HYD</h2>
+                <h2 className="text-[#C8A23A] font-semibold">NS1 — HYD</h2>
                 <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">{ns1Orders.length}</span>
                 <span className="text-xs text-orange-400 ml-auto">{ns1Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
               </div>
               {ns1Orders.length === 0
-                ? <p className="text-gray-600 text-sm text-center py-8">No NS1 orders</p>
+                ? <p className="text-[#6F655A] text-sm text-center py-8">No NS1 orders</p>
                 : paginate(ns1Orders, ns1Page, pageSize).map(order => (
                   <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                     onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
@@ -577,9 +577,9 @@ export default function AdminOrders() {
             className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
             onClick={() => setScreenshotModal(null)}>
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="max-w-lg w-full bg-white rounded-2xl overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <p className="text-[#1B2B5E] font-medium">Payment Screenshot</p>
-                <button onClick={() => setScreenshotModal(null)} className="text-gray-400 hover:text-[#1A1A2E]">&times;</button>
+              <div className="flex items-center justify-between p-4 border-b border-[#E7DED1]">
+                <p className="text-[#C8A23A] font-medium">Payment Screenshot</p>
+                <button onClick={() => setScreenshotModal(null)} className="text-[#8F857A] hover:text-[#2C241B]">&times;</button>
               </div>
               <img src={screenshotModal} alt="Payment screenshot" className="w-full max-h-[70vh] object-contain p-4" />
             </motion.div>
@@ -589,3 +589,5 @@ export default function AdminOrders() {
     </div>
   )
 }
+
+
