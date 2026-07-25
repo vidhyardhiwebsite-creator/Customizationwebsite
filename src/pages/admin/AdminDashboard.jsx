@@ -5,7 +5,7 @@ import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts'
-import { ShoppingBag, DollarSign, Package, AlertTriangle, TrendingUp, Clock, Video, Upload, Loader2 } from 'lucide-react'
+import { ShoppingBag, DollarSign, Package, AlertTriangle, TrendingUp, Clock, Video, Upload, Loader2, ImagePlus, X, GripVertical } from 'lucide-react'
 import { useAdminStore } from '../../store/adminStore'
 import { formatINR } from '../../utils/format'
 import { getSetting, setSetting } from '../../services/settingsService'
@@ -13,6 +13,149 @@ import { supabase } from '../../lib/supabase'
 import toast from 'react-hot-toast'
 
 const GOLD_COLORS = ['#C8A23A', '#A88422', '#8B5E3C', '#2C241B', '#D4AF37', '#6F655A', '#E4C55A', '#B8860B']
+
+// Hero Images Manager — admin can upload/paste up to 5 carousel images for the homepage hero
+function HeroImagesManager() {
+  const [images, setImages] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [urlInput, setUrlInput] = useState('')
+
+  useEffect(() => {
+    getSetting('hero_images').then(val => {
+      if (val) { try { const p = JSON.parse(val); if (Array.isArray(p) && p.length) setImages(p) } catch {} }
+    }).catch(() => {})
+  }, [])
+
+  const persist = async (updated) => {
+    setSaving(true)
+    try {
+      await setSetting('hero_images', JSON.stringify(updated))
+      setImages(updated)
+      toast.success('Hero images saved!')
+    } catch (e) {
+      toast.error(e.message || 'Failed to save')
+    } finally { setSaving(false) }
+  }
+
+  const handleUpload = async (e) => {
+    const files = Array.from(e.target.files || []).slice(0, 5 - images.length)
+    if (!files.length) { toast.error('Max 5 images allowed'); return }
+    setUploading(true)
+    try {
+      const urls = []
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) { toast.error('Only image files allowed'); continue }
+        if (file.size > 8 * 1024 * 1024) { toast.error(`${file.name} is over 8MB`); continue }
+        const ext = file.name.split('.').pop()
+        const path = `hero/img_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
+        const { error } = await supabase.storage.from('product-images').upload(path, file, { upsert: true, contentType: file.type })
+        if (error) throw error
+        const { data } = supabase.storage.from('product-images').getPublicUrl(path)
+        urls.push(data.publicUrl)
+      }
+      const updated = [...images, ...urls].slice(0, 5)
+      await persist(updated)
+    } catch (e) {
+      toast.error(e.message || 'Upload failed')
+    } finally { setUploading(false) }
+  }
+
+  const addUrl = async () => {
+    const url = urlInput.trim()
+    if (!url) return
+    if (images.length >= 5) { toast.error('Max 5 images allowed'); return }
+    const updated = [...images, url]
+    setUrlInput('')
+    await persist(updated)
+  }
+
+  const remove = async (idx) => {
+    await persist(images.filter((_, i) => i !== idx))
+  }
+
+  const moveUp = async (idx) => {
+    if (idx === 0) return
+    const u = [...images];[u[idx - 1], u[idx]] = [u[idx], u[idx - 1]]
+    await persist(u)
+  }
+
+  const moveDown = async (idx) => {
+    if (idx === images.length - 1) return
+    const u = [...images];[u[idx], u[idx + 1]] = [u[idx + 1], u[idx]]
+    await persist(u)
+  }
+
+  return (
+    <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div>
+          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: '#2C241B', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ImagePlus size={16} style={{ color: '#C8A23A' }} /> Hero Carousel Images
+          </h3>
+          <p style={{ fontSize: 11, color: '#8F857A', margin: '4px 0 0' }}>Up to 5 images shown in the homepage hero slider. Recommended: 1200×900px.</p>
+        </div>
+        <span style={{ fontSize: 11, color: '#8F857A', background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 20, padding: '3px 10px' }}>
+          {images.length}/5
+        </span>
+      </div>
+
+      {/* Current images */}
+      {images.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+          {images.map((url, idx) => (
+            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#F8F5F0', borderRadius: 10, padding: '8px 12px', border: '1px solid #E7DED1' }}>
+              <img src={url} alt={`Hero ${idx + 1}`} style={{ width: 56, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0, border: '1px solid #E7DED1' }} onError={e => { e.target.style.opacity = 0.3 }} />
+              <span style={{ flex: 1, fontSize: 11, color: '#6F655A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url.length > 50 ? url.slice(0, 50) + '…' : url}</span>
+              <span style={{ fontSize: 10, color: '#C8A23A', fontWeight: 700, background: 'rgba(200,162,58,0.1)', padding: '2px 8px', borderRadius: 20, flexShrink: 0 }}>#{idx + 1}</span>
+              <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+                <button onClick={() => moveUp(idx)} disabled={idx === 0 || saving} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 2, opacity: idx === 0 ? 0.3 : 1 }} title="Move up">▲</button>
+                <button onClick={() => moveDown(idx)} disabled={idx === images.length - 1 || saving} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 2, opacity: idx === images.length - 1 ? 0.3 : 1 }} title="Move down">▼</button>
+                <button onClick={() => remove(idx)} disabled={saving} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#D9534F', padding: 2, display: 'flex', alignItems: 'center' }} title="Remove">
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {images.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '20px 0 16px', color: '#8F857A', fontSize: 13 }}>
+          No hero images set — using default images from code.
+        </div>
+      )}
+
+      {/* Upload */}
+      {images.length < 5 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', border: '1px dashed rgba(200,162,58,0.4)', borderRadius: 10, cursor: 'pointer', background: '#FAF8F3', transition: 'border-color 0.2s' }}>
+            <input type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
+            {uploading
+              ? <><Loader2 size={15} style={{ color: '#C8A23A' }} className="animate-spin" /><span style={{ fontSize: 13, color: '#8F857A' }}>Uploading...</span></>
+              : <><Upload size={15} style={{ color: '#C8A23A' }} /><span style={{ fontSize: 13, color: '#8F857A' }}>Upload images from device (max 8MB each)</span></>
+            }
+          </label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              value={urlInput}
+              onChange={e => setUrlInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addUrl()}
+              placeholder="Or paste image URL and press Enter..."
+              style={{ flex: 1, background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none' }}
+              onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.12)' }}
+              onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }}
+            />
+            <button onClick={addUrl} disabled={!urlInput.trim() || saving || images.length >= 5}
+              style={{ padding: '9px 16px', background: 'linear-gradient(135deg, #D4AF37, #B8860B)', color: '#FFFFFF', fontWeight: 600, borderRadius: 10, fontSize: 13, border: 'none', cursor: 'pointer', flexShrink: 0, opacity: (!urlInput.trim() || saving) ? 0.6 : 1 }}>
+              Add
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 // Hero Video Manager component
 function HeroVideoManager() {
@@ -304,6 +447,9 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Hero Images Manager */}
+      <HeroImagesManager />
 
       {/* Hero Video Manager */}
       <HeroVideoManager />

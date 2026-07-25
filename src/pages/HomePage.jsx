@@ -7,6 +7,7 @@ import { fetchProducts } from "../services/productService"
 import { formatINR } from "../utils/format"
 import PromoBanners from "../components/PromoBanners"
 import ReviewsSection from "../components/ReviewsSection"
+import { getSetting } from "../services/settingsService"
 
 /* ── Reveal on scroll ── */
 const fadeUp = { hidden:{ opacity:0, y:28 }, show:{ opacity:1, y:0, transition:{ duration:0.6, ease:[0.25,0.46,0.45,0.94] } } }
@@ -23,7 +24,7 @@ function Reveal({ children, className="", delay=0, style={} }) {
 }
 
 /* ── Static content ── */
-const HERO_IMGS = [
+const DEFAULT_HERO_IMGS = [
   "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=700&q=80",
   "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=700&q=80",
   "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80",
@@ -200,10 +201,18 @@ export default function HomePage() {
   const [tIdx,      setTIdx]      = useState(0)
   const scrollRef                 = useRef(null)
   const [heroImg,   setHeroImg]   = useState(0)
+  const [heroImgs,  setHeroImgs]  = useState(DEFAULT_HERO_IMGS)
 
   useEffect(()=>{ fetchProducts({limit:12}).then(r=>setProducts(r||[])).catch(()=>{}) },[])
   useEffect(()=>{ const t=setInterval(()=>setTIdx(i=>(i+1)%TESTIMONIALS.length),5500); return()=>clearInterval(t) },[])
-  useEffect(()=>{ const t=setInterval(()=>setHeroImg(i=>(i+1)%HERO_IMGS.length),4000); return()=>clearInterval(t) },[])
+  useEffect(()=>{ const t=setInterval(()=>setHeroImg(i=>(i+1)%heroImgs.length),4000); return()=>clearInterval(t) },[heroImgs.length])
+
+  // Load hero images from admin settings
+  useEffect(()=>{
+    getSetting('hero_images').then(val=>{
+      if(val){ try{ const p=JSON.parse(val); if(Array.isArray(p)&&p.length){ setHeroImgs(p); setHeroImg(0) } }catch{} }
+    }).catch(()=>{})
+  },[]
 
   const featured    = products.filter(p=>p.is_featured).slice(0,8)
   const bestSellers = products.slice(0,10)
@@ -238,7 +247,7 @@ export default function HomePage() {
               <div className="block lg:hidden w-full">
                 <div className="relative rounded-[24px] overflow-hidden shadow-warm-xl aspect-[4/3] sm:aspect-[16/10]">
                   <AnimatePresence mode="wait">
-                    <motion.img key={heroImg} src={HERO_IMGS[heroImg]} alt="Premium Gift"
+                    <motion.img key={heroImg} src={heroImgs[heroImg]} alt="Premium Gift"
                       initial={{opacity:0,scale:1.04}} animate={{opacity:1,scale:1}} exit={{opacity:0}} transition={{duration:0.7}}
                       className="w-full h-full object-cover" onError={e=>e.target.src=FB}/>
                   </AnimatePresence>
@@ -297,7 +306,7 @@ export default function HomePage() {
               className="relative hidden lg:block w-full">
               <div className="relative rounded-[32px] overflow-hidden shadow-warm-xl aspect-[5/4]">
                 <AnimatePresence mode="wait">
-                  <motion.img key={heroImg} src={HERO_IMGS[heroImg]} alt="Premium Gift"
+                  <motion.img key={heroImg} src={heroImgs[heroImg]} alt="Premium Gift"
                     initial={{opacity:0,scale:1.04}} animate={{opacity:1,scale:1}} exit={{opacity:0}} transition={{duration:0.7}}
                     className="w-full h-full object-cover" onError={e=>e.target.src=FB}/>
                 </AnimatePresence>
@@ -330,7 +339,7 @@ export default function HomePage() {
 
               {/* Carousel dots */}
               <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-1.5">
-                {HERO_IMGS.map((_,i)=>(
+                {heroImgs.map((_,i)=>(
                   <button key={i} onClick={()=>setHeroImg(i)}
                     className={`rounded-full transition-all ${i===heroImg?"w-5 h-2 bg-white":"w-2 h-2 bg-white/50"}`}/>
                 ))}
@@ -681,7 +690,7 @@ export default function HomePage() {
             </Reveal>
             <Reveal delay={0.15}>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:12 }}>
-                {HERO_IMGS.concat(GALLERY.slice(0,1)).slice(0,4).map((img,i)=>(
+                {heroImgs.concat(GALLERY.slice(0,1)).slice(0,4).map((img,i)=>(
                   <div key={i} className="img-zoom overflow-hidden rounded-[20px] shadow-warm-md bg-[#F3EEE6]" style={{ aspectRatio:"1" }}>
                     <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" onError={e=>e.target.src=FB}/>
                   </div>
@@ -710,3 +719,4 @@ export default function HomePage() {
     </>
   )
 }
+
