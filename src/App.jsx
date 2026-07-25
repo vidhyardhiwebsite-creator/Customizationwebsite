@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import BottomNav from './components/BottomNav'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import AdminLayout from './components/admin/AdminLayout.jsx'
@@ -116,6 +117,7 @@ export default function App() {
                 </ErrorBoundary>
               </main>
               <Footer />
+              <BottomNav />
 
               {/* Floating social buttons */}
               <div className="fixed bottom-6 right-5 z-50 flex flex-col gap-3 items-center">
