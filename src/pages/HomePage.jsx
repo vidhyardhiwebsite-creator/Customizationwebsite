@@ -212,7 +212,7 @@ export default function HomePage() {
     getSetting('hero_images').then(val=>{
       if(val){ try{ const p=JSON.parse(val); if(Array.isArray(p)&&p.length){ setHeroImgs(p); setHeroImg(0) } }catch{} }
     }).catch(()=>{})
-  },[]
+  },[])
 
   const featured    = products.filter(p=>p.is_featured).slice(0,8)
   const bestSellers = products.slice(0,10)
