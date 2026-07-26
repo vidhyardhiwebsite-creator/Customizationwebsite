@@ -258,27 +258,27 @@ const StatCard = ({ icon: Icon, label, value, sub, color = 'gold', to }) => (
       style={{
         background: '#FFFFFF',
         border: '1px solid #E7DED1',
-        borderRadius: 14,
-        padding: 'clamp(12px,2vw,20px)',
+        borderRadius: 12,
+        padding: '12px',
         cursor: 'pointer',
         display: 'flex',
         flexDirection: 'column',
-        gap: 10,
+        gap: 8,
         boxShadow: '0 2px 10px rgba(44,36,27,0.05)',
         height: '100%',
       }}
     >
       <div style={{
-        width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+        width: 32, height: 32, borderRadius: 9, flexShrink: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: color === 'green' ? 'rgba(46,125,50,0.1)' : color === 'red' ? 'rgba(217,83,79,0.1)' : 'rgba(200,162,58,0.12)',
       }}>
-        <Icon size={17} style={{ color: color === 'green' ? '#2E7D32' : color === 'red' ? '#D9534F' : '#C8A23A' }} />
+        <Icon size={15} style={{ color: color === 'green' ? '#2E7D32' : color === 'red' ? '#D9534F' : '#C8A23A' }} />
       </div>
       <div style={{ minWidth: 0 }}>
-        <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 'clamp(15px,2.5vw,22px)', color: '#2C241B', margin: '0 0 3px', lineHeight: 1.1, wordBreak: 'break-word' }}>{value}</p>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</p>
-        {sub && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#C8A23A', margin: '3px 0 0', fontWeight: 600 }}>{sub}</p>}
+        <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 'clamp(14px,2.5vw,20px)', color: '#2C241B', margin: '0 0 2px', lineHeight: 1.1, wordBreak: 'break-word' }}>{value}</p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#8F857A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</p>
+        {sub && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, color: '#C8A23A', margin: '2px 0 0', fontWeight: 600 }}>{sub}</p>}
       </div>
     </motion.div>
   </Link>
@@ -325,7 +325,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(14px,2.5vw,24px)', maxWidth: '100%', minWidth: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px,2vw,22px)', maxWidth: '100%', minWidth: 0 }}>
 
       {/* ── Page title ── */}
       <div style={{ paddingBottom: 12, borderBottom: '1px solid #E7DED1' }}>
@@ -333,14 +333,17 @@ export default function AdminDashboard() {
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', margin: '4px 0 0' }}>Welcome back. Here's what's happening.</p>
       </div>
 
-      {/* ── Stat Cards: 2 col → 3 col → 5 col ── */}
-      <div style={{ display: 'grid', gap: 'clamp(10px,1.8vw,16px)', gridTemplateColumns: 'repeat(2,1fr)' }}
+      {/* ── Stat Cards: 2 col on mobile → 3 col sm → 5 col lg ── */}
+      <div style={{ display: 'grid', gap: 10, gridTemplateColumns: 'repeat(2,1fr)' }}
         className="sm:grid-cols-3 lg:grid-cols-5">
         <StatCard icon={ShoppingBag}   label="Total Orders"   value={stats.totalOrders}            sub={`${stats.paidOrders} paid`} color="gold"  to="/admin/orders" />
         <StatCard icon={DollarSign}    label="Total Revenue"  value={formatINR(stats.totalRevenue)} sub="from paid orders"           color="green" to="/admin/analytics" />
         <StatCard icon={Package}       label="Products"       value={stats.totalProducts}                                            color="gold"  to="/admin/products" />
         <StatCard icon={AlertTriangle} label="Low Stock"      value={stats.lowStockCount}           sub="< 10 items"                 color="red"   to="/admin/products" />
-        <StatCard icon={Clock}         label="Today's Orders" value={stats.todayOrdersCount}                                         color="gold"  to="/admin/orders?filter=today" />
+        {/* 5th card spans full width on mobile (2-col grid) so it doesn't sit alone */}
+        <div className="col-span-2 sm:col-span-1">
+          <StatCard icon={Clock} label="Today's Orders" value={stats.todayOrdersCount} color="gold" to="/admin/orders?filter=today" />
+        </div>
       </div>
 
       {/* ── Charts Row 1 ── */}
@@ -698,19 +701,19 @@ function ProductsPerPageManager() {
   }
 
   return (
-    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-      <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2">
-        <Package size={15} /> Products Per Page
+    <div className="bg-white border border-[#E7DED1] rounded-2xl p-4">
+      <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2 text-sm">
+        <Package size={14} /> Products Per Page
         <span className="text-xs text-[#8F857A] font-normal ml-1">- controls user-facing /products page</span>
       </h3>
-      <p className="text-[#8F857A] text-xs mb-4">Choose how many products are shown per page on the shop.</p>
-      <div className="flex items-center gap-3 flex-wrap">
+      <p className="text-[#8F857A] text-xs mb-3">Choose how many products are shown per page on the shop.</p>
+      <div className="flex items-center gap-2 flex-wrap">
         {PAGE_SIZE_OPTIONS.map(n => (
           <button
             key={n}
             onClick={() => save(n)}
             disabled={saving}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold border transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
               value === n
                 ? 'text-white border-[#C8A23A]'
                 : 'bg-[#F8F5F0] text-[#6F655A] border-[#E7DED1] hover:border-[#C8A23A] hover:text-[#2C241B]'
@@ -722,7 +725,7 @@ function ProductsPerPageManager() {
         ))}
         {saving && <span className="text-xs text-[#8F857A]">Saving...</span>}
       </div>
-      <p className="text-[#8F857A] text-xs mt-3">Current: <span className="text-[#2C241B] font-semibold">{value} products per page</span></p>
+      <p className="text-[#8F857A] text-xs mt-2">Current: <span className="text-[#2C241B] font-semibold">{value} products per page</span></p>
     </div>
   )
 }

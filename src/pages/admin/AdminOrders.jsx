@@ -160,24 +160,41 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
   const badge = getStatusBadge()
 
   return (
-    <div className={`border rounded-xl overflow-hidden mb-3 ${getStatusColor()}`}>
-      <div className="flex items-center justify-between p-3 cursor-pointer hover:bg-[#F8F5F0]" onClick={onToggle}>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1">
-            <span className="text-[#8F857A] text-xs">Order</span>
-            <p className="text-[#C8A23A] text-xs font-mono font-bold truncate">
+    <div className={`border rounded-xl overflow-hidden mb-2 ${getStatusColor()}`}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', cursor: 'pointer' }}
+        className="hover:bg-[#F8F5F0]" onClick={onToggle}>
+        
+        {/* Left: order id + customer name */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ fontSize: 11, color: '#8F857A', flexShrink: 0 }}>Order</span>
+            <span style={{ fontSize: 11, color: '#C8A23A', fontFamily: 'monospace', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
-            </p>
+            </span>
           </div>
-          <p className="text-[#8F857A] text-xs mt-0.5">{addr.full_name || "Customer"} &middot; {formatDate(order.created_at)}</p>
+          <p style={{ fontSize: 11, color: '#8F857A', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {addr.full_name || "Customer"} · {formatDate(order.created_at)}
+          </p>
         </div>
-        <div className="flex items-center gap-2 ml-2">
-          <span className="text-[#C8A23A] text-xs font-semibold">{formatINR(order.total_amount)}</span>
-          <span
-            className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge.color}`}
-            style={["Delivered", "Cancelled", "Failed"].includes(badge.label) ? { color: "#ffffff" } : undefined}
-          >{badge.label}</span>
-          {expanded ? <ChevronUp size={13} className="text-[#8F857A]" /> : <ChevronDown size={13} className="text-[#8F857A]" />}
+
+        {/* Right: amount + badge + chevron — never wraps */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          <span style={{ fontSize: 12, color: '#C8A23A', fontWeight: 700, whiteSpace: 'nowrap' }}>{formatINR(order.total_amount)}</span>
+          <span style={{
+            fontSize: 10, padding: '2px 8px', borderRadius: 999, fontWeight: 700, whiteSpace: 'nowrap',
+            background: badge.color.includes('orange') ? 'rgba(249,115,22,0.15)' :
+                        badge.color.includes('green') ? '#22C55E' :
+                        badge.color.includes('red') ? '#EF4444' :
+                        badge.color.includes('blue') ? 'rgba(59,130,246,0.15)' : 'rgba(200,162,58,0.15)',
+            color: badge.color.includes('orange') ? '#EA580C' :
+                   badge.color.includes('green') ? '#fff' :
+                   badge.color.includes('red') ? '#fff' :
+                   badge.color.includes('blue') ? '#3B82F6' : '#A88422',
+          }}>{badge.label}</span>
+          {expanded
+            ? <ChevronUp size={12} style={{ color: '#8F857A', flexShrink: 0 }} />
+            : <ChevronDown size={12} style={{ color: '#8F857A', flexShrink: 0 }} />
+          }
         </div>
       </div>
 
@@ -325,26 +342,30 @@ function Pagination({ total, page, pageSize, onPage, onPageSize, pageSizeOptions
     ? `Showing all ${total}`
     : `Showing ${Math.min((page - 1) * pageSize + 1, total)}–${Math.min(page * pageSize, total)} of ${total}`
   return (
-    <div className="flex items-center justify-between flex-wrap gap-2 mt-3">
-      <div className="flex items-center gap-2">
-        <p className="text-xs text-[#8F857A]">{showingText}</p>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginTop: 10, paddingTop: 10, borderTop: '1px solid #F3EEE6' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: 0 }}>{showingText}</p>
         <select value={pageSize} onChange={e => onPageSize(Number(e.target.value))}
-          className="bg-white border border-[#E7DED1] rounded-lg px-2 py-1 text-xs text-[#2C241B] focus:outline-none focus:border-[#C8A23A]">
+          style={{ background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 7, padding: '3px 6px', fontSize: 11, color: '#2C241B', outline: 'none', cursor: 'pointer' }}>
           {pageSizeOptions.map(n => <option key={n} value={n}>{n === 9999 ? "All" : n}</option>)}
         </select>
       </div>
       {totalPages > 1 && (
-        <div className="flex items-center gap-1">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           <button onClick={() => onPage(page - 1)} disabled={page === 1}
-            className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">‹</button>
+            style={{ padding: '3px 8px', fontSize: 11, border: '1px solid #E7DED1', borderRadius: 6, background: '#FFF', color: '#8F857A', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}>‹</button>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
             <button key={p} onClick={() => onPage(p)}
-              className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#C8A23A] text-white border-[#C8A23A]" : "border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A]"}`}>
+              style={{ padding: '3px 8px', fontSize: 11, border: '1px solid', borderRadius: 6, cursor: 'pointer',
+                background: p === page ? 'linear-gradient(135deg,#D4AF37,#B8860B)' : '#FFF',
+                color: p === page ? '#FFF' : '#8F857A',
+                borderColor: p === page ? '#C8A23A' : '#E7DED1',
+              }}>
               {p}
             </button>
           ))}
           <button onClick={() => onPage(page + 1)} disabled={page === totalPages}
-            className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">›</button>
+            style={{ padding: '3px 8px', fontSize: 11, border: '1px solid #E7DED1', borderRadius: 6, background: '#FFF', color: '#8F857A', cursor: 'pointer', opacity: page === totalPages ? 0.4 : 1 }}>›</button>
         </div>
       )}
     </div>
@@ -490,28 +511,42 @@ export default function AdminOrders() {
   const cardProps = { onStatusUpdate: handleStatusUpdate, onVerify: verifyPayment, onReject: rejectPayment, onNotify: notifyCustomer, onScreenshot: setScreenshotModal, onTrackingSave: handleTrackingSave }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 22, fontWeight: 700, color: '#2C241B', margin: 0 }}>
-            {filterToday ? "Today's Orders" : "Orders"}
-          </h1>
-          <p style={{ fontSize: 13, color: '#8F857A', marginTop: 4 }}>{localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification</p>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, maxWidth: '100%', minWidth: 0 }}>
+
+      {/* ── Header ── */}
+      <div style={{ paddingBottom: 12, borderBottom: '1px solid #E7DED1' }}>
+        <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: '#2C241B', margin: 0 }}>
+          {filterToday ? "Today's Orders" : "Orders"}
+        </h1>
+        <p style={{ fontSize: 12, color: '#8F857A', margin: '3px 0 0' }}>
+          {localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification
+        </p>
       </div>
 
-      <div className="relative">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8F857A]" />
-        <input value={search} onChange={e => { setSearch(e.target.value); setSearchPage(1) }} placeholder="Search by Order ID (e.g. NS0-001)"
-          className="w-full bg-white border border-[#E7DED1] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
+      {/* ── Search ── */}
+      <div style={{ position: 'relative' }}>
+        <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#8F857A', pointerEvents: 'none' }} />
+        <input
+          value={search}
+          onChange={e => { setSearch(e.target.value); setSearchPage(1) }}
+          placeholder="Search by Order ID (e.g. NS0-001)"
+          style={{
+            width: '100%', boxSizing: 'border-box',
+            background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10,
+            paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
+            fontSize: 13, color: '#2C241B', outline: 'none',
+          }}
+          onFocus={e => e.target.style.borderColor = '#C8A23A'}
+          onBlur={e => e.target.style.borderColor = '#E7DED1'}
+        />
       </div>
 
-      {/* Search results - flat list with pagination */}
+      {/* ── Search results ── */}
       {q && (
         <div>
-          <p className="text-[#8F857A] text-xs mb-3">{filtered.length} result{filtered.length !== 1 ? "s" : ""} for &quot;{search}&quot;</p>
+          <p style={{ fontSize: 12, color: '#8F857A', marginBottom: 10 }}>{filtered.length} result{filtered.length !== 1 ? "s" : ""} for "{search}"</p>
           {filtered.length === 0
-            ? <p className="text-[#6F655A] text-sm text-center py-12">No orders found</p>
+            ? <p style={{ color: '#6F655A', fontSize: 13, textAlign: 'center', padding: '48px 0' }}>No orders found</p>
             : paginate(filtered, searchPage, pageSize).map(order => (
               <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                 onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
@@ -523,49 +558,64 @@ export default function AdminOrders() {
         </div>
       )}
 
-      {/* Normal two-column layout */}
+      {/* ── Two-column series layout ── */}
       {!q && (
         <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6" style={{ minWidth: 0 }}>
-            {/* NS0 - Home */}
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid #E7DED1' }}>
-                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#C8A23A', flexShrink: 0 }} />
-                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: 0 }}>NS0 — Home</h2>
-                <span style={{ fontSize: 10, background: 'rgba(200,162,58,0.1)', color: '#A88422', padding: '2px 8px', borderRadius: 20, fontWeight: 700 }}>{ns0Orders.length}</span>
-                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto' }}>{ns0Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1,1fr)', gap: 14 }}
+            className="lg:grid-cols-2">
+
+            {/* NS0 — Home */}
+            <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
+              {/* Column header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C8A23A', flexShrink: 0 }} />
+                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>NS0 — Home</h2>
+                <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(200,162,58,0.12)', color: '#A88422', padding: '1px 8px', borderRadius: 20 }}>{ns0Orders.length}</span>
+                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto', fontWeight: 500 }}>
+                  {ns0Orders.filter(o => o.payment_status === "pending_verification").length} pending
+                </span>
               </div>
-              {ns0Orders.length === 0
-                ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS0 orders</p>
-                : paginate(ns0Orders, ns0Page, pageSize).map(order => (
-                  <OrderCard key={order.id} order={order} expanded={expanded === order.id}
-                    onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                    {...cardProps} />
-                ))
-              }
-              <Pagination total={ns0Orders.length} page={ns0Page} pageSize={pageSize} onPage={setNs0Page}
-                onPageSize={n => { setPageSize(n); setNs0Page(1); setNs1Page(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
+              {/* Orders */}
+              <div style={{ padding: '10px 12px' }}>
+                {ns0Orders.length === 0
+                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS0 orders</p>
+                  : paginate(ns0Orders, ns0Page, pageSize).map(order => (
+                    <OrderCard key={order.id} order={order} expanded={expanded === order.id}
+                      onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
+                      {...cardProps} />
+                  ))
+                }
+                <Pagination total={ns0Orders.length} page={ns0Page} pageSize={pageSize} onPage={setNs0Page}
+                  onPageSize={n => { setPageSize(n); setNs0Page(1); setNs1Page(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
+              </div>
             </div>
 
-            {/* NS1 - HYD */}
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid #E7DED1' }}>
-                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#A88422', flexShrink: 0 }} />
-                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: 0 }}>NS1 — HYD</h2>
-                <span style={{ fontSize: 10, background: 'rgba(168,132,34,0.1)', color: '#A88422', padding: '2px 8px', borderRadius: 20, fontWeight: 700 }}>{ns1Orders.length}</span>
-                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto' }}>{ns1Orders.filter(o=>o.payment_status==="pending_verification").length} pending</span>
+            {/* NS1 — HYD */}
+            <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
+              {/* Column header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#A88422', flexShrink: 0 }} />
+                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>NS1 — HYD</h2>
+                <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(168,132,34,0.1)', color: '#A88422', padding: '1px 8px', borderRadius: 20 }}>{ns1Orders.length}</span>
+                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto', fontWeight: 500 }}>
+                  {ns1Orders.filter(o => o.payment_status === "pending_verification").length} pending
+                </span>
               </div>
-              {ns1Orders.length === 0
-                ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS1 orders</p>
-                : paginate(ns1Orders, ns1Page, pageSize).map(order => (
-                  <OrderCard key={order.id} order={order} expanded={expanded === order.id}
-                    onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                    {...cardProps} />
-                ))
-              }
-              <Pagination total={ns1Orders.length} page={ns1Page} pageSize={pageSize} onPage={setNs1Page}
-                onPageSize={n => { setPageSize(n); setNs0Page(1); setNs1Page(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
+              {/* Orders */}
+              <div style={{ padding: '10px 12px' }}>
+                {ns1Orders.length === 0
+                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS1 orders</p>
+                  : paginate(ns1Orders, ns1Page, pageSize).map(order => (
+                    <OrderCard key={order.id} order={order} expanded={expanded === order.id}
+                      onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
+                      {...cardProps} />
+                  ))
+                }
+                <Pagination total={ns1Orders.length} page={ns1Page} pageSize={pageSize} onPage={setNs1Page}
+                  onPageSize={n => { setPageSize(n); setNs0Page(1); setNs1Page(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
+              </div>
             </div>
+
           </div>
         </>
       )}

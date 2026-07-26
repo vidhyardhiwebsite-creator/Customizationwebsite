@@ -31,7 +31,7 @@ function Sidebar({ pathname, onSignOut, onNavClick }) {
       height: "100%", overflow: "hidden",
     }}>
       {/* Logo */}
-      <div style={{ padding: "20px 20px 16px", borderBottom: "1px solid rgba(255,255,255,0.07)", flexShrink: 0 }}>
+      <div style={{ padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,255,255,0.07)", flexShrink: 0 }}>
         <Link to="/admin" onClick={onNavClick} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <div style={{ width: 38, height: 38, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "flex-start" }}>
             <img src="/logo.png" alt="Vidhyrathi" style={{ width: 38, height: "auto", display: "block", marginTop: "-2px" }} />
@@ -44,16 +44,16 @@ function Sidebar({ pathname, onSignOut, onNavClick }) {
       </div>
 
       {/* Nav items */}
-      <nav style={{ flex: 1, padding: "12px 12px", overflowY: "auto" }}>
+      <nav style={{ flex: 1, padding: "8px", overflowY: "auto" }}>
         {NAV.map(({ path, label, icon: Icon }) => {
           const active = pathname === path || (path !== "/admin" && pathname.startsWith(path))
           return (
             <Link key={path} to={path} onClick={onNavClick}
               style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "10px 14px", borderRadius: 10, marginBottom: 2,
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "9px 12px", borderRadius: 9, marginBottom: 1,
                 textDecoration: "none",
-                fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: active ? 600 : 400,
+                fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: active ? 600 : 400,
                 background: active ? "linear-gradient(135deg, rgba(200,162,58,0.18), rgba(200,162,58,0.08))" : "transparent",
                 color: active ? "#E4C55A" : "rgba(255,255,255,0.6)",
                 border: active ? "1px solid rgba(200,162,58,0.2)" : "1px solid transparent",
@@ -62,27 +62,27 @@ function Sidebar({ pathname, onSignOut, onNavClick }) {
               onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#FFFFFF" } }}
               onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.6)" } }}
             >
-              <Icon size={17} style={{ flexShrink: 0 }} />
+              <Icon size={16} style={{ flexShrink: 0 }} />
               <span style={{ flex: 1 }}>{label}</span>
-              {active && <ChevronRight size={13} style={{ flexShrink: 0, opacity: 0.7 }} />}
+              {active && <ChevronRight size={12} style={{ flexShrink: 0, opacity: 0.7 }} />}
             </Link>
           )
         })}
       </nav>
 
       {/* Bottom actions */}
-      <div style={{ padding: "12px", borderTop: "1px solid rgba(255,255,255,0.07)", flexShrink: 0, display: "flex", flexDirection: "column", gap: 2 }}>
+      <div style={{ padding: "8px", borderTop: "1px solid rgba(255,255,255,0.07)", flexShrink: 0, display: "flex", flexDirection: "column", gap: 1 }}>
         <Link to="/"
-          style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderRadius: 10, textDecoration: "none", fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", transition: "all 0.2s" }}
+          style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 9, textDecoration: "none", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,0.6)", transition: "all 0.2s" }}
           onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#FFFFFF" }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.6)" }}>
-          <Store size={17} /> Switch to Store
+          <Store size={16} /> Switch to Store
         </Link>
         <button onClick={onSignOut}
-          style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderRadius: 10, background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", width: "100%", transition: "all 0.2s" }}
+          style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 9, background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,0.6)", width: "100%", transition: "all 0.2s" }}
           onMouseEnter={e => { e.currentTarget.style.background = "rgba(217,83,79,0.12)"; e.currentTarget.style.color = "#F87171" }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.6)" }}>
-          <LogOut size={17} /> Sign Out
+          <LogOut size={16} /> Sign Out
         </button>
       </div>
     </aside>
@@ -297,7 +297,7 @@ export default function AdminLayout({ children }) {
         </header>
 
         {/* ── Page content ── */}
-        <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', background: '#F8F5F0', padding: 'clamp(16px, 3vw, 32px)', minWidth: 0 }}>
+        <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', background: '#F8F5F0', padding: 'clamp(12px, 2.5vw, 28px)', minWidth: 0 }}>
           {children}
         </main>
       </div>

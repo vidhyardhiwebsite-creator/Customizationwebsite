@@ -525,8 +525,28 @@ input[type="checkbox"],input[type="radio"],summary { cursor: pointer; }
 }
 
 /* ═══════════════════════════════════════
-   ROYAL PREMIUM ENHANCEMENTS
+   ADMIN TABLE / CARD RESPONSIVE TOGGLE
    ═══════════════════════════════════════ */
+/* Banner form grid — 2-col desktop, 1-col mobile */
+.banner-form-grid { grid-template-columns: repeat(2,1fr) !important; }
+@media (max-width: 639px) {
+  .banner-form-grid { grid-template-columns: repeat(1,1fr) !important; }
+}
+/* Users page grids */
+.kpi-grid-users   { grid-template-columns: repeat(2,1fr); }
+.user-detail-grid { grid-template-columns: repeat(1,1fr); }
+@media (min-width: 640px) {
+  .kpi-grid-users   { grid-template-columns: repeat(3,1fr); }
+  .user-detail-grid { grid-template-columns: repeat(2,1fr); }
+}
+.admin-table-view { display: block; }
+.admin-card-view  { display: none; }
+@media (max-width: 639px) {
+  .admin-table-view { display: none !important; }
+  .admin-card-view  { display: block !important; }
+}
+
+
 
 /* Gold shimmer divider */
 .gold-divider {

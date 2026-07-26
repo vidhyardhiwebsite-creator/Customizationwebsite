@@ -261,119 +261,206 @@ export default function AdminProducts() {
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: '100%', minWidth: 0 }}>
+
+      {/* ── Header ── */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
         <div>
-          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 22, fontWeight: 700, color: '#2C241B', margin: 0 }}>Products</h1>
-          <p style={{ fontSize: 13, color: '#8F857A', marginTop: 4 }}>{products.length} total products</p>
+          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: '#2C241B', margin: 0 }}>Products</h1>
+          <p style={{ fontSize: 12, color: '#8F857A', margin: '3px 0 0' }}>{products.length} total products</p>
         </div>
         <button onClick={openAdd} style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          padding: '8px 18px', background: 'linear-gradient(135deg, #D4AF37, #B8860B)',
+          display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0,
+          padding: '8px 14px', background: 'linear-gradient(135deg, #D4AF37, #B8860B)',
           color: '#FFFFFF', fontSize: 13, fontWeight: 600, borderRadius: 10,
-          border: 'none', cursor: 'pointer',
+          border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
+          boxShadow: '0 2px 8px rgba(200,162,58,0.3)',
         }}>
-          <Plus size={16} /> Add Product
+          <Plus size={14} /> Add Product
         </button>
       </div>
 
-      <div className="relative">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8F857A]" />
-        <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search products..."
-          className="w-full bg-white border border-[#E7DED1] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
+      {/* ── Search ── */}
+      <div style={{ position: 'relative' }}>
+        <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#8F857A', pointerEvents: 'none' }} />
+        <input
+          value={search}
+          onChange={e => { setSearch(e.target.value); setPage(1) }}
+          placeholder="Search products..."
+          style={{
+            width: '100%', boxSizing: 'border-box',
+            background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10,
+            paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
+            fontSize: 13, color: '#2C241B', outline: 'none',
+          }}
+          onFocus={e => e.target.style.borderColor = '#C8A23A'}
+          onBlur={e => e.target.style.borderColor = '#E7DED1'}
+        />
       </div>
 
-      <div className="bg-white border border-[#E7DED1] rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="border-b border-[#E7DED1]">
-              <tr>{["Product","Category","Price","Stock","Tags","Actions"].map(h => (
-                <th key={h} className="text-left text-[#8F857A] text-xs px-4 py-3 font-medium">{h}</th>
-              ))}</tr>
+      {/* ── Table (desktop) / Cards (mobile) ── */}
+      <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
+
+        {/* Desktop table — hidden on mobile */}
+        <div className="admin-table-view" style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid #E7DED1', background: '#F8F5F0' }}>
+                {[['Product', '35%'], ['Category', '20%'], ['Price', '12%'], ['Stock', '10%'], ['Tags', '15%'], ['Actions', '8%']].map(([h, w]) => (
+                  <th key={h} style={{ textAlign: 'left', width: w, padding: '10px 14px', fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap' }}>{h}</th>
+                ))}
+              </tr>
             </thead>
-            <tbody className="divide-y divide-[#F3EEE6]">
-              {pagedProducts.map(p => (
-                <tr key={p.id} className="hover:bg-[#F8F5F0] transition-colors">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
+            <tbody>
+              {pagedProducts.map((p, idx) => (
+                <tr key={p.id}
+                  style={{ borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#FAF8F3'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <td style={{ padding: '12px 14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       {p.images?.[0] && isVideoUrl(p.images[0]) ? (
-                        <video
-                          src={p.images[0]}
-                          muted
-                          playsInline
-                          className="w-10 h-10 object-cover rounded-lg flex-shrink-0 bg-black"
+                        <video src={p.images[0]} muted playsInline
+                          style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 8, flexShrink: 0, background: '#000', border: '1px solid #E7DED1' }}
                           onMouseEnter={e => e.target.play()}
-                          onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }}
-                        />
+                          onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }} />
                       ) : (
-                        <img
-                          src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
-                          alt=""
-                          className="w-10 h-10 object-cover rounded-lg"
+                        <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
+                          alt="" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: '1px solid #E7DED1' }}
                           loading="lazy"
-                          onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }}
-                        />
+                          onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
                       )}
-                      <div>
-                        <p className="text-[#2C241B] text-xs font-medium">{p.name}</p>
-                        {p.custom_id && <p className="text-[#C8A23A] text-xs font-mono">{p.custom_id}</p>}
-                        <p className="text-[#8F857A] text-xs">{p.size}</p>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                        {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
+                        {p.size && <p style={{ fontSize: 11, color: '#8F857A', margin: '1px 0 0' }}>{p.size}</p>}
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#8F857A] text-xs">{p.category}</td>
-                  <td className="px-4 py-3 text-[#C8A23A] text-xs font-medium">{formatINR(p.price)}</td>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs font-medium ${p.stock < 10 ? "text-red-400" : p.stock < 20 ? "text-yellow-400" : "text-green-400"}`}>
-                      {p.stock < 10 && <AlertTriangle size={11} className="inline mr-1" />}{p.stock}
+                  <td style={{ padding: '12px 14px', fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#6F655A' }}>{p.category}</td>
+                  <td style={{ padding: '12px 14px', fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#C8A23A', whiteSpace: 'nowrap' }}>{formatINR(p.price)}</td>
+                  <td style={{ padding: '12px 14px' }}>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', display: 'flex', alignItems: 'center', gap: 3 }}>
+                      {p.stock < 10 && <AlertTriangle size={10} />}{p.stock}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
+                  <td style={{ padding: '12px 14px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                       {(p.tags || []).map(t => (
-                        <span key={t} className="text-xs px-1.5 py-0.5 bg-[#C8A23A]/10 text-[#C8A23A] rounded">{t}</span>
+                        <span key={t} style={{ fontSize: 10, padding: '2px 7px', background: 'rgba(200,162,58,0.1)', color: '#C8A23A', borderRadius: 999, fontWeight: 500 }}>{t}</span>
                       ))}
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => openEdit(p)} className="text-[#8F857A] hover:text-[#C8A23A] transition-colors p-1"><Edit2 size={14} /></button>
-                      <button onClick={() => setDeleteConfirm(p.id)} className="text-[#8F857A] hover:text-red-400 transition-colors p-1"><Trash2 size={14} /></button>
+                  <td style={{ padding: '12px 14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 4, borderRadius: 6, transition: 'color 0.15s' }}
+                        onMouseEnter={e => e.currentTarget.style.color = '#C8A23A'}
+                        onMouseLeave={e => e.currentTarget.style.color = '#8F857A'}>
+                        <Edit2 size={14} />
+                      </button>
+                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 4, borderRadius: 6, transition: 'color 0.15s' }}
+                        onMouseEnter={e => e.currentTarget.style.color = '#EF4444'}
+                        onMouseLeave={e => e.currentTarget.style.color = '#8F857A'}>
+                        <Trash2 size={14} />
+                      </button>
                     </div>
                   </td>
                 </tr>
               ))}
+              {pagedProducts.length === 0 && (
+                <tr>
+                  <td colSpan={6} style={{ padding: '36px 14px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 13, color: '#8F857A' }}>
+                    No products found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Mobile cards — shown only on small screens */}
+        <div className="admin-card-view">
+          {pagedProducts.length === 0 && (
+            <p style={{ padding: '32px 16px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 13, color: '#8F857A' }}>No products found</p>
+          )}
+          {pagedProducts.map((p, idx) => (
+            <div key={p.id} style={{ padding: '12px 14px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                {/* Thumbnail */}
+                {p.images?.[0] && isVideoUrl(p.images[0]) ? (
+                  <video src={p.images[0]} muted playsInline
+                    style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, flexShrink: 0, background: '#000', border: '1px solid #E7DED1' }} />
+                ) : (
+                  <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
+                    alt="" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: '1px solid #E7DED1' }}
+                    loading="lazy"
+                    onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
+                )}
+
+                {/* Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                      {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
+                    </div>
+                    {/* Actions */}
+                    <div style={{ display: 'flex', gap: 2, flexShrink: 0 }}>
+                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Edit2 size={14} /></button>
+                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Trash2 size={14} /></button>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px 10px', marginTop: 5 }}>
+                    <span style={{ fontSize: 11, color: '#6F655A' }}>{p.category}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#C8A23A' }}>{formatINR(p.price)}</span>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', display: 'flex', alignItems: 'center', gap: 2 }}>
+                      {p.stock < 10 && <AlertTriangle size={9} />}{p.stock} in stock
+                    </span>
+                  </div>
+                  {(p.tags || []).length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                      {(p.tags || []).map(t => (
+                        <span key={t} style={{ fontSize: 10, padding: '2px 7px', background: 'rgba(200,162,58,0.1)', color: '#C8A23A', borderRadius: 999 }}>{t}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Pagination */}
+      {/* ── Pagination ── */}
       {(totalPages > 1 || filtered.length > 0) && (
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <p className="text-xs text-[#8F857A]">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', margin: 0 }}>
               {pageSize === 9999
                 ? `Showing all ${filtered.length}`
                 : `Showing ${Math.min((page - 1) * pageSize + 1, filtered.length)}–${Math.min(page * pageSize, filtered.length)} of ${filtered.length}`}
             </p>
             <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
-              className="bg-white border border-[#E7DED1] rounded-lg px-2 py-1 text-xs text-[#2C241B] focus:outline-none focus:border-[#C8A23A]">
+              style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '4px 8px', fontSize: 12, color: '#2C241B', outline: 'none', cursor: 'pointer' }}>
               {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n === 9999 ? "All" : n}</option>)}
             </select>
           </div>
           {totalPages > 1 && (
-            <div className="flex items-center gap-1">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">‹</button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                <button key={p} onClick={() => setPage(p)}
-                  className={`px-2.5 py-1 text-xs rounded border transition-all ${p === page ? "bg-[#C8A23A] text-white border-[#C8A23A]" : "border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A]"}`}>
-                  {p}
+                style={{ padding: '4px 10px', fontSize: 12, border: '1px solid #E7DED1', borderRadius: 7, background: '#FFF', color: '#8F857A', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}>‹</button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(pg => (
+                <button key={pg} onClick={() => setPage(pg)}
+                  style={{ padding: '4px 9px', fontSize: 12, border: '1px solid', borderRadius: 7, cursor: 'pointer', transition: 'all 0.15s',
+                    background: pg === page ? 'linear-gradient(135deg,#D4AF37,#B8860B)' : '#FFF',
+                    color: pg === page ? '#FFF' : '#8F857A',
+                    borderColor: pg === page ? '#C8A23A' : '#E7DED1',
+                  }}>
+                  {pg}
                 </button>
               ))}
               <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                className="px-2 py-1 text-xs rounded border border-[#E7DED1] text-[#8F857A] hover:border-[#C8A23A] disabled:opacity-40">›</button>
+                style={{ padding: '4px 10px', fontSize: 12, border: '1px solid #E7DED1', borderRadius: 7, background: '#FFF', color: '#8F857A', cursor: 'pointer', opacity: page === totalPages ? 0.4 : 1 }}>›</button>
             </div>
           )}
         </div>
