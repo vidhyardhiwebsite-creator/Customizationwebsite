@@ -295,45 +295,45 @@ export default function AdminProducts() {
       <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 12, overflow: 'hidden' }}>
 
         {/* Table header */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 72px 52px', padding: '7px 12px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1', gap: 8 }}>
-          {['Product', 'Category', 'Price', 'Stock'].map(h => (
-            <span key={h} style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</span>
-          ))}
+        <div style={{ display: 'grid', gridTemplateColumns: '30px 1fr 1fr 62px 38px', padding: '5px 8px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1', gap: 4, alignItems: 'center' }}>
+          <span />
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Product</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Category</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Price</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right' }}>St.</span>
         </div>
 
-        {/* Empty state */}
         {pagedProducts.length === 0 && (
           <p style={{ padding: '28px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', margin: 0 }}>No products found</p>
         )}
 
-        {/* Rows */}
         {pagedProducts.map((p, idx) => (
           <div key={p.id}
-            style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 72px 52px', alignItems: 'center', padding: '8px 12px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none', gap: 8 }}
+            style={{ display: 'grid', gridTemplateColumns: '30px 1fr 1fr 62px 38px', alignItems: 'center', padding: '6px 8px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none', gap: 4, transition: 'background 0.1s' }}
             onMouseEnter={e => e.currentTarget.style.background = '#FAF8F3'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
 
-            {/* Product: thumb + name + id */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-              {p.images?.[0] && isVideoUrl(p.images[0]) ? (
-                <video src={p.images[0]} muted playsInline
-                  style={{ width: 34, height: 34, objectFit: 'cover', borderRadius: 6, flexShrink: 0, background: '#000' }} />
-              ) : (
-                <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
-                  alt="" style={{ width: 34, height: 34, objectFit: 'cover', borderRadius: 6, flexShrink: 0, border: '1px solid #F3EEE6' }}
-                  loading="lazy"
-                  onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
-              )}
-              <div style={{ minWidth: 0 }}>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {p.name}
+            {/* Thumbnail */}
+            {p.images?.[0] && isVideoUrl(p.images[0]) ? (
+              <video src={p.images[0]} muted playsInline
+                style={{ width: 26, height: 26, objectFit: 'cover', borderRadius: 5, display: 'block' }} />
+            ) : (
+              <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
+                alt="" style={{ width: 26, height: 26, objectFit: 'cover', borderRadius: 5, display: 'block', border: '1px solid #F3EEE6' }}
+                loading="lazy"
+                onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
+            )}
+
+            {/* Name + custom_id */}
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {p.name}
+              </p>
+              {p.custom_id && (
+                <p style={{ fontFamily: 'monospace', fontSize: 10, color: '#C8A23A', margin: '1px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {p.custom_id}
                 </p>
-                {p.custom_id && (
-                  <p style={{ fontFamily: 'monospace', fontSize: 10, color: '#C8A23A', margin: '1px 0 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {p.custom_id}
-                  </p>
-                )}
-              </div>
+              )}
             </div>
 
             {/* Category + tags */}
@@ -349,27 +349,27 @@ export default function AdminProducts() {
             </div>
 
             {/* Price */}
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 700, color: '#C8A23A', margin: 0, whiteSpace: 'nowrap' }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: '#C8A23A', margin: 0, textAlign: 'right', whiteSpace: 'nowrap' }}>
               {formatINR(p.price)}
             </p>
 
             {/* Stock + actions */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
               <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E' }}>
                 {p.stock}
               </span>
-              <div style={{ display: 'flex', gap: 2 }}>
+              <div style={{ display: 'flex', gap: 1 }}>
                 <button onClick={() => openEdit(p)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#C0B8B0', padding: '1px 2px', lineHeight: 1 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#C0B8B0', padding: '1px 2px' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#C8A23A'}
                   onMouseLeave={e => e.currentTarget.style.color = '#C0B8B0'}>
-                  <Edit2 size={12} />
+                  <Edit2 size={11} />
                 </button>
                 <button onClick={() => setDeleteConfirm(p.id)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#C0B8B0', padding: '1px 2px', lineHeight: 1 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#C0B8B0', padding: '1px 2px' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#EF4444'}
                   onMouseLeave={e => e.currentTarget.style.color = '#C0B8B0'}>
-                  <Trash2 size={12} />
+                  <Trash2 size={11} />
                 </button>
               </div>
             </div>
