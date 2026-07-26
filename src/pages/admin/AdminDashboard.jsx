@@ -87,17 +87,15 @@ function HeroImagesManager() {
   }
 
   return (
-    <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 20 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+    <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 14 }}>
         <div>
-          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: '#2C241B', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <ImagePlus size={16} style={{ color: '#C8A23A' }} /> Hero Carousel Images
-          </h3>
-          <p style={{ fontSize: 11, color: '#8F857A', margin: '4px 0 0' }}>Up to 5 images shown in the homepage hero slider. Recommended: 1200×900px.</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <ImagePlus size={14} style={{ color: '#C8A23A', flexShrink: 0 }} /> Hero Carousel Images
+          </p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '3px 0 0' }}>Up to 5 images for the homepage slider. Recommended: 1200×900px.</p>
         </div>
-        <span style={{ fontSize: 11, color: '#8F857A', background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 20, padding: '3px 10px' }}>
-          {images.length}/5
-        </span>
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#8F857A', background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 20, padding: '2px 9px', flexShrink: 0 }}>{images.length}/5</span>
       </div>
 
       {/* Current images */}
@@ -209,10 +207,10 @@ function HeroVideoManager() {
   }
 
   return (
-    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-      <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
-        <Video size={16} className="text-[#2C241B]" /> Hero Video
-      </h3>
+    <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)' }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <Video size={14} style={{ color: '#C8A23A' }} /> Hero Video
+      </p>
       {currentUrl && (
         <video src={currentUrl} className="w-full h-32 object-cover rounded-lg mb-4 bg-[#F8F5F0]" muted />
       )}
@@ -252,35 +250,35 @@ function HeroVideoManager() {
 }
 
 const StatCard = ({ icon: Icon, label, value, sub, color = 'gold', to }) => (
-  <Link to={to || '#'} style={{ textDecoration: "none" }}>
+  <Link to={to || '#'} style={{ textDecoration: 'none', display: 'block' }}>
     <motion.div
-      whileHover={{ y: -3, boxShadow: "0 8px 28px rgba(44,36,27,0.12)" }}
-      initial={{ opacity: 0, y: 10 }}
+      whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(44,36,27,0.1)' }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       style={{
-        background: "#FFFFFF",
-        border: "1px solid #E7DED1",
-        borderRadius: 16,
-        padding: "16px",
-        cursor: "pointer",
-        transition: "all 0.3s",
-        minHeight: 110,
-        display: "flex", flexDirection: "column", justifyContent: "space-between",
-        boxShadow: "0 2px 12px rgba(44,36,27,0.06)",
+        background: '#FFFFFF',
+        border: '1px solid #E7DED1',
+        borderRadius: 14,
+        padding: 'clamp(12px,2vw,20px)',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
+        boxShadow: '0 2px 10px rgba(44,36,27,0.05)',
+        height: '100%',
       }}
     >
       <div style={{
-        width: 36, height: 36, borderRadius: 10,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        background: color === 'green' ? "rgba(46,125,50,0.1)" : color === 'red' ? "rgba(217,83,79,0.1)" : "rgba(200,162,58,0.12)",
-        marginBottom: 8,
+        width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: color === 'green' ? 'rgba(46,125,50,0.1)' : color === 'red' ? 'rgba(217,83,79,0.1)' : 'rgba(200,162,58,0.12)',
       }}>
-        <Icon size={18} style={{ color: color === 'green' ? "#2E7D32" : color === 'red' ? "#D9534F" : "#C8A23A" }} />
+        <Icon size={17} style={{ color: color === 'green' ? '#2E7D32' : color === 'red' ? '#D9534F' : '#C8A23A' }} />
       </div>
-      <div>
-        <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: "clamp(16px, 3.5vw, 24px)", color: "#2C241B", margin: "0 0 2px", lineHeight: 1.1, wordBreak: "break-word" }}>{value}</p>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#8F857A", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</p>
-        {sub && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "#C8A23A", margin: "4px 0 0", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</p>}
+      <div style={{ minWidth: 0 }}>
+        <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 'clamp(15px,2.5vw,22px)', color: '#2C241B', margin: '0 0 3px', lineHeight: 1.1, wordBreak: 'break-word' }}>{value}</p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</p>
+        {sub && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#C8A23A', margin: '3px 0 0', fontWeight: 600 }}>{sub}</p>}
       </div>
     </motion.div>
   </Link>
@@ -327,98 +325,92 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 22, fontWeight: 700, color: '#2C241B', margin: 0 }}>Dashboard</h1>
-        <p style={{ fontSize: 13, color: '#8F857A', marginTop: 4 }}>Welcome back. Here's what's happening.</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(14px,2.5vw,24px)', maxWidth: '100%', minWidth: 0 }}>
+
+      {/* ── Page title ── */}
+      <div style={{ paddingBottom: 12, borderBottom: '1px solid #E7DED1' }}>
+        <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: '#2C241B', margin: 0 }}>Dashboard</h1>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', margin: '4px 0 0' }}>Welcome back. Here's what's happening.</p>
       </div>
 
-      {/* Stat Cards — 2 col mobile, 3 col tablet, 5 col desktop */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-        <StatCard icon={ShoppingBag} label="Total Orders"   value={stats.totalOrders}         sub={`${stats.paidOrders} paid`}    color="gold"  to="/admin/orders" />
-        <StatCard icon={DollarSign}  label="Total Revenue"  value={formatINR(stats.totalRevenue)} sub="from paid orders"             color="green" to="/admin/analytics" />
-        <StatCard icon={Package}     label="Products"       value={stats.totalProducts}                                             color="gold"  to="/admin/products" />
-        <StatCard icon={AlertTriangle} label="Low Stock"   value={stats.lowStockCount}        sub="< 10 items"                    color="red"   to="/admin/products" />
-        {/* Last card spans full width on mobile (col-span-2), normal on sm+ */}
-        <div className="col-span-2 sm:col-span-1">
-          <StatCard icon={Clock} label="Today's Orders" value={stats.todayOrdersCount} color="gold" to="/admin/orders?filter=today" />
-        </div>
+      {/* ── Stat Cards: 2 col → 3 col → 5 col ── */}
+      <div style={{ display: 'grid', gap: 'clamp(10px,1.8vw,16px)', gridTemplateColumns: 'repeat(2,1fr)' }}
+        className="sm:grid-cols-3 lg:grid-cols-5">
+        <StatCard icon={ShoppingBag}   label="Total Orders"   value={stats.totalOrders}            sub={`${stats.paidOrders} paid`} color="gold"  to="/admin/orders" />
+        <StatCard icon={DollarSign}    label="Total Revenue"  value={formatINR(stats.totalRevenue)} sub="from paid orders"           color="green" to="/admin/analytics" />
+        <StatCard icon={Package}       label="Products"       value={stats.totalProducts}                                            color="gold"  to="/admin/products" />
+        <StatCard icon={AlertTriangle} label="Low Stock"      value={stats.lowStockCount}           sub="< 10 items"                 color="red"   to="/admin/products" />
+        <StatCard icon={Clock}         label="Today's Orders" value={stats.todayOrdersCount}                                         color="gold"  to="/admin/orders?filter=today" />
       </div>
 
-      {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-        {/* Orders + Revenue Line Chart */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
-          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <TrendingUp size={15} style={{ color: '#C8A23A' }} /> Orders (Last 14 Days)
-          </h3>
-          <ResponsiveContainer width="100%" height={200}>
+      {/* ── Charts Row 1 ── */}
+      <div style={{ display: 'grid', gap: 'clamp(10px,1.8vw,16px)', gridTemplateColumns: '1fr' }}
+        className="lg:grid-cols-2">
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)', minWidth: 0, overflow: 'hidden' }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <TrendingUp size={14} style={{ color: '#C8A23A' }} /> Orders — Last 14 Days
+          </p>
+          <ResponsiveContainer width="100%" height={180}>
             <LineChart data={stats.last14Days}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F3EEE6" />
-              <XAxis dataKey="date" tick={{ fill: '#8F857A', fontSize: 10 }} />
-              <YAxis tick={{ fill: '#8F857A', fontSize: 10 }} />
+              <XAxis dataKey="date" tick={{ fill: '#8F857A', fontSize: 9 }} />
+              <YAxis tick={{ fill: '#8F857A', fontSize: 9 }} width={28} />
               <Tooltip content={<ChartTooltip />} />
               <Line type="monotone" dataKey="orders" stroke="#C8A23A" strokeWidth={2} dot={{ fill: '#C8A23A', r: 3 }} name="orders" />
             </LineChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Revenue Bar Chart */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
-          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Revenue (Last 14 Days)</h3>
-          <ResponsiveContainer width="100%" height={200}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)', minWidth: 0, overflow: 'hidden' }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 14px' }}>Revenue — Last 14 Days</p>
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart data={stats.last14Days}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F3EEE6" />
-              <XAxis dataKey="date" tick={{ fill: '#8F857A', fontSize: 10 }} />
-              <YAxis tick={{ fill: '#8F857A', fontSize: 10 }} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
+              <XAxis dataKey="date" tick={{ fill: '#8F857A', fontSize: 9 }} />
+              <YAxis tick={{ fill: '#8F857A', fontSize: 9 }} width={36} tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
               <Tooltip content={<ChartTooltip />} />
-              <Bar dataKey="revenue" fill="#C8A23A" radius={[3, 3, 0, 0]} name="revenue" />
+              <Bar dataKey="revenue" fill="#C8A23A" radius={[3,3,0,0]} name="revenue" />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
-        {/* Category Pie */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
-          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Category Sales</h3>
-          <ResponsiveContainer width="100%" height={200}>
+      {/* ── Charts Row 2 ── */}
+      <div style={{ display: 'grid', gap: 'clamp(10px,1.8vw,16px)', gridTemplateColumns: '1fr' }}
+        className="sm:grid-cols-2 lg:grid-cols-3">
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)', minWidth: 0, overflow: 'hidden' }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 14px' }}>Category Sales</p>
+          <ResponsiveContainer width="100%" height={180}>
             <PieChart>
-              <Pie data={stats.categorySales} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" nameKey="name">
+              <Pie data={stats.categorySales} cx="50%" cy="50%" innerRadius={44} outerRadius={70} dataKey="value" nameKey="name">
                 {stats.categorySales.map((_, i) => <Cell key={i} fill={GOLD_COLORS[i % GOLD_COLORS.length]} />)}
               </Pie>
               <Tooltip content={<ChartTooltip />} />
-              <Legend iconSize={8} wrapperStyle={{ fontSize: 11, color: '#8F857A' }} />
+              <Legend iconSize={8} wrapperStyle={{ fontSize: 10, color: '#8F857A' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
-
-        {/* City Distribution */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
-          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Orders by City</h3>
-          <ResponsiveContainer width="100%" height={200}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)', minWidth: 0, overflow: 'hidden' }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 14px' }}>Orders by City</p>
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart data={stats.cityData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#F3EEE6" />
-              <XAxis type="number" tick={{ fill: '#8F857A', fontSize: 10 }} />
-              <YAxis dataKey="city" type="category" tick={{ fill: '#8F857A', fontSize: 10 }} width={70} />
+              <XAxis type="number" tick={{ fill: '#8F857A', fontSize: 9 }} />
+              <YAxis dataKey="city" type="category" tick={{ fill: '#8F857A', fontSize: 9 }} width={65} />
               <Tooltip content={<ChartTooltip />} />
-              <Bar dataKey="count" fill="#A88422" radius={[0, 3, 3, 0]} />
+              <Bar dataKey="count" fill="#A88422" radius={[0,3,3,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Top Products */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, padding: 'clamp(16px,2.5vw,24px)', minWidth: 0 }}>
-          <h3 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', marginBottom: 16 }}>Top Products</h3>
-          <div className="space-y-3">
+        <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)', minWidth: 0 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 14px' }}>Top Products</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {stats.topProducts.slice(0, 6).map((p, i) => (
-              <div key={i} className="flex items-center gap-2">
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
                 <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: '#C8A23A', width: 16, flexShrink: 0 }}>{i + 1}</span>
-                <div className="flex-1 min-w-0">
-                  <p style={{ fontSize: 11, color: '#6F655A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0 }}>{p.name}</p>
-                  <div style={{ height: 5, background: '#F3EEE6', borderRadius: 3, marginTop: 4 }}>
-                    <div style={{ height: '100%', background: 'linear-gradient(90deg, #C8A23A, #A88422)', borderRadius: 3, width: `${(p.qty / stats.topProducts[0].qty) * 100}%` }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 11, color: '#6F655A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: '0 0 3px' }}>{p.name}</p>
+                  <div style={{ height: 4, background: '#F3EEE6', borderRadius: 3 }}>
+                    <div style={{ height: '100%', background: 'linear-gradient(90deg,#C8A23A,#A88422)', borderRadius: 3, width: `${(p.qty / stats.topProducts[0].qty) * 100}%` }} />
                   </div>
                 </div>
                 <span style={{ fontSize: 11, color: '#8F857A', flexShrink: 0 }}>{p.qty}</span>
@@ -428,97 +420,107 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Low Stock Alert */}
+      {/* ── Low Stock Alert ── */}
       {stats.lowStockProducts?.length > 0 && (
-        <div className="bg-white border border-red-500/20 rounded-xl p-5">
-          <h3 className="text-[#2C241B] font-medium mb-3 flex items-center gap-2">
-            <AlertTriangle size={16} className="text-red-400" /> Low Stock Alert
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div style={{ background: '#FFFFFF', border: '1px solid rgba(217,83,79,0.2)', borderRadius: 14, padding: 'clamp(14px,2vw,20px)' }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <AlertTriangle size={14} style={{ color: '#D9534F' }} /> Low Stock Alert
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 8 }} className="sm:grid-cols-4">
             {stats.lowStockProducts.slice(0, 8).map(p => (
-              <div key={p.id} className="bg-[#F8F5F0] rounded-lg p-3">
-                <p className="text-[#2C241B] text-xs font-medium truncate">{p.name}</p>
-                <p className="text-red-400 text-xs mt-1">{p.stock} left</p>
+              <div key={p.id} style={{ background: '#FFF5F5', border: '1px solid rgba(217,83,79,0.12)', borderRadius: 10, padding: '10px 12px' }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500, color: '#2C241B', margin: '0 0 3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#D9534F', margin: 0 }}>{p.stock} left</p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Hero Images Manager */}
-      <HeroImagesManager />
+      {/* ── Settings Divider ── */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ flex: 1, height: 1, background: '#E7DED1' }} />
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8F857A', whiteSpace: 'nowrap' }}>Homepage Settings</span>
+        <div style={{ flex: 1, height: 1, background: '#E7DED1' }} />
+      </div>
 
-      {/* Hero Video Manager */}
-      <HeroVideoManager />
-      <FeaturesBarManager />
-      <OfferBannerManager />
-      <ProductsPerPageManager />
+      {/* ── Settings: Images + Video side-by-side ── */}
+      <div style={{ display: 'grid', gap: 'clamp(10px,1.8vw,16px)', gridTemplateColumns: '1fr' }}
+        className="lg:grid-cols-2">
+        <HeroImagesManager />
+        <HeroVideoManager />
+      </div>
 
-      {/* Recent Orders — grouped by day (last 3 days) */}
+      {/* ── Settings: Badges + Banner + Per-page ── */}
+      <div style={{ display: 'grid', gap: 'clamp(10px,1.8vw,16px)', gridTemplateColumns: '1fr' }}
+        className="sm:grid-cols-2 lg:grid-cols-3">
+        <FeaturesBarManager />
+        <OfferBannerManager />
+        <ProductsPerPageManager />
+      </div>
+
+      {/* ── Recent Orders ── */}
       {(() => {
         const days = []
         for (let i = 0; i < 3; i++) {
-          const d = new Date()
-          d.setDate(d.getDate() - i)
+          const d = new Date(); d.setDate(d.getDate() - i)
           const ds = d.toDateString()
-          const label = i === 0 ? "Today" : i === 1 ? "Yesterday" : d.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" })
-          const dayOrders = orders.filter(o => new Date(o.created_at).toDateString() === ds)
-          days.push({ label, date: ds, orders: dayOrders })
+          const label = i === 0 ? 'Today' : i === 1 ? 'Yesterday' : d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })
+          days.push({ label, orders: orders.filter(o => new Date(o.created_at).toDateString() === ds) })
         }
         const hasAny = days.some(d => d.orders.length > 0)
         return (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-[#2C241B] font-medium">Recent Orders <span className="text-[#8F857A] text-xs font-normal ml-1">({orders.length} total)</span></h3>
-              <Link to="/admin/orders" className="text-xs text-[#2C241B] hover:underline font-medium">View all →</Link>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: '#2C241B', margin: 0 }}>
+                Recent Orders <span style={{ fontWeight: 400, fontSize: 12, color: '#8F857A' }}>({orders.length} total)</span>
+              </p>
+              <Link to="/admin/orders" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#C8A23A', textDecoration: 'none', fontWeight: 500 }}>View all →</Link>
             </div>
             {!hasAny && (
-              <div className="bg-white border border-[#E7DED1] rounded-xl p-8 text-center text-[#8F857A] text-sm">No orders in the last 3 days</div>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 32, textAlign: 'center', fontFamily: "'Inter',sans-serif", color: '#8F857A', fontSize: 13 }}>
+                No orders in the last 3 days
+              </div>
             )}
             {days.map(({ label, orders: dayOrders }) => dayOrders.length === 0 ? null : (
-              <div key={label} className="bg-white border border-[#E7DED1] rounded-xl overflow-hidden">
-                {/* Day header */}
-                <div className="flex items-center justify-between px-4 py-2.5 bg-[#F8F5F0] border-b border-[#E7DED1]">
-                  <span className="text-[#2C241B] text-xs font-semibold">{label}</span>
-                  <span className="text-[#8F857A] text-xs">{dayOrders.length} order{dayOrders.length !== 1 ? "s" : ""} &middot; {formatINR(dayOrders.filter(o => o.payment_status === "paid").reduce((s, o) => s + (o.total_amount || 0), 0))} revenue</span>
+              <div key={label} style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B' }}>{label}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A' }}>
+                    {dayOrders.length} order{dayOrders.length !== 1 ? 's' : ''} · {formatINR(dayOrders.filter(o => o.payment_status === 'paid').reduce((s, o) => s + (o.total_amount || 0), 0))} revenue
+                  </span>
                 </div>
-                {/* Orders table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
                     <thead>
-                      <tr className="border-b border-gray-100">
-                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Order ID</th>
-                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Customer</th>
-                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Amount</th>
-                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Status</th>
-                        <th className="text-left text-[#8F857A] text-xs px-4 py-2 font-medium">Time</th>
+                      <tr style={{ borderBottom: '1px solid #F3EEE6' }}>
+                        {['Order ID','Customer','Amount','Status','Time'].map(h => (
+                          <th key={h} style={{ textAlign: 'left', fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: '#8F857A', padding: '8px 14px', whiteSpace: 'nowrap', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{h}</th>
+                        ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#F8F5F0]">
+                    <tbody>
                       {dayOrders.map(o => {
-                        const addr = (() => { try { return typeof o.address === "object" ? o.address : JSON.parse(o.address || "{}") } catch { return {} } })()
-                        const customerName = addr.full_name || o.users?.email || "Guest"
+                        const addr = (() => { try { return typeof o.address === 'object' ? o.address : JSON.parse(o.address || '{}') } catch { return {} } })()
+                        const paid = o.payment_status === 'paid'
+                        const statusStyle =
+                          paid && o.order_status === 'delivered'    ? { label: 'Delivered',  bg: '#dcfce7', color: '#15803d' } :
+                          paid && o.order_status === 'shipping'     ? { label: 'Shipped',    bg: '#fef9c3', color: '#ca8a04' } :
+                          paid                                       ? { label: 'Confirmed',  bg: '#dcfce7', color: '#15803d' } :
+                          o.payment_status === 'pending_verification'? { label: 'Verify',    bg: '#ffedd5', color: '#ea580c' } :
+                          o.payment_status === 'failed'              ? { label: 'Failed',     bg: '#fee2e2', color: '#dc2626' } :
+                                                                       { label: 'Pending',    bg: '#fef9c3', color: '#ca8a04' }
                         return (
-                          <tr key={o.id} className="hover:bg-[#F8F5F0] transition-colors">
-                            <td className="px-4 py-2.5 text-[#2C241B] text-xs font-mono font-semibold">{o.display_order_id || "#" + String(o.id).slice(-6).toUpperCase()}</td>
-                            <td className="px-4 py-2.5 text-[#6F655A] text-xs truncate max-w-[120px]">{customerName}</td>
-                            <td className="px-4 py-2.5 text-[#2C241B] text-xs font-medium">{formatINR(o.total_amount)}</td>
-                            <td className="px-4 py-2.5">
-                              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                                o.payment_status === "paid"
-                                  ? o.order_status === "delivered" ? "bg-green-500 text-white" : "bg-green-500/20 text-green-600"
-                                  : o.payment_status === "pending_verification" ? "bg-orange-500/20 text-orange-500"
-                                  : o.payment_status === "failed" ? "bg-red-500/20 text-red-500"
-                                  : "bg-yellow-500/20 text-yellow-600"
-                              }`}>
-                                {o.payment_status === "paid"
-                                  ? (o.order_status === "delivered" ? "Delivered" : o.order_status === "shipping" ? "Shipped" : "Confirmed")
-                                  : o.payment_status === "pending_verification" ? "Verify"
-                                  : o.payment_status === "failed" ? "Failed"
-                                  : "Pending"}
-                              </span>
+                          <tr key={o.id} style={{ borderBottom: '1px solid #F8F5F0', transition: 'background 0.15s' }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#FAF8F3'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                            <td style={{ padding: '10px 14px', fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: '#2C241B', whiteSpace: 'nowrap' }}>{o.display_order_id || '#' + String(o.id).slice(-6).toUpperCase()}</td>
+                            <td style={{ padding: '10px 14px', fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#6F655A', maxWidth: 130, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{addr.full_name || o.users?.email || 'Guest'}</td>
+                            <td style={{ padding: '10px 14px', fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#2C241B', whiteSpace: 'nowrap' }}>{formatINR(o.total_amount)}</td>
+                            <td style={{ padding: '10px 14px' }}>
+                              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 999, background: statusStyle.bg, color: statusStyle.color }}>{statusStyle.label}</span>
                             </td>
-                            <td className="px-4 py-2.5 text-[#8F857A] text-xs">{new Date(o.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</td>
+                            <td style={{ padding: '10px 14px', fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', whiteSpace: 'nowrap' }}>{new Date(o.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</td>
                           </tr>
                         )
                       })}
@@ -527,8 +529,8 @@ export default function AdminDashboard() {
                 </div>
               </div>
             ))}
-            <div className="text-center">
-              <Link to="/admin/orders" className="text-xs text-[#2C241B] hover:underline">View all {orders.length} orders →</Link>
+            <div style={{ textAlign: 'center', paddingTop: 4 }}>
+              <Link to="/admin/orders" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', textDecoration: 'none' }}>View all {orders.length} orders →</Link>
             </div>
           </div>
         )
@@ -566,27 +568,28 @@ function FeaturesBarManager() {
   }
 
   return (
-    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-      <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2">
-        ✦ Homepage Trust Badges
-      </h3>
-      <p className="text-xs text-[#8F857A] mb-4">Edit the 4 feature badges shown below the hero on the homepage.</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+    <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)' }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: 0 }}>✦ Homepage Trust Badges</p>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '4px 0 14px' }}>Edit the 4 feature badges shown below the hero.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1,1fr)', gap: 10, marginBottom: 14 }} className="sm:grid-cols-2">
         {features.map(f => (
-          <div key={f.id} className="bg-[#F8F5F0] rounded-lg p-3 space-y-2">
+          <div key={f.id} style={{ background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 10, padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
             <input value={f.title} onChange={e => update(f.id, 'title', e.target.value)}
               placeholder="Title e.g. Fast Shipping"
-              className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-1.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]" />
+              style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '7px 10px', fontSize: 12, color: '#2C241B', outline: 'none', boxSizing: 'border-box' }}
+              onFocus={e => e.target.style.borderColor = '#C8A23A'}
+              onBlur={e => e.target.style.borderColor = '#E7DED1'} />
             <input value={f.desc} onChange={e => update(f.id, 'desc', e.target.value)}
               placeholder="Description e.g. Across India"
-              className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-1.5 text-sm text-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
+              style={{ width: '100%', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '7px 10px', fontSize: 12, color: '#8F857A', outline: 'none', boxSizing: 'border-box' }}
+              onFocus={e => e.target.style.borderColor = '#C8A23A'}
+              onBlur={e => e.target.style.borderColor = '#E7DED1'} />
           </div>
         ))}
       </div>
       <button onClick={() => save(features)} disabled={saving}
-        className="px-4 py-2 text-white text-sm font-semibold rounded-lg disabled:opacity-60 transition-all"
-        style={{ background: 'linear-gradient(135deg, #D4AF37, #B8860B)', borderRadius: 10, border: 'none', cursor: 'pointer' }}>
-        {saving ? 'Saving...' : 'Save Changes'}
+        style={{ padding: '8px 18px', background: 'linear-gradient(135deg,#D4AF37,#B8860B)', color: '#FFFFFF', fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, borderRadius: 8, border: 'none', cursor: 'pointer', opacity: saving ? 0.6 : 1 }}>
+        {saving ? 'Saving…' : 'Save Changes'}
       </button>
     </div>
   )
@@ -632,37 +635,35 @@ function OfferBannerManager() {
   }
 
   return (
-    <div className="bg-white border border-[#E7DED1] rounded-2xl p-5">
-      <h3 className="text-[#2C241B] font-medium mb-4 flex items-center gap-2">
-        <span className="text-[#2C241B]">🏷️</span> Offer Banner
-        <span className="text-xs text-[#8F857A] font-normal ml-1">- scrolling banner below navbar</span>
-      </h3>
-
-      {/* Current offers */}
-      <div className="space-y-2 mb-4">
+    <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, padding: 'clamp(14px,2vw,20px)' }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: '#2C241B', margin: '0 0 4px' }}>🏷️ Offer Banner</p>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '0 0 14px' }}>Scrolling banner below the navbar.</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
         {offers.map(o => (
-          <div key={o.id} className="flex items-center gap-2 bg-[#F8F5F0] rounded-lg px-3 py-2">
-            <span className="flex-1 text-sm text-[#6F655A] truncate">{o.text}</span>
-            <span className="text-xs text-[#6F655A] shrink-0">{o.link}</span>
-            <button onClick={() => removeOffer(o.id)} className="text-[#6F655A] hover:text-red-400 transition-colors ml-1 shrink-0">&times;</button>
+          <div key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 9, padding: '8px 10px' }}>
+            <span style={{ flex: 1, fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#6F655A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.text}</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#8F857A', flexShrink: 0, maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.link}</span>
+            <button onClick={() => removeOffer(o.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', flexShrink: 0, fontSize: 16, lineHeight: 1, padding: '0 2px' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#D9534F'}
+              onMouseLeave={e => e.currentTarget.style.color = '#8F857A'}>×</button>
           </div>
         ))}
-        {offers.length === 0 && <p className="text-[#8F857A] text-xs">No offers. Add one below.</p>}
+        {offers.length === 0 && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: 0 }}>No offers. Add one below.</p>}
       </div>
-
-      {/* Add new offer */}
-      <div className="space-y-2">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <input value={newText} onChange={e => setNewText(e.target.value)}
-          placeholder="Offer text e.g. 🚚 Free Shipping on all orders!"
-          className="w-full bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
-        <div className="flex gap-2">
-          <input value={newLink} onChange={e => setNewLink(e.target.value)}
-            placeholder="Link e.g. /products"
-            className="flex-1 bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A]" />
+          placeholder="Offer text e.g. Free Shipping on all orders!"
+          style={{ width: '100%', background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', boxSizing: 'border-box' }}
+          onFocus={e => e.target.style.borderColor = '#C8A23A'}
+          onBlur={e => e.target.style.borderColor = '#E7DED1'} />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input value={newLink} onChange={e => setNewLink(e.target.value)} placeholder="/products"
+            style={{ flex: 1, minWidth: 0, background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none' }}
+            onFocus={e => e.target.style.borderColor = '#C8A23A'}
+            onBlur={e => e.target.style.borderColor = '#E7DED1'} />
           <button onClick={addOffer} disabled={saving || !newText.trim()}
-            className="px-4 py-2 text-white text-sm font-semibold rounded-lg disabled:opacity-60 transition-all"
-            style={{ background: 'linear-gradient(135deg, #D4AF37, #B8860B)', borderRadius: 10, border: 'none', cursor: 'pointer' }}>
-            {saving ? '...' : '+ Add'}
+            style={{ padding: '8px 14px', background: 'linear-gradient(135deg,#D4AF37,#B8860B)', color: '#FFFFFF', fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, borderRadius: 8, border: 'none', cursor: 'pointer', flexShrink: 0, opacity: (!newText.trim() || saving) ? 0.6 : 1 }}>
+            + Add
           </button>
         </div>
       </div>
