@@ -43,9 +43,9 @@ export default function CartPage() {
   }
 
   return (
-    <div style={{ background:'#F8F5F0', minHeight:'100vh' }}>
-      <div className="container-lux section-gap-sm">
-        <div className="mb-10">
+      <div style={{ background:'#F8F5F0', minHeight:'100vh' }}>
+      <div className="container-lux" style={{ paddingTop:'clamp(20px,3vw,40px)', paddingBottom:'clamp(40px,6vw,72px)' }}>
+        <div style={{ marginBottom:'clamp(16px,2.5vw,32px)' }}>
           <span className="eyebrow">Your Selection</span>
           <h1 className="heading-xl">Shopping <span className="text-gold-accent">Cart</span></h1>
           <p className="body-md mt-1">{items.length} item{items.length!==1?'s':''} in your cart</p>
@@ -101,8 +101,8 @@ export default function CartPage() {
               })}
             </AnimatePresence>
 
-            {/* Trust strip */}
-            <div className="grid grid-cols-3 gap-4 mt-4">
+        {/* Trust strip */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-4">
               {[{ icon:<ShieldCheck size={16}/>, t:"Secure Checkout" }, { icon:<Truck size={16}/>, t:"Free Delivery" }, { icon:<Gift size={16}/>, t:"Gift Packaging" }].map(f=>(
                 <div key={f.t} className="card-warm p-4 flex flex-col items-center gap-2 text-center">
                   <span style={{ color:'#C8A23A' }}>{f.icon}</span>
@@ -157,6 +157,5 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-    </div>
-  )
+    </div>  )
 }

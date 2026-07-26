@@ -42,14 +42,17 @@ function NewAddressForm({ onSave, onCancel, saving }) {
     return Object.keys(e).length === 0
   }
   const handleSubmit = (e) => { e.preventDefault(); if (validate()) onSave(form) }
-  const inp = "w-full bg-white border border-[#E8E0D5] rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]"
-  const lbl = "text-xs text-[#4A4A6A] mb-1 block font-medium"
+  const inp = "w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] placeholder-[#8F857A] focus:outline-none focus:border-[#C8A23A] transition-colors"
+  const lbl = "text-[11px] text-[#6F655A] mb-1 block font-semibold uppercase tracking-wide"
   return (
-    <form onSubmit={handleSubmit} className="border border-[#E8E0D5] rounded-xl p-4 bg-[#FAF8F5] space-y-3">
+    <form onSubmit={handleSubmit} className="rounded-xl p-4 space-y-3" style={{ background: "#FAF8F3", border: "1px solid #E7DED1" }}>
       <div className="flex gap-2 mb-1">
         {["Home","Work","Other"].map(l => (
           <button key={l} type="button" onClick={() => setForm(f => ({ ...f, label: l }))}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.label === l ? "bg-[#1B2B5E] text-white" : "bg-white text-[#4A4A6A] border border-[#E8E0D5]"}`}>{l}</button>
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all`}
+            style={form.label === l
+              ? { background: "linear-gradient(135deg,#D4AF37,#B8860B)", color: "#fff", border: "none" }
+              : { background: "#FFFFFF", color: "#6F655A", border: "1px solid #E7DED1" }}>{l}</button>
         ))}
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -73,8 +76,8 @@ function NewAddressForm({ onSave, onCancel, saving }) {
         Save as default address
       </label>
       <div className="flex gap-2">
-        <button type="button" onClick={onCancel} className="flex-1 py-2 border border-[#E8E0D5] text-[#4A4A6A] rounded-lg text-sm">Cancel</button>
-        <button type="submit" disabled={saving} className="flex-1 py-2 bg-[#1B2B5E] text-white font-semibold rounded-lg text-sm hover:bg-[#2A3F7E] disabled:opacity-60">Save & Use</button>
+        <button type="button" onClick={onCancel} className="btn-ghost flex-1" style={{ height: 40, fontSize: 13 }}>Cancel</button>
+        <button type="submit" disabled={saving} className="btn-primary flex-1 disabled:opacity-60" style={{ height: 40, fontSize: 13 }}>Save & Use</button>
       </div>
     </form>
   )
@@ -240,85 +243,104 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }}>
-          <CheckCircle size={80} className="text-green-400 mx-auto mb-6" />
+          <CheckCircle size={80} className="mx-auto mb-6" style={{ color: "#C8A23A" }} />
         </motion.div>
-        <h2 className="text-3xl font-bold text-[#1A1A2E] mb-3" style={{ fontFamily: "Georgia, serif" }}>Order Placed!</h2>
-        <p className="text-[#4A4A6A] mb-2">Your order is pending payment verification.</p>
-        <p className="text-[#8A8AAA] text-sm mb-8">We will confirm your order once payment is verified. You will be notified.</p>
+        <h2 className="heading-lg mb-3">Order Placed!</h2>
+        <p className="body-md mb-2">Your order is pending payment verification.</p>
+        <p className="body-md mb-8 text-sm">We will confirm your order once payment is verified. You will be notified.</p>
         <div className="flex gap-4 justify-center">
-          <button onClick={() => navigate("/orders")} className="px-6 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all">View Orders</button>
-          <button onClick={() => navigate("/")} className="px-6 py-3 border border-[#1B2B5E] text-[#1B2B5E] rounded-lg hover:bg-[#1B2B5E]/10 transition-all">Continue Shopping</button>
+          <button onClick={() => navigate("/orders")} className="btn-primary" style={{ height: 48, padding: "0 28px" }}>View Orders</button>
+          <button onClick={() => navigate("/")} className="btn-ghost" style={{ height: 48, padding: "0 24px" }}>Continue Shopping</button>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-[#1A1A2E] mb-8" style={{ fontFamily: "Georgia, serif" }}>
-        {isBuyNow ? "Buy Now" : "Checkout"}
-      </h1>
-      {isBuyNow && (
-        <div className="mb-6 flex items-center gap-2 bg-[#1B2B5E]/5 border border-[#1B2B5E]/20 rounded-lg px-4 py-2.5 text-sm text-[#1B2B5E]">
-          <Zap size={14} className="flex-shrink-0" />
-          Buying <span className="font-semibold mx-1">{buyNowData.product.name}</span> directly — your cart is unchanged.
+    <div style={{ background: "#F8F5F0", minHeight: "100vh" }}>
+      <div className="container-lux" style={{ paddingTop: 40, paddingBottom: 80 }}>
+        <div className="mb-8">
+          <span className="eyebrow">{isBuyNow ? "Quick Purchase" : "Checkout"}</span>
+          <h1 className="heading-xl">{isBuyNow ? "Buy <span class='text-gold-accent'>Now</span>" : <>Complete Your <span className="text-gold-accent">Order</span></>}</h1>
         </div>
-      )}
-
-      {/* Step indicator */}
-      <div className="flex items-center gap-3 mb-8">
-        {["address","payment"].map((s, i) => (
-          <div key={s} className="flex items-center gap-2">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${step === s || (s === "address" && step === "payment") ? "bg-[#1B2B5E] text-white" : "bg-[#E8E0D5] text-[#8A8AAA] border border-[#E8E0D5]"}`}>
-              {i + 1}
-            </div>
-            <span className={`text-sm capitalize ${step === s ? "text-[#1A1A2E] font-medium" : "text-[#8A8AAA]"}`}>{s === "address" ? "Delivery Address" : "Payment"}</span>
-            {i === 0 && <div className="w-8 h-px bg-[#E8E0D5] mx-1" />}
+      {isBuyNow && (
+          <div className="mb-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
+            style={{ background: "rgba(200,162,58,0.08)", border: "1px solid rgba(200,162,58,0.25)", color: "#A88422" }}>
+            <Zap size={14} className="flex-shrink-0" />
+            Buying <span className="font-semibold mx-1">{buyNowData.product.name}</span> directly — your cart is unchanged.
           </div>
-        ))}
-      </div>
+        )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Step indicator */}
+        <div className="flex items-center gap-3 mb-8">
+          {["address","payment"].map((s, i) => (
+            <div key={s} className="flex items-center gap-2">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === s || (s === "address" && step === "payment") ? "text-white" : "text-[#8F857A]"}`}
+                style={step === s || (s === "address" && step === "payment")
+                  ? { background: "linear-gradient(135deg,#D4AF37,#B8860B)" }
+                  : { background: "#F3EEE6", border: "1px solid #E7DED1" }}>
+                {i + 1}
+              </div>
+              <span className={`text-sm capitalize font-inter ${step === s ? "text-[#2C241B] font-semibold" : "text-[#8F857A]"}`}>
+                {s === "address" ? "Delivery Address" : "Payment"}
+              </span>
+              {i === 0 && <div className="w-8 h-px mx-1" style={{ background: "#E7DED1" }} />}
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div className="lg:col-span-2 space-y-4">
           {step === "address" && (
-            <div className="bg-white border border-[#E8E0D5] rounded-xl p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-[#1A1A2E] font-semibold flex items-center gap-2"><MapPin size={16} className="text-[#C9956C]" /> Delivery Address</h2>
-                {!showNewForm && <button onClick={() => setShowNewForm(true)} className="flex items-center gap-1 text-xs text-[#1B2B5E] font-medium"><Plus size={13} /> Add New</button>}
-              </div>
-              {loading ? <div className="h-20 bg-[#F2EDE6] rounded-xl animate-pulse" /> : (
-                <div className="space-y-3">
-                  {showNewForm && <NewAddressForm onSave={handleSaveNew} onCancel={() => addresses.length > 0 && setShowNewForm(false)} saving={savingAddr} />}
-                  {addresses.map(addr => (
-                    <div key={addr.id} onClick={() => { setSelectedId(addr.id); setShowNewForm(false) }}
-                      className={`border rounded-xl p-4 cursor-pointer transition-all ${selectedId === addr.id ? "border-[#1B2B5E] bg-[#1B2B5E]/5" : "border-[#E8E0D5] bg-[#FAF8F5] hover:border-[#1B2B5E]/30"}`}>
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <span className="text-xs px-2 py-0.5 bg-[#1B2B5E]/10 text-[#1B2B5E] rounded-full font-medium">{addr.label}</span>
-                          <p className="text-[#1A1A2E] text-sm font-medium mt-1">{addr.full_name} &middot; {addr.phone}</p>
-                          <p className="text-[#4A4A6A] text-xs">{addr.address1}, {addr.city}, {addr.state} &ndash; {addr.pincode}</p>
-                        </div>
-                        {selectedId === addr.id && <div className="w-5 h-5 bg-[#1B2B5E] rounded-full flex items-center justify-center ml-3"><Check size={12} className="text-white" /></div>}
-                      </div>
-                    </div>
-                  ))}
+              <div className="card-lux p-5 sm:p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="font-inter font-semibold text-[#2C241B] flex items-center gap-2 text-[15px]">
+                    <MapPin size={16} style={{ color: "#C8A23A" }} /> Delivery Address
+                  </h2>
+                  {!showNewForm && <button onClick={() => setShowNewForm(true)} className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#C8A23A" }}><Plus size={13} /> Add New</button>}
                 </div>
-              )}
-              <button onClick={() => { if (!selectedId) { toast.error("Select an address"); return } setStep("payment") }}
-                disabled={!selectedId || loading}
-                className="w-full mt-4 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all disabled:opacity-50">
-                Continue to Payment &rarr;
-              </button>
-            </div>
-          )}
+                {loading ? <div className="h-20 rounded-xl animate-pulse" style={{ background: "#F3EEE6" }} /> : (
+                  <div className="space-y-3">
+                    {showNewForm && <NewAddressForm onSave={handleSaveNew} onCancel={() => addresses.length > 0 && setShowNewForm(false)} saving={savingAddr} />}
+                    {addresses.map(addr => (
+                      <div key={addr.id} onClick={() => { setSelectedId(addr.id); setShowNewForm(false) }}
+                        className="rounded-xl p-4 cursor-pointer transition-all"
+                        style={{
+                          border: selectedId === addr.id ? "1.5px solid #C8A23A" : "1px solid #E7DED1",
+                          background: selectedId === addr.id ? "rgba(200,162,58,0.05)" : "#FAF8F3",
+                        }}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: "rgba(200,162,58,0.12)", color: "#A88422" }}>{addr.label}</span>
+                            <p className="font-inter font-medium text-[14px] text-[#2C241B] mt-1.5">{addr.full_name} &middot; {addr.phone}</p>
+                            <p className="font-inter text-[12px] text-[#6F655A] mt-0.5">{addr.address1}, {addr.city}, {addr.state} &ndash; {addr.pincode}</p>
+                          </div>
+                          {selectedId === addr.id && (
+                            <div className="w-5 h-5 rounded-full flex items-center justify-center ml-3 flex-shrink-0"
+                              style={{ background: "linear-gradient(135deg,#D4AF37,#B8860B)" }}>
+                              <Check size={12} className="text-white" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <button onClick={() => { if (!selectedId) { toast.error("Select an address"); return } setStep("payment") }}
+                  disabled={!selectedId || loading}
+                  className="btn-primary w-full mt-5 disabled:opacity-40 disabled:cursor-not-allowed" style={{ height: 48 }}>
+                  Continue to Payment &rarr;
+                </button>
+              </div>
+            )}
 
           {step === "payment" && (
-            <div className="space-y-4">
-              {/* UPI Payment */}
-              <div className="bg-white border border-[#E8E0D5] rounded-xl p-5 shadow-sm">
-                <h2 className="text-[#1A1A2E] font-semibold mb-4 flex items-center gap-2">
-                  <Smartphone size={16} className="text-[#C9956C]" /> Pay via UPI
-                </h2>
+              <div className="space-y-4">
+                {/* UPI Payment */}
+                <div className="card-lux p-5 sm:p-6">
+                  <h2 className="font-inter font-semibold text-[#2C241B] mb-4 flex items-center gap-2 text-[15px]">
+                    <Smartphone size={16} style={{ color: "#C8A23A" }} /> Pay via UPI
+                  </h2>
 
                 {/* QR Code — flip card, hidden by default, tap to reveal */}
                 <div className="flex flex-col sm:flex-row gap-6 items-center mb-5">
@@ -387,98 +409,101 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Other payment modes coming soon */}
-                <div className="border border-[#D4AF37]/10 rounded-xl p-3 mb-4">
-                  <p className="text-gray-500 text-xs text-center">💳 Card / Net Banking / EMI — <span className="text-[#D4AF37]">Coming Soon</span></p>
+                <div className="border rounded-xl p-3 mb-4" style={{ borderColor: "rgba(200,162,58,0.2)", background: "rgba(200,162,58,0.04)" }}>
+                    <p className="text-[13px] text-center" style={{ color: "#8F857A" }}>💳 Card / Net Banking / EMI — <span style={{ color: "#C8A23A" }}>Coming Soon</span></p>
+                  </div>
+
+                  {/* Screenshot upload */}
+                  <div className="space-y-3">
+                    <div>
+                      <label className="font-inter text-[12px] font-medium text-[#6F655A] mb-1 block">UPI Transaction Reference (optional)</label>
+                      <input value={upiRef} onChange={e=>setUpiRef(e.target.value)} placeholder="e.g. 123456789012"
+                        className="input-warm text-[14px]" style={{ height: 44 }} />
+                    </div>
+                    <div>
+                      <label className="font-inter text-[12px] font-medium text-[#6F655A] mb-1 block">Payment Screenshot <span style={{ color: "#D9534F" }}>*</span></label>
+                      <label className="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all"
+                        style={{ border: "2px dashed #E7DED1", background: "#FAF8F3" }}
+                        onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(200,162,58,0.5)"}
+                        onMouseLeave={e => e.currentTarget.style.borderColor = "#E7DED1"}>
+                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
+                        <Upload size={20} style={{ color: "#C8A23A", flexShrink: 0 }} />
+                        <div>
+                          <p className="font-inter font-semibold text-[14px] text-[#2C241B]">{screenshot ? screenshot.name : "Upload payment screenshot"}</p>
+                          <p className="font-inter text-[12px] text-[#8F857A]">JPG, PNG &mdash; max 10MB</p>
+                        </div>
+                      </label>
+                      {screenshotPreview && (
+                        <div className="mt-2 relative inline-block">
+                          <img src={screenshotPreview} alt="Screenshot preview" className="h-32 rounded-xl object-cover" style={{ border: "1px solid rgba(200,162,58,0.3)" }} />
+                          <button onClick={() => { setScreenshot(null); setScreenshotPreview(null) }}
+                            className="absolute -top-2 -right-2 bg-[#D9534F] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">×</button>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-start gap-2 rounded-xl p-3" style={{ background: "rgba(200,162,58,0.07)", border: "1px solid rgba(200,162,58,0.2)" }}>
+                      <AlertCircle size={14} style={{ color: "#A88422", marginTop: 2, flexShrink: 0 }} />
+                      <p className="font-inter text-[12px]" style={{ color: "#A88422" }}>Order will be confirmed only after admin verifies your payment screenshot.</p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Screenshot upload */}
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-xs text-[#4A4A6A] mb-1 block font-medium">UPI Transaction Reference (optional)</label>
-                    <input value={upiRef} onChange={e=>setUpiRef(e.target.value)} placeholder="e.g. 123456789012"
-                      className="w-full bg-white border border-[#E8E0D5] rounded-lg px-3 py-2.5 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]" />
-                  </div>
-                  <div>
-                    <label className="text-xs text-[#4A4A6A] mb-1 block font-medium">Payment Screenshot *</label>
-                    <label className="flex items-center gap-3 p-4 border-2 border-dashed border-[#E8E0D5] hover:border-[#1B2B5E]/40 rounded-xl cursor-pointer transition-all bg-[#FAF8F5]">
-                      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
-                      <Upload size={20} className="text-[#C9956C] flex-shrink-0" />
-                      <div>
-                        <p className="text-[#1A1A2E] text-sm font-medium">{screenshot ? screenshot.name : "Upload payment screenshot"}</p>
-                        <p className="text-[#8A8AAA] text-xs">JPG, PNG &mdash; max 10MB</p>
-                      </div>
-                    </label>
-                    {screenshotPreview && (
-                      <div className="mt-2 relative inline-block">
-                        <img src={screenshotPreview} alt="Screenshot preview" className="h-32 rounded-lg border border-[#D4AF37]/20 object-cover" />
-                        <button onClick={() => { setScreenshot(null); setScreenshotPreview(null) }}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">×</button>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-start gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
-                    <AlertCircle size={14} className="text-yellow-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-yellow-400 text-xs">Order will be confirmed only after admin verifies your payment screenshot.</p>
-                  </div>
+                <div className="flex gap-3">
+                  <button onClick={() => setStep("address")} className="btn-ghost" style={{ height: 48, padding: "0 20px" }}>&larr; Back</button>
+                  <button onClick={handleSubmitOrder} disabled={submitting || !screenshot}
+                    className="btn-primary flex-1 disabled:opacity-40 disabled:cursor-not-allowed" style={{ height: 48 }}>
+                    {submitting && <Loader2 size={16} className="animate-spin" />}
+                    Place Order &amp; Confirm
+                  </button>
                 </div>
               </div>
-
-              <div className="flex gap-3">
-                <button onClick={() => setStep("address")} className="px-4 py-3 border border-[#E8E0D5] text-[#4A4A6A] rounded-lg text-sm hover:border-[#1B2B5E]/30 transition-all">&larr; Back</button>
-                <button onClick={handleSubmitOrder} disabled={submitting || !screenshot}
-                  className="flex-1 py-3 bg-[#1B2B5E] text-white font-semibold rounded-lg hover:bg-[#2A3F7E] transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-                  {submitting && <Loader2 size={16} className="animate-spin" />}
-                  Place Order &amp; Confirm
-                </button>
-              </div>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Order Summary */}
-        <div className="bg-white border border-[#E8E0D5] rounded-xl p-6 h-fit sticky top-20 shadow-sm">
-          <h2 className="text-[#1A1A2E] font-semibold mb-4">Order Summary</h2>
+        <div className="card-lux p-5 sm:p-6 h-fit lg:sticky top-24">
+          <h2 className="font-inter font-semibold text-[#2C241B] mb-4 text-[15px]">Order Summary</h2>
           <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
             {items.map(item => (
-              <div key={item.id || item.product_id} className="flex justify-between text-sm">
-                <span className="text-[#4A4A6A] truncate mr-2">{item.products?.name} &times; {item.quantity}</span>
-                <span className="text-[#1A1A2E] shrink-0 font-medium">{formatINR((item.products?.price || 0) * item.quantity)}</span>
+              <div key={item.id || item.product_id} className="flex justify-between text-[13px]">
+                <span className="text-[#6F655A] truncate mr-2">{item.products?.name} &times; {item.quantity}</span>
+                <span className="text-[#2C241B] shrink-0 font-semibold">{formatINR((item.products?.price || 0) * item.quantity)}</span>
               </div>
             ))}
           </div>
-          <div className="border-t border-[#E8E0D5] pt-4 space-y-2 mb-5">
+          <div style={{ borderTop: "1px solid #E7DED1", paddingTop: 16 }} className="space-y-2 mb-5">
             {(() => {
               const selectedAddr = addresses.find(a => a.id === selectedId)
               const shipping = getShippingCost(selectedAddr)
               const grandTotal = total + shipping
               return (
                 <>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#4A4A6A]">Subtotal</span>
-                    <span className="text-[#1A1A2E] font-medium">{formatINR(total)}</span>
+                  <div className="flex justify-between text-[13px]">
+                    <span className="font-inter text-[#8F857A]">Subtotal</span>
+                    <span className="font-inter font-semibold text-[#2C241B]">{formatINR(total)}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#4A4A6A]">Shipping</span>
-                    <span className="text-[#C9956C] font-medium">+{formatINR(shipping)}</span>
+                  <div className="flex justify-between text-[13px]">
+                    <span className="font-inter text-[#8F857A]">Shipping</span>
+                    <span className="font-inter font-semibold" style={{ color: "#C8A23A" }}>+{formatINR(shipping)}</span>
                   </div>
                   {selectedAddr && (
-                    <p className="text-[#8A8AAA] text-xs">
+                    <p className="font-inter text-[11px] text-[#8F857A]">
                       {["andhra pradesh","telangana","ap","ts"].some(s => (selectedAddr.state||"").toLowerCase().includes(s))
                         ? "AP/Telangana rate"
                         : "Other states rate"}
                     </p>
                   )}
-                  <div className="flex justify-between font-semibold pt-1 border-t border-[#E8E0D5]">
-                    <span className="text-[#1A1A2E]">Total</span>
-                    <span className="text-[#1B2B5E] text-lg font-bold">{formatINR(grandTotal)}</span>
+                  <div className="flex justify-between font-semibold pt-2" style={{ borderTop: "1px solid #E7DED1", marginTop: 8 }}>
+                    <span className="font-playfair font-bold text-[15px] text-[#2C241B]">Total</span>
+                    <span className="font-playfair font-bold text-[1.2rem] text-gold-accent">{formatINR(grandTotal)}</span>
                   </div>
                 </>
               )
             })()}
           </div>
-          <p className="text-[#8A8AAA] text-xs text-center">🔒 UPI Payment · Secure &amp; Safe</p>
+          <p className="font-inter text-[11px] text-center" style={{ color: "#8F857A" }}>🔒 UPI Payment · Secure &amp; Safe</p>
         </div>
+      </div>
       </div>
     </div>
   )

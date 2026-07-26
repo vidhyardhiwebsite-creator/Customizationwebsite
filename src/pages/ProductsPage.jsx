@@ -62,46 +62,68 @@ export default function ProductsPage() {
       <div style={{ background:'#F8F5F0', minHeight:'100vh' }}>
         {/* Page header */}
         <div style={{ background:'#F3EEE6', borderBottom:'1px solid #E7DED1' }}>
-          <div className="container-lux" style={{ paddingTop:56, paddingBottom:56 }}>
-            <span className="eyebrow">{category ? "Category" : search ? "Search Results" : "All Products"}</span>
-            <h1 className="heading-xl">
+          <div className="container-lux" style={{ paddingTop:'clamp(20px,3vw,32px)', paddingBottom:'clamp(16px,2.5vw,28px)' }}>
+            <span className="eyebrow" style={{ marginBottom: 6 }}>{category ? "Category" : search ? "Search Results" : "All Products"}</span>
+            <h1 className="heading-xl" style={{ marginBottom: 4 }}>
               {category ? <><span className="text-gold-accent">{category}</span></>
                : search ? <>Results for "<span className="text-gold-accent">{search}</span>"</>
                : <>Our <span className="text-gold-accent">Collection</span></>}
             </h1>
-            <p className="body-md mt-2">
+            <p className="body-md">
               {loading ? "Loading..." : `${products.length} handcrafted piece${products.length!==1?"s":""} available`}
             </p>
           </div>
         </div>
 
-        <div className="container-lux" style={{ paddingTop:48, paddingBottom:80 }}>
+        <div className="container-lux" style={{ paddingTop:'clamp(16px,2.5vw,32px)', paddingBottom:'clamp(40px,6vw,80px)' }}>
           {/* Filter row */}
-          <div className="flex flex-wrap items-center gap-3 mb-8">
-            <div className="flex flex-wrap gap-2">
+          <div style={{ marginBottom: 'clamp(16px,4vw,32px)' }}>
+
+            {/* Pills — swipeable on mobile, wraps on desktop */}
+            <div className="pill-scroll">
               {["All",...categories].map(cat => {
                 const isActive = cat==="All" ? !category : category===cat
                 return (
                   <button key={cat} onClick={()=>setFilter('category',cat==="All"?"":cat)}
-                    className="font-inter font-medium text-[13px] px-4 py-2 rounded-full transition-all"
-                    style={isActive
-                      ? { background:"linear-gradient(135deg,#D4AF37,#B8860B)", color:"#FFFFFF", border:"none", boxShadow:"0 3px 12px rgba(200,162,58,0.35)" }
-                      : { background:"#FFFFFF", color:"#6F655A", border:"1px solid #E7DED1" }}>
+                    style={{
+                      fontFamily:"'Inter',sans-serif",
+                      fontWeight: 500,
+                      fontSize: 13,
+                      padding: "7px 16px",
+                      borderRadius: 999,
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                      transition: "all 0.2s ease",
+                      lineHeight: 1.4,
+                      ...(isActive
+                        ? { background:"linear-gradient(135deg,#D4AF37,#B8860B)", color:"#FFFFFF", border:"none", boxShadow:"0 3px 12px rgba(200,162,58,0.35)" }
+                        : { background:"#FFFFFF", color:"#6F655A", border:"1px solid #E7DED1", boxShadow:"0 1px 4px rgba(44,36,27,0.05)" })
+                    }}
+                    onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor="#C8A23A"; e.currentTarget.style.color="#C8A23A" } }}
+                    onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor="#E7DED1"; e.currentTarget.style.color="#6F655A" } }}>
                     {cat}
                   </button>
                 )
               })}
             </div>
-            <div className="ml-auto flex items-center gap-3">
+
+            {/* Sort row */}
+            <div style={{ display:"flex", alignItems:"center", gap:12, paddingTop:14, borderTop:"1px solid #E7DED1", marginTop:12 }}>
               {hasFilters && (
-                <button onClick={clearAll} className="flex items-center gap-1 font-inter text-[12px] text-[#8F857A] hover:text-[#D9534F] transition-colors">
-                  <X size={12}/>Clear
+                <button onClick={clearAll} style={{ display:"flex", alignItems:"center", gap:5, fontFamily:"'Inter',sans-serif", fontSize:12, color:"#8F857A", background:"none", border:"none", cursor:"pointer", padding:0, flexShrink:0 }}
+                  onMouseEnter={e=>e.currentTarget.style.color="#D9534F"}
+                  onMouseLeave={e=>e.currentTarget.style.color="#8F857A"}>
+                  <X size={12}/>Clear filters
                 </button>
               )}
-              <select value={sort} onChange={e=>setFilter('sort',e.target.value)}
-                className="input-warm text-[13px]" style={{ width:'auto', height:40, padding:"0 12px" }}>
-                {SORT_OPTIONS.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
-              </select>
+              <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:8 }}>
+                <span style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#8F857A", whiteSpace:"nowrap" }}>Sort by</span>
+                <select value={sort} onChange={e=>setFilter('sort',e.target.value)}
+                  className="input-warm" style={{ width:'auto', height:36, padding:"0 10px", fontSize:13, borderRadius:999 }}>
+                  {SORT_OPTIONS.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
             </div>
           </div>
 
@@ -123,7 +145,7 @@ export default function ProductsPage() {
 
           {/* Grid */}
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
               {Array(pageSize).fill(0).map((_,i)=><SkeletonCard key={i}/>)}
             </div>
           ) : products.length===0 ? (
@@ -139,7 +161,7 @@ export default function ProductsPage() {
           ) : (
             <>
               <motion.div initial={{opacity:0}} animate={{opacity:1}}
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
                 {paged.map((p,i)=>(
                   <motion.div key={p.id} initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:i*0.03}}>
                     <ProductCard product={p}/>

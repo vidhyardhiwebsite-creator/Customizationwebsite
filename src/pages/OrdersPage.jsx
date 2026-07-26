@@ -142,80 +142,106 @@ export default function OrdersPage() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-4">
-        {[1,2,3].map(i => (
-          <div key={i} className="bg-white border border-[#E8E0D5] rounded-xl p-6 animate-pulse shadow-sm">
-            <div className="h-4 bg-[#F2EDE6] rounded w-1/3 mb-3" />
-            <div className="h-3 bg-[#F2EDE6] rounded w-1/2" />
+      <div style={{ background: "#F8F5F0", minHeight: "100vh" }}>
+        <div className="container-lux" style={{ paddingTop: 48, paddingBottom: 80 }}>
+          <div className="max-w-3xl mx-auto space-y-4">
+            {[1,2,3].map(i => (
+              <div key={i} className="card-lux p-6">
+                <div className="skeleton h-4 w-1/3 rounded mb-3" />
+                <div className="skeleton h-3 w-1/2 rounded" />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     )
   }
 
   if (orders.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <Package size={64} className="text-[#C9956C] mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-[#1A1A2E] mb-2" style={{ fontFamily: "Georgia, serif" }}>No orders yet</h2>
-        <p className="text-[#8A8AAA]">Your order history will appear here</p>
+      <div style={{ background: "#F8F5F0", minHeight: "100vh" }} className="flex flex-col items-center justify-center text-center px-4 py-20">
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-warm-sm"
+          style={{ background: "rgba(200,162,58,0.1)", border: "1px solid rgba(200,162,58,0.2)" }}>
+          <Package size={36} style={{ color: "#C8A23A" }} />
+        </div>
+        <h2 className="heading-lg mb-3">No orders yet</h2>
+        <p className="body-md mb-2">Your order history will appear here</p>
       </div>
     )
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-[#1A1A2E] mb-6" style={{ fontFamily: "Georgia, serif" }}>My Orders</h1>
+    <div style={{ background: "#F8F5F0", minHeight: "100vh" }}>
 
-      {/* Search bar */}
-      <div className="relative mb-6">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-        <input
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search by order ID (e.g. NS0-001)..."
-          className="w-full bg-white border border-[#E8E0D5] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#1A1A2E] placeholder-[#8A8AAA] focus:outline-none focus:border-[#1B2B5E]"
-        />
-        {search && (
-          <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A8AAA] hover:text-[#1A1A2E] text-xs">✕</button>
-        )}
+      {/* Page header */}
+      <div style={{ background: "#F3EEE6", borderBottom: "1px solid #E7DED1" }}>
+        <div className="container-lux" style={{ paddingTop: "clamp(20px,3vw,32px)", paddingBottom: "clamp(16px,2.5vw,28px)" }}>
+          <span className="eyebrow" style={{ marginBottom: 6 }}>Account</span>
+          <h1 className="heading-xl" style={{ marginBottom: 0 }}>My <span className="text-gold-accent">Orders</span></h1>
+        </div>
       </div>
 
-      <div className="space-y-4">
-        {filteredOrders.length === 0 && search && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-sm">No orders found for "{search}"</p>
-            <button onClick={() => setSearch("")} className="mt-3 text-[#D4AF37] text-xs hover:underline">Clear search</button>
-          </div>
-        )}
-        {filteredOrders.map((order, i) => {
-          const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
-          const statusInfo = getStatusBadge(order)
-          const StatusIcon = statusInfo.icon
-          return (
-            <motion.div key={order.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className="bg-white border border-[#E8E0D5] rounded-xl overflow-hidden shadow-sm">
-              <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#FAF8F5] transition-colors"
-                onClick={() => setExpanded(expanded === order.id ? null : order.id)}>
-                <div>
-                  <p className="text-[#1A1A2E] font-medium text-sm">{order.display_order_id || `Order #${order.id?.slice(-8)?.toUpperCase()}`}</p>
-                  <p className="text-[#8A8AAA] text-xs mt-1">{formatDate(order.created_at)}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <p className="text-[#1B2B5E] font-semibold">{formatINR(order.total_amount)}</p>
-                    <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 mt-1 font-medium ${statusInfo.color}`} style={{ color: "#ffffff" }}>
-                      <StatusIcon size={10} /> {statusInfo.label}
-                    </span>
-                  </div>
-                  {expanded === order.id ? <ChevronUp size={16} className="text-[#8A8AAA]" /> : <ChevronDown size={16} className="text-[#8A8AAA]" />}
-                </div>
-              </div>
+      <div className="container-lux" style={{ paddingTop: "clamp(20px,3vw,32px)", paddingBottom: "clamp(40px,6vw,72px)" }}>
+        <div className="max-w-3xl mx-auto">
 
-              <AnimatePresence>
-                {expanded === order.id && (
-                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
-                    <div className="border-t border-[#E8E0D5] p-5 space-y-4 bg-[#FAF8F5]">
+          {/* Search bar */}
+          <div className="relative mb-6">
+            <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: "#8F857A" }} />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search by order ID (e.g. NS0-001)..."
+              className="input-warm" style={{ paddingLeft: 42, height: 48 }}
+            />
+            {search && (
+              <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8F857A] hover:text-[#2C241B] transition-colors">
+                <span className="text-xs font-bold">✕</span>
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            {filteredOrders.length === 0 && search && (
+              <div className="text-center py-12">
+                <p className="body-md mb-3">No orders found for "{search}"</p>
+                <button onClick={() => setSearch("")} className="btn-ghost" style={{ height: 40, padding: "0 20px", fontSize: 13 }}>Clear search</button>
+              </div>
+            )}
+        {filteredOrders.map((order, i) => {
+            const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
+            const statusInfo = getStatusBadge(order)
+            const StatusIcon = statusInfo.icon
+            return (
+              <motion.div key={order.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                className="card-lux overflow-hidden">
+                <div className="flex items-center justify-between p-4 sm:p-5 cursor-pointer transition-colors rounded-[20px]"
+                  style={{ background: "transparent" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "#FAF8F3"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                  onClick={() => setExpanded(expanded === order.id ? null : order.id)}>
+                  <div>
+                    <p className="font-inter font-semibold text-[14px] text-[#2C241B]">
+                      {order.display_order_id || `Order #${order.id?.slice(-8)?.toUpperCase()}`}
+                    </p>
+                    <p className="font-inter text-[12px] text-[#8F857A] mt-0.5">{formatDate(order.created_at)}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="font-inter font-bold text-[15px] text-[#2C241B]">{formatINR(order.total_amount)}</p>
+                      <span className={`text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1 mt-1 font-semibold ${statusInfo.color}`}>
+                        <StatusIcon size={10} /> {statusInfo.label}
+                      </span>
+                    </div>
+                    {expanded === order.id
+                      ? <ChevronUp size={16} style={{ color: "#8F857A", flexShrink: 0 }} />
+                      : <ChevronDown size={16} style={{ color: "#8F857A", flexShrink: 0 }} />}
+                  </div>
+                </div>
+
+                <AnimatePresence>
+                  {expanded === order.id && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
+                      <div className="p-4 sm:p-5 space-y-4" style={{ background: "#FAF8F3", borderTop: "1px solid #E7DED1" }}>
 
                       {/* Delivery Tracker */}
                       {order.payment_status === "paid" && (
@@ -303,20 +329,22 @@ export default function OrdersPage() {
                       </div>
 
                       {addr.full_name && (
-                        <div className="bg-white border border-[#E8E0D5] rounded-lg p-3 text-xs">
-                          <p className="text-[#4A4A6A] font-medium mb-1">Delivery Address</p>
-                          <p className="text-[#1A1A2E]">{addr.full_name}, {addr.phone}</p>
-                          <p className="text-[#4A4A6A]">{addr.address1}{addr.address2 ? `, ${addr.address2}` : ""}</p>
-                          <p className="text-[#4A4A6A]">{addr.city}, {addr.state} – {addr.pincode}</p>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )
-        })}
+                          <div className="card-warm p-3 text-xs rounded-xl">
+                            <p className="font-inter font-semibold text-[12px] text-[#2C241B] mb-1">Delivery Address</p>
+                            <p className="font-inter text-[#2C241B]">{addr.full_name}, {addr.phone}</p>
+                            <p className="font-inter text-[#6F655A]">{addr.address1}{addr.address2 ? `, ${addr.address2}` : ""}</p>
+                            <p className="font-inter text-[#6F655A]">{addr.city}, {addr.state} – {addr.pincode}</p>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )
+          })}
+          </div>
+        </div>
       </div>
     </div>
   )

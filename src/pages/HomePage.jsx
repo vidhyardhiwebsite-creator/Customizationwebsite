@@ -401,7 +401,7 @@ export default function HomePage() {
             />
           </Reveal>
           <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,margin:"-50px"}}
-            style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:12, marginTop:24 }}
+            style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10, marginTop:24 }}
             className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-4 lg:gap-5">
             {CATEGORIES.map(cat=>(
               <motion.div key={cat.name} variants={fadeUp}>
@@ -449,14 +449,14 @@ export default function HomePage() {
           </Reveal>
           {featured.length>0 ? (
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,margin:"-50px"}}
-              style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:12 }}
+              style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10 }}
               className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-4 lg:gap-5">
               {featured.map(p=>(
                 <motion.div key={p.id} variants={fadeUp} style={{ height:"100%" }}><FeatCard product={p}/></motion.div>
               ))}
             </motion.div>
           ) : (
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:12 }}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10 }}
               className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-4 lg:gap-5">
               {[...Array(8)].map((_,i)=>(
                 <div key={i} className="card-lux overflow-hidden">
@@ -644,7 +644,7 @@ export default function HomePage() {
               center
             />
           </Reveal>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10 }} className="sm:grid-cols-3 md:grid-cols-4 sm:gap-3 md:gap-4">
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:8 }} className="sm:grid-cols-3 md:grid-cols-4 sm:gap-3 md:gap-4">
             {GALLERY.map((img,i)=>(
               <Reveal key={i} delay={i*0.04}>
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
@@ -689,7 +689,7 @@ export default function HomePage() {
               </Link>
             </Reveal>
             <Reveal delay={0.15}>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:12 }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10 }}>
                 {heroImgs.concat(GALLERY.slice(0,1)).slice(0,4).map((img,i)=>(
                   <div key={i} className="img-zoom overflow-hidden rounded-[20px] shadow-warm-md bg-[#F3EEE6]" style={{ aspectRatio:"1" }}>
                     <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" onError={e=>e.target.src=FB}/>

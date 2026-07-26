@@ -651,22 +651,46 @@ export default function Navbar() {
       ══════════════════════════════ */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ x: "100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "100%", opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{
-              position: "fixed",
-              top: 0, left: 0, right: 0, bottom: 0,
-              zIndex: 300,
-              background: "#FFFFFF",
-              overflowY: "auto",
-              WebkitOverflowScrolling: "touch",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+          <>
+            {/* Dim overlay — clicking it closes the drawer */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={closeAll}
+              style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 299,
+                background: "rgba(44,36,27,0.55)",
+                backdropFilter: "blur(2px)",
+                WebkitBackdropFilter: "blur(2px)",
+              }}
+            />
+
+            {/* Drawer panel — right-side, 82% width max 360px */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{
+                position: "fixed",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: "min(82vw, 360px)",
+                zIndex: 300,
+                background: "#FFFFFF",
+                overflowY: "auto",
+                overflowX: "hidden",
+                WebkitOverflowScrolling: "touch",
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: "-8px 0 40px rgba(44,36,27,0.18)",
+              }}
+            >
             {/* ── Header row: Logo + Icons + Close ── */}
             <div style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -722,11 +746,11 @@ export default function Navbar() {
                   <Link key={link.label} to={link.to} onClick={closeAll}
                     style={{
                       display: "block",
-                      padding: "14px 16px",
-                      marginBottom: 4,
-                      borderRadius: 12,
+                      padding: "12px 14px",
+                      marginBottom: 2,
+                      borderRadius: 10,
                       fontFamily: "'Inter',sans-serif",
-                      fontSize: 16, fontWeight: isActive ? 600 : 400,
+                      fontSize: 14, fontWeight: isActive ? 600 : 400,
                       color: isActive ? "#C8A23A" : "#2C241B",
                       textDecoration: "none",
                       background: isActive ? "rgba(200,162,58,0.08)" : "transparent",
@@ -745,11 +769,11 @@ export default function Navbar() {
                 <Link key={cat} to={`/products?category=${encodeURIComponent(cat)}`} onClick={closeAll}
                   style={{
                     display: "block",
-                    padding: "13px 16px",
-                    marginBottom: 2,
-                    borderRadius: 12,
+                    padding: "10px 14px",
+                    marginBottom: 1,
+                    borderRadius: 10,
                     fontFamily: "'Inter',sans-serif",
-                    fontSize: 15, fontWeight: 400,
+                    fontSize: 13, fontWeight: 400,
                     color: "#6F655A",
                     textDecoration: "none",
                     transition: "all 0.2s",
@@ -869,7 +893,8 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

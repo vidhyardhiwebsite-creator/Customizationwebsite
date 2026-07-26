@@ -112,11 +112,11 @@ img, video, iframe, embed, object { max-width: 100%; }
 @media (max-width: 1024px) { .container-lux { padding-left: 32px; padding-right: 32px; } }
 @media (max-width: 640px)  { .container-lux { padding-left: 16px; padding-right: 16px; } }
 
-.section-gap { padding-top: clamp(56px, 10vw, 120px); padding-bottom: clamp(56px, 10vw, 120px); }
-.section-gap-sm { padding-top: clamp(40px, 8vw, 80px); padding-bottom: clamp(40px, 8vw, 80px); }
+.section-gap { padding-top: clamp(40px, 6vw, 80px); padding-bottom: clamp(40px, 6vw, 80px); }
+.section-gap-sm { padding-top: clamp(24px, 4vw, 56px); padding-bottom: clamp(24px, 4vw, 56px); }
 @media (max-width: 768px) {
-  .section-gap { padding-top: 56px; padding-bottom: 56px; }
-  .section-gap-sm { padding-top: 40px; padding-bottom: 40px; }
+  .section-gap { padding-top: 40px; padding-bottom: 40px; }
+  .section-gap-sm { padding-top: 24px; padding-bottom: 24px; }
 }
 
 /* ═══════════════════════════════════════
@@ -422,7 +422,33 @@ input[type="checkbox"],input[type="radio"],summary { cursor: pointer; }
    BOTTOM NAV SPACER (mobile)
    ═══════════════════════════════════════ */
 @media (max-width: 1023px) {
-  main { padding-bottom: 64px; }
+  main { padding-bottom: 72px; }
+}
+
+/* Right-edge safe area — stop content going under the floating social buttons */
+@media (max-width: 1023px) {
+  .container-lux { padding-right: 20px; }
+}
+
+/* ═══════════════════════════════════════
+   FILTER PILLS — swipeable on mobile, wrap on desktop
+   ═══════════════════════════════════════ */
+.pill-scroll {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+.pill-scroll::-webkit-scrollbar { display: none; }
+@media (min-width: 768px) {
+  .pill-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
 }
 
 /* ═══════════════════════════════════════

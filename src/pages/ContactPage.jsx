@@ -75,7 +75,7 @@ export default function ContactPage() {
 
         {/* ── Page header ── */}
         <div style={{ background: "#F3EEE6", borderBottom: "1px solid #E7DED1" }}>
-          <div className="container-lux" style={{ paddingTop: 56, paddingBottom: 56 }}>
+          <div className="container-lux" style={{ paddingTop: 'clamp(20px,3vw,32px)', paddingBottom: 'clamp(16px,2.5vw,28px)' }}>
             <span className="eyebrow" style={{ display: "block", marginBottom: 12 }}>Get In Touch</span>
             <h1 className="heading-xl" style={{ marginBottom: 12 }}>
               Contact <span className="text-gold-accent">Us</span>
@@ -86,7 +86,7 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="container-lux" style={{ paddingTop: 48, paddingBottom: 80 }}>
+        <div className="container-lux" style={{ paddingTop: 'clamp(20px,3vw,32px)', paddingBottom: 'clamp(40px,6vw,72px)' }}>
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",

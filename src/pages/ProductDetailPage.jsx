@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <div style={{ background:'#F8F5F0', minHeight:'100vh' }}>
-        <div className="container-lux section-gap-sm">
+        <div className="container-lux" style={{ paddingTop:'clamp(20px,4vw,56px)', paddingBottom:'clamp(40px,8vw,80px)' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-14">
             <div className="skeleton rounded-2xl" style={{ aspectRatio:'1' }}/>
             <div className="space-y-5 pt-4">
@@ -120,10 +120,10 @@ export default function ProductDetailPage() {
       </Helmet>
 
       <div style={{ background:'#F8F5F0', minHeight:'100vh' }}>
-        <div className="container-lux section-gap-sm">
+        <div className="container-lux" style={{ paddingTop:'clamp(16px,2.5vw,32px)', paddingBottom:'clamp(40px,6vw,72px)' }}>
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 font-inter text-[12px] text-[#8F857A] mb-10">
+          <div className="flex items-center gap-2 font-inter text-[12px] text-[#8F857A]" style={{ marginBottom:'clamp(12px,2vw,28px)' }}>
             <Link to="/" className="hover:text-[#C8A23A] transition-colors">Home</Link>
             <span>/</span>
             <Link to="/products" className="hover:text-[#C8A23A] transition-colors">Products</Link>
@@ -133,7 +133,7 @@ export default function ProductDetailPage() {
             <span className="text-[#6F655A] truncate max-w-[180px]">{product.name}</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-14 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 mb-20">
 
             {/* -- Gallery -- */}
             <div>
@@ -170,19 +170,19 @@ export default function ProductDetailPage() {
             </div>
 
             {/* -- Info -- */}
-            <div className="flex flex-col">
-              <span className="eyebrow">{product.category}</span>
-              <h1 className="heading-xl mb-4" style={{ fontSize:"clamp(1.8rem,3vw,2.3rem)" }}>{product.name}</h1>
+            <div className="flex flex-col" style={{ gap: 0 }}>
+              <span className="eyebrow" style={{ marginBottom: 8 }}>{product.category}</span>
+              <h1 className="heading-xl" style={{ fontSize:"clamp(1.6rem,3vw,2.3rem)", marginBottom: 16 }}>{product.name}</h1>
 
               {/* Rating */}
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex flex-wrap items-center gap-3" style={{ marginBottom: 20 }}>
                 <div className="flex gap-0.5">{[...Array(5)].map((_,i)=><Star key={i} size={15} className="fill-[#C8A23A] text-[#C8A23A]"/>)}</div>
                 <span className="font-inter text-[13px] text-[#8F857A]">(24 verified reviews)</span>
-                <span className="badge badge-success"><CheckCircle size={9}/>In Stock</span>
+                <span className="badge badge-success"><CheckCircle size={9}/>&nbsp;In Stock</span>
               </div>
 
               {/* Price */}
-              <div className="flex items-baseline gap-3 mb-6">
+              <div className="flex flex-wrap items-baseline gap-3" style={{ marginBottom: 16 }}>
                 <span className="font-playfair font-bold text-[2rem] text-gold-accent">{formatINR(product.price)}</span>
                 {product.compare_price>product.price&&<>
                   <span className="font-inter text-[15px] text-[#8F857A] line-through">{formatINR(product.compare_price)}</span>
@@ -190,10 +190,10 @@ export default function ProductDetailPage() {
                 </>}
               </div>
 
-              <p className="body-md mb-6">{product.description}</p>
+              <p className="body-md" style={{ marginBottom: 20 }}>{product.description}</p>
 
               {/* Stock */}
-              <div className="flex flex-wrap gap-3 mb-6">
+              <div className="flex flex-wrap gap-3" style={{ marginBottom: 16 }}>
                 <div className="card-warm px-4 py-2.5 flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full flex-shrink-0 ${product.stock>0?'bg-[#2E7D32]':'bg-[#D9534F]'}`}/>
                   <span className={`font-inter text-[13px] font-semibold ${product.stock>0?'text-[#2E7D32]':'text-[#D9534F]'}`}>
@@ -212,7 +212,7 @@ export default function ProductDetailPage() {
 
               {/* Tags */}
               {product.tags?.length>0&&(
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-wrap gap-2" style={{ marginBottom: 20 }}>
                   {product.tags.map(tag=>(
                     <span key={tag} className="badge badge-bronze flex items-center gap-1"><Tag size={9}/>{tag}</span>
                   ))}
@@ -221,8 +221,7 @@ export default function ProductDetailPage() {
 
               {/* Personalisation */}
               {(product.allow_custom_name||product.allow_custom_photo)&&(
-                <div className="rounded-2xl p-6 mb-6 space-y-5"
-                  style={{ background:'rgba(200,162,58,0.06)', border:'1px solid rgba(200,162,58,0.2)' }}>
+                <div className="rounded-2xl p-5 space-y-4" style={{ marginBottom: 20, background:'rgba(200,162,58,0.06)', border:'1px solid rgba(200,162,58,0.2)' }}>
                   <p className="font-inter font-semibold text-[14px] text-[#2C241B] flex items-center gap-2">
                     <Award size={16} style={{ color:'#C8A23A' }}/>Personalise Your Gift
                   </p>
@@ -274,7 +273,7 @@ export default function ProductDetailPage() {
               )}
 
               {/* Actions */}
-              <div className="flex gap-3 mb-5">
+              <div className="flex gap-3" style={{ marginBottom: 16 }}>
                 <button onClick={handleAddToCart} disabled={product.stock===0||uploading}
                   className="flex-1 btn-secondary disabled:opacity-40 disabled:cursor-not-allowed" style={{ height:52, fontSize:14 }}>
                   {uploading?<><div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"/>Uploading...</>
@@ -287,7 +286,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Delivery promises */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-3" style={{ paddingRight: 60 }}>
                 {[{icon:<Truck size={14}/>,t:"Free Shipping"},{icon:<Gift size={14}/>,t:"Gift Ready"},{icon:<ShieldCheck size={14}/>,t:"Secure Pay"}].map(f=>(
                   <div key={f.t} className="card-warm p-3 flex flex-col items-center gap-1.5 text-center">
                     <span style={{ color:'#C8A23A' }}>{f.icon}</span>
@@ -314,7 +313,7 @@ export default function ProductDetailPage() {
                     View All<ChevronRight size={14}/>
                   </Link>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
                   {related.slice(0,12).map(p=><ProductCard key={p.id} product={p}/>)}
                 </div>
               </section>
