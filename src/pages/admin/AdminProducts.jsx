@@ -291,135 +291,77 @@ export default function AdminProducts() {
         />
       </div>
 
-      {/* ── Table (desktop) / Cards (mobile) ── */}
-      <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
+      {/* ── Product Table — works on both mobile & desktop ── */}
+      <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 12, overflow: 'hidden' }}>
 
-        {/* Desktop table — hidden on mobile */}
-        <div className="admin-table-view" style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #E7DED1', background: '#F8F5F0' }}>
-                {[['Product', '35%'], ['Category', '20%'], ['Price', '12%'], ['Stock', '10%'], ['Tags', '15%'], ['Actions', '8%']].map(([h, w]) => (
-                  <th key={h} style={{ textAlign: 'left', width: w, padding: '10px 14px', fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {pagedProducts.map((p, idx) => (
-                <tr key={p.id}
-                  style={{ borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none', transition: 'background 0.15s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#FAF8F3'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                  <td style={{ padding: '12px 14px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      {p.images?.[0] && isVideoUrl(p.images[0]) ? (
-                        <video src={p.images[0]} muted playsInline
-                          style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 8, flexShrink: 0, background: '#000', border: '1px solid #E7DED1' }}
-                          onMouseEnter={e => e.target.play()}
-                          onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }} />
-                      ) : (
-                        <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
-                          alt="" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: '1px solid #E7DED1' }}
-                          loading="lazy"
-                          onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
-                      )}
-                      <div style={{ minWidth: 0 }}>
-                        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                        {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
-                        {p.size && <p style={{ fontSize: 11, color: '#8F857A', margin: '1px 0 0' }}>{p.size}</p>}
-                      </div>
-                    </div>
-                  </td>
-                  <td style={{ padding: '12px 14px', fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#6F655A' }}>{p.category}</td>
-                  <td style={{ padding: '12px 14px', fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#C8A23A', whiteSpace: 'nowrap' }}>{formatINR(p.price)}</td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', display: 'flex', alignItems: 'center', gap: 3 }}>
-                      {p.stock < 10 && <AlertTriangle size={10} />}{p.stock}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                      {(p.tags || []).map(t => (
-                        <span key={t} style={{ fontSize: 10, padding: '2px 7px', background: 'rgba(200,162,58,0.1)', color: '#C8A23A', borderRadius: 999, fontWeight: 500 }}>{t}</span>
-                      ))}
-                    </div>
-                  </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 4, borderRadius: 6, transition: 'color 0.15s' }}
-                        onMouseEnter={e => e.currentTarget.style.color = '#C8A23A'}
-                        onMouseLeave={e => e.currentTarget.style.color = '#8F857A'}>
-                        <Edit2 size={14} />
-                      </button>
-                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 4, borderRadius: 6, transition: 'color 0.15s' }}
-                        onMouseEnter={e => e.currentTarget.style.color = '#EF4444'}
-                        onMouseLeave={e => e.currentTarget.style.color = '#8F857A'}>
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {pagedProducts.length === 0 && (
-                <tr>
-                  <td colSpan={6} style={{ padding: '36px 14px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 13, color: '#8F857A' }}>
-                    No products found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Mobile cards — shown only on small screens */}
-        <div className="admin-card-view">
-          {pagedProducts.length === 0 && (
-            <p style={{ padding: '32px 16px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A' }}>No products found</p>
-          )}
-          {pagedProducts.map((p, idx) => (
-            <div key={p.id} style={{ padding: '10px 12px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                {/* Thumbnail */}
-                {p.images?.[0] && isVideoUrl(p.images[0]) ? (
-                  <video src={p.images[0]} muted playsInline
-                    style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0, background: '#000', border: '1px solid #E7DED1' }} />
-                ) : (
-                  <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
-                    alt="" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: '1px solid #E7DED1' }}
-                    loading="lazy"
-                    onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
-                )}
-                {/* Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
-                    <div style={{ minWidth: 0 }}>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                      {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 10, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
-                    </div>
-                    <div style={{ display: 'flex', gap: 0, flexShrink: 0 }}>
-                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: '4px 6px' }}><Edit2 size={14} /></button>
-                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: '4px 6px' }}><Trash2 size={14} /></button>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2px 8px', marginTop: 3 }}>
-                    <span style={{ fontSize: 11, color: '#6F655A' }}>{p.category}</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#C8A23A' }}>{formatINR(p.price)}</span>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E' }}>
-                      {p.stock} in stock
-                    </span>
-                  </div>
-                  {(p.tags || []).length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 4 }}>
-                      {(p.tags || []).map(t => (
-                        <span key={t} style={{ fontSize: 10, padding: '1px 7px', background: 'rgba(200,162,58,0.1)', color: '#A88422', borderRadius: 999 }}>{t}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+        {/* Table header row */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px 60px 56px', gap: 0, padding: '7px 10px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
+          {['Product', 'Category', 'Price', 'Stock'].map(h => (
+            <span key={h} style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: '#8F857A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</span>
           ))}
         </div>
+
+        {/* Rows */}
+        {pagedProducts.length === 0 && (
+          <p style={{ padding: '28px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', margin: 0 }}>No products found</p>
+        )}
+        {pagedProducts.map((p, idx) => (
+          <div key={p.id}
+            style={{ display: 'grid', gridTemplateColumns: '1fr 90px 60px 56px', alignItems: 'center', padding: '8px 10px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none', gap: 0 }}>
+
+            {/* Product col: thumb + name + id */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, paddingRight: 6 }}>
+              {p.images?.[0] && isVideoUrl(p.images[0]) ? (
+                <video src={p.images[0]} muted playsInline
+                  style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 6, flexShrink: 0, background: '#000' }} />
+              ) : (
+                <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
+                  alt="" style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 6, flexShrink: 0, border: '1px solid #F3EEE6' }}
+                  loading="lazy"
+                  onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
+              )}
+              <div style={{ minWidth: 0 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 10, color: '#C8A23A', margin: '1px 0 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.custom_id}</p>}
+              </div>
+            </div>
+
+            {/* Category col */}
+            <div style={{ paddingRight: 4, minWidth: 0 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#6F655A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.category}</p>
+              {(p.tags || []).length > 0 && (
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#A88422', margin: '1px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {p.tags.join(', ')}
+                </p>
+              )}
+            </div>
+
+            {/* Price col */}
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 700, color: '#C8A23A', margin: 0, whiteSpace: 'nowrap' }}>{formatINR(p.price)}</p>
+            </div>
+
+            {/* Stock + actions col */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', whiteSpace: 'nowrap' }}>
+                {p.stock < 10 && <AlertTriangle size={9} style={{ display: 'inline', marginRight: 2 }} />}{p.stock}
+              </span>
+              <div style={{ display: 'flex', gap: 0 }}>
+                <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#C0B8B0', padding: '2px 3px' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#C8A23A'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#C0B8B0'}>
+                  <Edit2 size={12} />
+                </button>
+                <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#C0B8B0', padding: '2px 3px' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#EF4444'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#C0B8B0'}>
+                  <Trash2 size={12} />
+                </button>
+              </div>
+            </div>
+
+          </div>
+        ))}
       </div>
 
       {/* ── Pagination ── */}
