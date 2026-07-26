@@ -66,60 +66,54 @@ function ImageUploader({ images, onImagesChange, uploading, setUploading }) {
   }
 
   return (
-    <div className="col-span-2">
-      <label className="text-xs text-[#8F857A] mb-2 block">Product Images & Videos (max 4) — Videos max 30s, muted on display</label>
+    <div>
+      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 6 }}>
+        Product Images &amp; Videos (max 4) — Videos max 30s
+      </label>
       {images.length < 4 && (
         <div
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-[#C8A23A]/30 hover:border-[#D4AF37]/60 rounded-xl p-6 text-center cursor-pointer transition-all mb-3 bg-[#F8F5F0]"
+          style={{ border: '1px dashed rgba(200,162,58,0.4)', borderRadius: 10, padding: '14px 12px', textAlign: 'center', cursor: 'pointer', background: '#FAF8F3', marginBottom: 8 }}
         >
-          <input
-            ref={inputRef}
-            type="file"
+          <input ref={inputRef} type="file"
             accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm"
-            multiple
-            className="hidden"
-            onChange={e => handleFiles(e.target.files)}
-          />
+            multiple style={{ display: 'none' }}
+            onChange={e => handleFiles(e.target.files)} />
           {uploading ? (
-            <div className="flex items-center justify-center gap-2 text-[#C8A23A]">
-              <Loader2 size={20} className="animate-spin" />
-              <span className="text-sm">Uploading...</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#C8A23A' }}>
+              <Loader2 size={14} className="animate-spin" />
+              <span style={{ fontSize: 12, color: '#8F857A' }}>Uploading...</span>
             </div>
           ) : (
             <>
-              <ImagePlus size={28} className="text-[#C8A23A]/50 mx-auto mb-2" />
-              <p className="text-[#8F857A] text-sm">Drop images or videos here or click to browse</p>
-              <p className="text-[#6F655A] text-xs mt-1">Images: JPG, PNG, WEBP (max 5MB) · Videos: MP4, MOV, WEBM (max 30s, 50MB)</p>
+              <ImagePlus size={18} style={{ color: 'rgba(200,162,58,0.5)', display: 'block', margin: '0 auto 6px' }} />
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A', margin: '0 0 3px' }}>Drop images or videos here or click to browse</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#B8AFA8', margin: 0 }}>JPG, PNG, WEBP (max 5MB) · MP4, MOV, WEBM (max 30s, 50MB)</p>
             </>
           )}
         </div>
       )}
       {images.length > 0 && (
-        <div className="flex gap-2 flex-wrap">
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {images.map((url, i) => (
-            <div key={i} className="relative group">
+            <div key={i} style={{ position: 'relative' }} className="group">
               {isVideoUrl(url) ? (
                 <video src={url} muted playsInline
-                  className="w-20 h-20 object-cover rounded-lg border border-[#E7DED1] bg-black"
+                  style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid #E7DED1', background: '#000' }}
                   onMouseEnter={e => e.target.play()}
-                  onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }}
-                />
+                  onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0 }} />
               ) : (
-                <img src={url} alt="" className="w-20 h-20 object-cover rounded-lg border border-[#E7DED1]" loading="lazy"
-                  onError={e => { if (e.target.src !== 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80') e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
+                <img src={url} alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid #E7DED1' }} loading="lazy"
+                  onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
               )}
-              <button
-                type="button"
-                onClick={() => removeImage(url, i)}
-                className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <X size={10} />
+              <button type="button" onClick={() => removeImage(url, i)}
+                style={{ position: 'absolute', top: -5, right: -5, background: '#EF4444', color: '#FFF', border: 'none', borderRadius: '50%', width: 16, height: 16, fontSize: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <X size={8} />
               </button>
-              {i === 0 && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-black/60 text-white rounded-b-lg py-0.5">Main</span>}
-              {isVideoUrl(url) && <span className="absolute top-0 left-0 text-xs bg-black/60 text-white rounded-tl-lg rounded-br-lg px-1 py-0.5">▶</span>}
+              {i === 0 && <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', fontSize: 9, background: 'rgba(0,0,0,0.6)', color: '#FFF', borderRadius: '0 0 8px 8px', padding: '1px 0' }}>Main</span>}
+              {isVideoUrl(url) && <span style={{ position: 'absolute', top: 0, left: 0, fontSize: 9, background: 'rgba(0,0,0,0.6)', color: '#FFF', borderRadius: '8px 0 4px 0', padding: '1px 4px' }}>▶</span>}
             </div>
           ))}
         </div>
@@ -401,26 +395,26 @@ export default function AdminProducts() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
                     <div style={{ minWidth: 0 }}>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                      {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                      {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 10, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
                     </div>
                     {/* Actions */}
                     <div style={{ display: 'flex', gap: 2, flexShrink: 0 }}>
-                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Edit2 size={14} /></button>
-                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Trash2 size={14} /></button>
+                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Edit2 size={13} /></button>
+                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Trash2 size={13} /></button>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px 10px', marginTop: 5 }}>
-                    <span style={{ fontSize: 11, color: '#6F655A' }}>{p.category}</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#C8A23A' }}>{formatINR(p.price)}</span>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', display: 'flex', alignItems: 'center', gap: 2 }}>
-                      {p.stock < 10 && <AlertTriangle size={9} />}{p.stock} in stock
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '3px 8px', marginTop: 4 }}>
+                    <span style={{ fontSize: 10, color: '#6F655A' }}>{p.category}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#C8A23A' }}>{formatINR(p.price)}</span>
+                    <span style={{ fontSize: 10, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', display: 'flex', alignItems: 'center', gap: 2 }}>
+                      {p.stock < 10 && <AlertTriangle size={8} />}{p.stock} in stock
                     </span>
                   </div>
                   {(p.tags || []).length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 4 }}>
                       {(p.tags || []).map(t => (
-                        <span key={t} style={{ fontSize: 10, padding: '2px 7px', background: 'rgba(200,162,58,0.1)', color: '#C8A23A', borderRadius: 999 }}>{t}</span>
+                        <span key={t} style={{ fontSize: 9, padding: '2px 6px', background: 'rgba(200,162,58,0.1)', color: '#C8A23A', borderRadius: 999 }}>{t}</span>
                       ))}
                     </div>
                   )}
@@ -475,8 +469,8 @@ export default function AdminProducts() {
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
               style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, width: '100%', maxWidth: 560, maxHeight: '92vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
               {/* Modal header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid #E7DED1', flexShrink: 0, position: 'sticky', top: 0, background: '#FFFFFF', zIndex: 1 }}>
-                <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 16, fontWeight: 700, color: '#2C241B', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', borderBottom: '1px solid #E7DED1', flexShrink: 0, position: 'sticky', top: 0, background: '#FFFFFF', zIndex: 1 }}>
+                <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 15, fontWeight: 700, color: '#2C241B', margin: 0 }}>
                   {editProduct ? "Edit Product" : "Add New Product"}
                 </h2>
                 <button onClick={() => !uploading && setModalOpen(false)}
@@ -485,7 +479,7 @@ export default function AdminProducts() {
                 </button>
               </div>
               {/* Modal body */}
-              <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 11 }}>
                 {/* Product ID */}
                 <div>
                   <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>
@@ -508,60 +502,60 @@ export default function AdminProducts() {
 
                 {/* Product Name */}
                 <div>
-                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Product Name *</label>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Product Name *</label>
                   <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Custom Photo Mug"
-                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
                     onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                  {errors.name && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.name}</p>}
+                  {errors.name && <p style={{ fontSize: 10, color: '#EF4444', margin: '2px 0 0' }}>{errors.name}</p>}
                 </div>
                 {/* Price + Stock */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Price (₹) *</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Price (₹) *</label>
                     <input type="number" min="0" step="1" value={form.price} onChange={e => setForm(f => ({ ...f, price: Math.floor(Number(e.target.value)) || "" }))} placeholder="2499"
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
                       onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                    {errors.price && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.price}</p>}
+                    {errors.price && <p style={{ fontSize: 10, color: '#EF4444', margin: '2px 0 0' }}>{errors.price}</p>}
                   </div>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Stock *</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Stock *</label>
                     <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))} placeholder="15"
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
                       onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                    {errors.stock && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.stock}</p>}
+                    {errors.stock && <p style={{ fontSize: 10, color: '#EF4444', margin: '2px 0 0' }}>{errors.stock}</p>}
                   </div>
                 </div>
                 {/* Category + Sizes */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Category</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
                       onFocus={e => e.target.style.borderColor = '#C8A23A'} onBlur={e => e.target.style.borderColor = '#E7DED1'}>
                       {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>
                       Sizes <span style={{ fontWeight: 400, color: '#B8AFA8' }}>(optional)</span>
                     </label>
                     <input value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} placeholder="S, M, L or Free Size"
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
                       onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#B8AFA8', margin: '3px 0 0' }}>Comma-separated, leave blank if N/A</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#B8AFA8', margin: '2px 0 0' }}>Comma-separated, leave blank if N/A</p>
                   </div>
                 </div>
                 {/* Description */}
                 <div>
-                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Description</label>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Description</label>
                   <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                    rows={3} placeholder="Product description..."
-                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', resize: 'vertical', fontFamily: "'Inter',sans-serif" }}
-                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                    rows={2} placeholder="Product description..."
+                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', resize: 'vertical', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
                     onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
                 </div>
                 {/* Tags */}
@@ -597,10 +591,10 @@ export default function AdminProducts() {
                   <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: '#2C241B', margin: '0 0 2px' }}>🎨 Personalization Options</p>
                   <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '0 0 12px' }}>Enable if customers can customise this product</p>
                   {/* Custom name toggle */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, background: '#FFFFFF', borderRadius: 10, padding: '10px 12px', border: '1px solid #E7DED1', marginBottom: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: '#FFFFFF', borderRadius: 10, padding: '9px 10px', border: '1px solid #E7DED1', marginBottom: 8 }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0 }}>Custom Name / Text</p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '2px 0 0' }}>Customer types a name, message or text to print</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0 }}>Custom Name / Text</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#8F857A', margin: '2px 0 0' }}>Customer types a name, message or text to print</p>
                     </div>
                     <button type="button" onClick={() => setForm(f => ({ ...f, allow_custom_name: !f.allow_custom_name }))}
                       style={{ width: 44, height: 24, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0, position: 'relative', background: form.allow_custom_name ? '#C8A23A' : '#D4C9BC', transition: 'background 0.2s' }}>
@@ -617,10 +611,10 @@ export default function AdminProducts() {
                     </div>
                   )}
                   {/* Custom photo toggle */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, background: '#FFFFFF', borderRadius: 10, padding: '10px 12px', border: '1px solid #E7DED1' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: '#FFFFFF', borderRadius: 10, padding: '9px 10px', border: '1px solid #E7DED1' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0 }}>Custom Photo Upload</p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '2px 0 0' }}>Customer uploads a photo to be printed on product</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0 }}>Custom Photo Upload</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#8F857A', margin: '2px 0 0' }}>Customer uploads a photo to be printed on product</p>
                     </div>
                     <button type="button" onClick={() => setForm(f => ({ ...f, allow_custom_photo: !f.allow_custom_photo }))}
                       style={{ width: 44, height: 24, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0, position: 'relative', background: form.allow_custom_photo ? '#C8A23A' : '#D4C9BC', transition: 'background 0.2s' }}>
