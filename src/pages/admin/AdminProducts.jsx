@@ -255,28 +255,27 @@ export default function AdminProducts() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: '100%', minWidth: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: '100%', minWidth: 0 }}>
 
       {/* ── Header ── */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
         <div>
-          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: '#2C241B', margin: 0 }}>Products</h1>
-          <p style={{ fontSize: 12, color: '#8F857A', margin: '3px 0 0' }}>{products.length} total products</p>
+          <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 20, fontWeight: 700, color: '#2C241B', margin: 0 }}>Products</h1>
+          <p style={{ fontSize: 11, color: '#8F857A', margin: '2px 0 0' }}>{products.length} total products</p>
         </div>
         <button onClick={openAdd} style={{
-          display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0,
-          padding: '8px 14px', background: 'linear-gradient(135deg, #D4AF37, #B8860B)',
-          color: '#FFFFFF', fontSize: 13, fontWeight: 600, borderRadius: 10,
+          display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
+          padding: '7px 12px', background: 'linear-gradient(135deg, #D4AF37, #B8860B)',
+          color: '#FFFFFF', fontSize: 12, fontWeight: 600, borderRadius: 8,
           border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
-          boxShadow: '0 2px 8px rgba(200,162,58,0.3)',
         }}>
-          <Plus size={14} /> Add Product
+          <Plus size={13} /> Add Product
         </button>
       </div>
 
       {/* ── Search ── */}
       <div style={{ position: 'relative' }}>
-        <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#8F857A', pointerEvents: 'none' }} />
+        <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#8F857A', pointerEvents: 'none' }} />
         <input
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1) }}
@@ -284,7 +283,7 @@ export default function AdminProducts() {
           style={{
             width: '100%', boxSizing: 'border-box',
             background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10,
-            paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
+            paddingLeft: 32, paddingRight: 12, paddingTop: 8, paddingBottom: 8,
             fontSize: 13, color: '#2C241B', outline: 'none',
           }}
           onFocus={e => e.target.style.borderColor = '#C8A23A'}
@@ -375,46 +374,44 @@ export default function AdminProducts() {
         {/* Mobile cards — shown only on small screens */}
         <div className="admin-card-view">
           {pagedProducts.length === 0 && (
-            <p style={{ padding: '32px 16px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 13, color: '#8F857A' }}>No products found</p>
+            <p style={{ padding: '32px 16px', textAlign: 'center', fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#8F857A' }}>No products found</p>
           )}
           {pagedProducts.map((p, idx) => (
-            <div key={p.id} style={{ padding: '12px 14px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none' }}>
+            <div key={p.id} style={{ padding: '10px 12px', borderBottom: idx < pagedProducts.length - 1 ? '1px solid #F3EEE6' : 'none' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                 {/* Thumbnail */}
                 {p.images?.[0] && isVideoUrl(p.images[0]) ? (
                   <video src={p.images[0]} muted playsInline
-                    style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, flexShrink: 0, background: '#000', border: '1px solid #E7DED1' }} />
+                    style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0, background: '#000', border: '1px solid #E7DED1' }} />
                 ) : (
                   <img src={p.images?.[0] || 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=60&q=60'}
-                    alt="" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: '1px solid #E7DED1' }}
+                    alt="" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: '1px solid #E7DED1' }}
                     loading="lazy"
                     onError={e => { e.target.src = 'https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80' }} />
                 )}
-
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
                     <div style={{ minWidth: 0 }}>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
                       {p.custom_id && <p style={{ fontFamily: 'monospace', fontSize: 10, color: '#C8A23A', margin: '1px 0 0' }}>{p.custom_id}</p>}
                     </div>
-                    {/* Actions */}
-                    <div style={{ display: 'flex', gap: 2, flexShrink: 0 }}>
-                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Edit2 size={13} /></button>
-                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 5 }}><Trash2 size={13} /></button>
+                    <div style={{ display: 'flex', gap: 0, flexShrink: 0 }}>
+                      <button onClick={() => openEdit(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: '4px 6px' }}><Edit2 size={14} /></button>
+                      <button onClick={() => setDeleteConfirm(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: '4px 6px' }}><Trash2 size={14} /></button>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '3px 8px', marginTop: 4 }}>
-                    <span style={{ fontSize: 10, color: '#6F655A' }}>{p.category}</span>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: '#C8A23A' }}>{formatINR(p.price)}</span>
-                    <span style={{ fontSize: 10, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E', display: 'flex', alignItems: 'center', gap: 2 }}>
-                      {p.stock < 10 && <AlertTriangle size={8} />}{p.stock} in stock
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2px 8px', marginTop: 3 }}>
+                    <span style={{ fontSize: 11, color: '#6F655A' }}>{p.category}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#C8A23A' }}>{formatINR(p.price)}</span>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: p.stock < 10 ? '#EF4444' : p.stock < 20 ? '#EAB308' : '#22C55E' }}>
+                      {p.stock} in stock
                     </span>
                   </div>
                   {(p.tags || []).length > 0 && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 4 }}>
                       {(p.tags || []).map(t => (
-                        <span key={t} style={{ fontSize: 9, padding: '2px 6px', background: 'rgba(200,162,58,0.1)', color: '#C8A23A', borderRadius: 999 }}>{t}</span>
+                        <span key={t} style={{ fontSize: 10, padding: '1px 7px', background: 'rgba(200,162,58,0.1)', color: '#A88422', borderRadius: 999 }}>{t}</span>
                       ))}
                     </div>
                   )}
