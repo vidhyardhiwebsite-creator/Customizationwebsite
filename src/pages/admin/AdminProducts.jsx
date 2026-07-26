@@ -467,96 +467,102 @@ export default function AdminProducts() {
             style={{ position: 'fixed', inset: 0, background: 'rgba(44,36,27,0.75)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '12px' }}
             onClick={e => e.target === e.currentTarget && !uploading && setModalOpen(false)}>
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, width: '100%', maxWidth: 560, maxHeight: '92vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+              style={{ background: '#FFFFFF', borderRadius: 20, width: '100%', maxWidth: 480, maxHeight: '94vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(44,36,27,0.25)' }}>
               {/* Modal header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', borderBottom: '1px solid #E7DED1', flexShrink: 0, position: 'sticky', top: 0, background: '#FFFFFF', zIndex: 1 }}>
-                <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 15, fontWeight: 700, color: '#2C241B', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px 14px', flexShrink: 0, position: 'sticky', top: 0, background: '#FFFFFF', zIndex: 1, borderRadius: '20px 20px 0 0' }}>
+                <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 18, fontWeight: 700, color: '#2C241B', margin: 0 }}>
                   {editProduct ? "Edit Product" : "Add New Product"}
                 </h2>
                 <button onClick={() => !uploading && setModalOpen(false)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 4, display: 'flex' }}>
-                  <X size={18} />
+                  <X size={20} />
                 </button>
               </div>
+              {/* Divider */}
+              <div style={{ height: 1, background: '#F3EEE6', flexShrink: 0, margin: '0 20px' }} />
               {/* Modal body */}
-              <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 11 }}>
+              <div style={{ padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
                 {/* Product ID */}
                 <div>
-                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>
-                    Product ID <span style={{ color: '#B8AFA8', fontWeight: 400 }}>(e.g. SS0.1, SS1.5)</span>
-                    {editProduct && <span style={{ marginLeft: 8, color: '#C8A23A', fontWeight: 600 }}>· locked after creation</span>}
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>
+                    Product ID <span style={{ color: '#8F857A', fontWeight: 400, fontSize: 12 }}>(e.g. SS0.1, SS1.5)</span>
+                    {editProduct && <span style={{ marginLeft: 8, color: '#C8A23A', fontWeight: 600, fontSize: 11 }}>· locked after creation</span>}
                   </label>
                   <input
                     value={form.custom_id || ""}
                     onChange={e => !editProduct && setForm(f => ({ ...f, custom_id: e.target.value }))}
                     readOnly={!!editProduct}
                     placeholder="e.g. VR0.1"
-                    style={{ width: '100%', boxSizing: 'border-box', background: editProduct ? '#F8F5F0' : '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: editProduct ? '#8F857A' : '#2C241B', outline: 'none', cursor: editProduct ? 'not-allowed' : 'text', fontFamily: "'Inter',sans-serif" }}
-                    onFocus={e => { if (!editProduct) { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' } }}
-                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }}
+                    style={{ width: '100%', boxSizing: 'border-box', background: editProduct ? '#F8F5F0' : '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: editProduct ? '#8F857A' : '#2C241B', outline: 'none', cursor: editProduct ? 'not-allowed' : 'text', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { if (!editProduct) { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' } }}
+                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }}
                   />
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#B8AFA8', margin: '3px 0 0' }}>
-                    {editProduct && form.custom_id ? "ID is permanent and cannot be changed after creation." : !editProduct ? "Leave empty to auto-generate" : ""}
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '4px 0 0' }}>
+                    {editProduct && form.custom_id ? "ID cannot be changed after creation." : !editProduct ? "Leave empty to auto-generate" : ""}
                   </p>
                 </div>
 
                 {/* Product Name */}
                 <div>
-                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Product Name *</label>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>Product Name *</label>
                   <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Custom Photo Mug"
-                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
-                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                  {errors.name && <p style={{ fontSize: 10, color: '#EF4444', margin: '2px 0 0' }}>{errors.name}</p>}
+                    style={{ width: '100%', boxSizing: 'border-box', background: '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' }}
+                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }} />
+                  {errors.name && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.name}</p>}
                 </div>
+
                 {/* Price + Stock */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Price (₹) *</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>Price (₹) *</label>
                     <input type="number" min="0" step="1" value={form.price} onChange={e => setForm(f => ({ ...f, price: Math.floor(Number(e.target.value)) || "" }))} placeholder="2499"
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
-                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                    {errors.price && <p style={{ fontSize: 10, color: '#EF4444', margin: '2px 0 0' }}>{errors.price}</p>}
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }} />
+                    {errors.price && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.price}</p>}
                   </div>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Stock *</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>Stock *</label>
                     <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))} placeholder="15"
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
-                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                    {errors.stock && <p style={{ fontSize: 10, color: '#EF4444', margin: '2px 0 0' }}>{errors.stock}</p>}
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }} />
+                    {errors.stock && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.stock}</p>}
                   </div>
                 </div>
+
                 {/* Category + Sizes */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Category</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => e.target.style.borderColor = '#C8A23A'} onBlur={e => e.target.style.borderColor = '#E7DED1'}>
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }}>
                       {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>
-                      Sizes <span style={{ fontWeight: 400, color: '#B8AFA8' }}>(optional)</span>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>
+                      Sizes <span style={{ fontWeight: 400, color: '#8F857A', fontSize: 12 }}>(optional)</span>
                     </label>
                     <input value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} placeholder="S, M, L or Free Size"
-                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
-                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
-                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#B8AFA8', margin: '2px 0 0' }}>Comma-separated, leave blank if N/A</p>
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }} />
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '3px 0 0' }}>Comma-separated, leave blank if N/A</p>
                   </div>
                 </div>
+
                 {/* Description */}
                 <div>
-                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 4 }}>Description</label>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', display: 'block', marginBottom: 6 }}>Description</label>
                   <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                     rows={2} placeholder="Product description..."
-                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#2C241B', outline: 'none', resize: 'vertical', fontFamily: "'Inter',sans-serif" }}
-                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 2px rgba(200,162,58,0.1)' }}
-                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
+                    style={{ width: '100%', boxSizing: 'border-box', background: '#F8F5F0', border: '1.5px solid #E7DED1', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#2C241B', outline: 'none', resize: 'vertical', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.background = '#FFFFFF' }}
+                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.background = '#F8F5F0' }} />
                 </div>
                 {/* Tags */}
                 <div>

@@ -60,7 +60,7 @@ body {
   background: #F8F5F0;
   color: #2C241B;
   font-family: 'Inter', Georgia, sans-serif;
-  font-size: 15px;        /* slightly smaller base — prevents zoom feel */
+  font-size: 14px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
