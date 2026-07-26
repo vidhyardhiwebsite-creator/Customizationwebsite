@@ -470,207 +470,193 @@ export default function AdminProducts() {
       <AnimatePresence>
         {modalOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+            style={{ position: 'fixed', inset: 0, background: 'rgba(44,36,27,0.75)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '12px' }}
             onClick={e => e.target === e.currentTarget && !uploading && setModalOpen(false)}>
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white border border-[#E7DED1] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-5 border-b border-[#E7DED1]">
-                <h2 className="text-[#C8A23A] font-semibold">{editProduct ? "Edit Product" : "Add New Product"}</h2>
-                <button onClick={() => !uploading && setModalOpen(false)} className="text-[#8F857A] hover:text-[#2C241B] p-1"><X size={18} /></button>
+              style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 16, width: '100%', maxWidth: 560, maxHeight: '92vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+              {/* Modal header */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid #E7DED1', flexShrink: 0, position: 'sticky', top: 0, background: '#FFFFFF', zIndex: 1 }}>
+                <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 16, fontWeight: 700, color: '#2C241B', margin: 0 }}>
+                  {editProduct ? "Edit Product" : "Add New Product"}
+                </h2>
+                <button onClick={() => !uploading && setModalOpen(false)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8F857A', padding: 4, display: 'flex' }}>
+                  <X size={18} />
+                </button>
               </div>
-              <div className="p-5 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <label className="text-xs text-[#8F857A] mb-1 block">
-                      Product ID <span className="text-[#6F655A]">(e.g. NS0.1, NS1.5)</span>
-                      {editProduct && <span className="ml-2 text-[#C9956C] font-medium">· locked after creation</span>}
-                    </label>
-                    <input
-                      value={form.custom_id || ""}
-                      onChange={e => !editProduct && setForm(f => ({ ...f, custom_id: e.target.value }))}
-                      readOnly={!!editProduct}
-                      className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#C8A23A] ${
-                        editProduct
-                          ? "bg-[#F8F5F0] border-gray-100 text-[#8F857A] cursor-not-allowed select-none"
-                          : "bg-white border-[#E7DED1] text-[#2C241B]"
-                      }`}
-                      placeholder="e.g. VR0.1"
-                    />
-                    {!editProduct && <p className="text-[#6F655A] text-xs mt-0.5">Leave empty to auto-generate</p>}
-                    {editProduct && form.custom_id && <p className="text-[#8F857A] text-xs mt-0.5">ID is permanent and cannot be changed after creation.</p>}
-                  </div>
+              {/* Modal body */}
+              <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {/* Product ID */}
+                <div>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>
+                    Product ID <span style={{ color: '#B8AFA8', fontWeight: 400 }}>(e.g. SS0.1, SS1.5)</span>
+                    {editProduct && <span style={{ marginLeft: 8, color: '#C8A23A', fontWeight: 600 }}>· locked after creation</span>}
+                  </label>
+                  <input
+                    value={form.custom_id || ""}
+                    onChange={e => !editProduct && setForm(f => ({ ...f, custom_id: e.target.value }))}
+                    readOnly={!!editProduct}
+                    placeholder="e.g. VR0.1"
+                    style={{ width: '100%', boxSizing: 'border-box', background: editProduct ? '#F8F5F0' : '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: editProduct ? '#8F857A' : '#2C241B', outline: 'none', cursor: editProduct ? 'not-allowed' : 'text', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { if (!editProduct) { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' } }}
+                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }}
+                  />
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#B8AFA8', margin: '3px 0 0' }}>
+                    {editProduct && form.custom_id ? "ID is permanent and cannot be changed after creation." : !editProduct ? "Leave empty to auto-generate" : ""}
+                  </p>
+                </div>
 
-                  <div className="col-span-2">
-                    <label className="text-xs text-[#8F857A] mb-1 block">Product Name *</label>
-                    <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
-                      placeholder="e.g. Custom Photo Mug" />
-                    {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+                {/* Product Name */}
+                <div>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Product Name *</label>
+                  <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Custom Photo Mug"
+                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
+                  {errors.name && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.name}</p>}
+                </div>
+                {/* Price + Stock */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Price (₹) *</label>
+                    <input type="number" min="0" step="1" value={form.price} onChange={e => setForm(f => ({ ...f, price: Math.floor(Number(e.target.value)) || "" }))} placeholder="2499"
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
+                    {errors.price && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.price}</p>}
                   </div>
                   <div>
-                    <label className="text-xs text-[#8F857A] mb-1 block">Price (₹) *</label>
-                    <input type="number" min="0" step="1" value={form.price} onChange={e => setForm(f => ({ ...f, price: Math.floor(Number(e.target.value)) || "" }))}
-                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
-                      placeholder="2499" />
-                    {errors.price && <p className="text-red-400 text-xs mt-1">{errors.price}</p>}
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Stock *</label>
+                    <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))} placeholder="15"
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
+                    {errors.stock && <p style={{ fontSize: 11, color: '#EF4444', margin: '3px 0 0' }}>{errors.stock}</p>}
                   </div>
+                </div>
+                {/* Category + Sizes */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div>
-                    <label className="text-xs text-[#8F857A] mb-1 block">Stock *</label>
-                    <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
-                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
-                      placeholder="15" />
-                    {errors.stock && <p className="text-red-400 text-xs mt-1">{errors.stock}</p>}
-                  </div>
-                  <div>
-                    <label className="text-xs text-[#8F857A] mb-1 block">Category</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Category</label>
                     <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value, size: "" }))}
-                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]">
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => e.target.style.borderColor = '#C8A23A'} onBlur={e => e.target.style.borderColor = '#E7DED1'}>
                       {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-[#8F857A] mb-1 block">Available Sizes <span className="text-[#8F857A]">(optional)</span></label>
-                    <input
-                      value={form.size}
-                      onChange={e => setForm(f => ({ ...f, size: e.target.value }))}
-                      placeholder="e.g. S, M, L, XL or Free Size"
-                      className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
-                    />
-                    <p className="text-[#6F655A] text-xs mt-0.5">Comma-separated sizes (leave blank if not applicable).</p>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>
+                      Sizes <span style={{ fontWeight: 400, color: '#B8AFA8' }}>(optional)</span>
+                    </label>
+                    <input value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} placeholder="S, M, L or Free Size"
+                      style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                      onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#B8AFA8', margin: '3px 0 0' }}>Comma-separated, leave blank if N/A</p>
                   </div>
-                  <div className="col-span-2">
-                    <label className="text-xs text-[#8F857A] mb-1 block">Description</label>
-                    <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                      rows={3} className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A] resize-none"
-                      placeholder="Product description..." />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="text-xs text-[#8F857A] mb-2 block">Tags</label>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {allTags.map(tag => (
-                        <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${form.tags.includes(tag) ? "bg-[#C8A23A] text-white" : "bg-[#F8F5F0] text-[#8F857A] border border-[#E7DED1] hover:border-[#C8A23A]/50"}`}>
-                          {tag}
-                        </button>
-                      ))}
-                      {/* Custom tags typed in this session but not yet in allTags */}
-                      {form.tags.filter(t => !allTags.includes(t)).map(tag => (
-                        <button key={tag} type="button" onClick={() => toggleTag(tag)}
-                          className="px-3 py-1 rounded-full text-xs font-medium bg-[#C8A23A] text-white flex items-center gap-1">
-                          {tag} <X size={10} />
-                        </button>
-                      ))}
-                    </div>
-                    {/* Add custom tag */}
-                    <div className="flex gap-2">
-                      <input
-                        id="custom-tag-input"
-                        type="text"
-                        placeholder="Add custom tag..."
-                        onKeyDown={e => {
-                          if (e.key === "Enter") {
-                            e.preventDefault()
-                            const val = e.target.value.trim().toLowerCase()
-                            if (val && !form.tags.includes(val)) {
-                              setForm(f => ({ ...f, tags: [...f.tags, val] }))
-                            }
-                            e.target.value = ""
-                          }
-                        }}
-                        className="flex-1 bg-[#F8F5F0] border border-[#E7DED1] rounded-lg px-3 py-1.5 text-xs text-[#2C241B] placeholder-gray-400 focus:outline-none focus:border-[#C8A23A]"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const input = document.getElementById("custom-tag-input")
-                          const val = input.value.trim().toLowerCase()
-                          if (val && !form.tags.includes(val)) {
-                            setForm(f => ({ ...f, tags: [...f.tags, val] }))
-                          }
-                          input.value = ""
-                        }}
-                        className="px-3 py-1.5 bg-[#C8A23A] text-white rounded-lg text-xs font-bold hover:bg-[#A88422] transition-all"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  {/* ── Customization Options ── */}
-                  <div className="col-span-2 border border-[#C8A23A]/30 rounded-xl p-4 bg-[#FAF8F3] space-y-3">
-                    <p className="text-sm font-semibold text-[#2C241B] flex items-center gap-2">
-                      🎨 Personalization Options
-                      <span className="text-xs text-[#8F857A] font-normal">— enable if customers can customise this product</span>
-                    </p>
-
-                    {/* Allow custom name/text */}
-                    <div className="flex items-center justify-between gap-3 bg-white rounded-lg px-3 py-2.5 border border-[#E8E0D5]">
-                      <div>
-                        <p className="text-sm text-[#2C241B] font-medium">Custom Name / Text</p>
-                        <p className="text-xs text-[#8F857A]">Customer types a name, message or text to print</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setForm(f => ({ ...f, allow_custom_name: !f.allow_custom_name }))}
-                        className={`w-12 h-6 rounded-full transition-all flex-shrink-0 relative ${form.allow_custom_name ? 'bg-[#C8A23A]' : 'bg-gray-300'}`}
-                      >
-                        <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${form.allow_custom_name ? 'left-6' : 'left-0.5'}`} />
-                      </button>
-                    </div>
-                    {form.allow_custom_name && (
-                      <div>
-                        <label className="text-xs text-[#8F857A] mb-1 block">Label shown to customer</label>
-                        <input
-                          value={form.custom_name_label}
-                          onChange={e => setForm(f => ({ ...f, custom_name_label: e.target.value }))}
-                          placeholder="e.g. Enter name to print, Your message..."
-                          className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
-                        />
-                      </div>
-                    )}
-
-                    {/* Allow custom photo */}
-                    <div className="flex items-center justify-between gap-3 bg-white rounded-lg px-3 py-2.5 border border-[#E8E0D5]">
-                      <div>
-                        <p className="text-sm text-[#2C241B] font-medium">Custom Photo Upload</p>
-                        <p className="text-xs text-[#8F857A]">Customer uploads a photo to be printed on product</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setForm(f => ({ ...f, allow_custom_photo: !f.allow_custom_photo }))}
-                        className={`w-12 h-6 rounded-full transition-all flex-shrink-0 relative ${form.allow_custom_photo ? 'bg-[#C8A23A]' : 'bg-gray-300'}`}
-                      >
-                        <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${form.allow_custom_photo ? 'left-6' : 'left-0.5'}`} />
-                      </button>
-                    </div>
-                    {form.allow_custom_photo && (
-                      <div>
-                        <label className="text-xs text-[#8F857A] mb-1 block">Label shown to customer</label>
-                        <input
-                          value={form.custom_photo_label}
-                          onChange={e => setForm(f => ({ ...f, custom_photo_label: e.target.value }))}
-                          placeholder="e.g. Upload your photo, Upload couple photo..."
-                          className="w-full bg-white border border-[#E7DED1] rounded-lg px-3 py-2 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  <ImageUploader
-                    images={form.images}
-                    onImagesChange={imgs => setForm(f => ({ ...f, images: imgs }))}
-                    uploading={uploading}
-                    setUploading={setUploading}
-                  />
-                  {errors.images && <p className="col-span-2 text-red-400 text-xs">{errors.images}</p>}
                 </div>
-                <div className="flex gap-3 pt-2">
+                {/* Description */}
+                <div>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 5 }}>Description</label>
+                  <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                    rows={3} placeholder="Product description..."
+                    style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '9px 12px', fontSize: 13, color: '#2C241B', outline: 'none', resize: 'vertical', fontFamily: "'Inter',sans-serif" }}
+                    onFocus={e => { e.target.style.borderColor = '#C8A23A'; e.target.style.boxShadow = '0 0 0 3px rgba(200,162,58,0.1)' }}
+                    onBlur={e => { e.target.style.borderColor = '#E7DED1'; e.target.style.boxShadow = 'none' }} />
+                </div>
+                {/* Tags */}
+                <div>
+                  <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: '#8F857A', display: 'block', marginBottom: 8 }}>Tags</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+                    {allTags.map(tag => (
+                      <button key={tag} type="button" onClick={() => toggleTag(tag)}
+                        style={{ padding: '4px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600, cursor: 'pointer', background: form.tags.includes(tag) ? '#C8A23A' : '#F8F5F0', color: form.tags.includes(tag) ? '#FFF' : '#8F857A', border: form.tags.includes(tag) ? '1px solid #C8A23A' : '1px solid #E7DED1' }}>
+                        {tag}
+                      </button>
+                    ))}
+                    {form.tags.filter(t => !allTags.includes(t)).map(tag => (
+                      <button key={tag} type="button" onClick={() => toggleTag(tag)}
+                        style={{ padding: '4px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600, cursor: 'pointer', background: '#C8A23A', color: '#FFF', border: '1px solid #C8A23A', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {tag} <X size={9} />
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <input id="custom-tag-input" type="text" placeholder="Add custom tag..."
+                      onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); const val = e.target.value.trim().toLowerCase(); if (val && !form.tags.includes(val)) setForm(f => ({ ...f, tags: [...f.tags, val] })); e.target.value = "" } }}
+                      style={{ flex: 1, minWidth: 0, background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 10, padding: '7px 10px', fontSize: 12, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                      onFocus={e => e.target.style.borderColor = '#C8A23A'} onBlur={e => e.target.style.borderColor = '#E7DED1'} />
+                    <button type="button" onClick={() => { const input = document.getElementById("custom-tag-input"); const val = input.value.trim().toLowerCase(); if (val && !form.tags.includes(val)) setForm(f => ({ ...f, tags: [...f.tags, val] })); input.value = "" }}
+                      style={{ padding: '7px 14px', background: 'linear-gradient(135deg,#D4AF37,#B8860B)', color: '#FFF', border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>
+                      +
+                    </button>
+                  </div>
+                </div>
+                {/* ── Personalization Options ── */}
+                <div style={{ background: '#FAF8F3', border: '1px solid rgba(200,162,58,0.25)', borderRadius: 12, padding: 14 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: '#2C241B', margin: '0 0 2px' }}>🎨 Personalization Options</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '0 0 12px' }}>Enable if customers can customise this product</p>
+                  {/* Custom name toggle */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, background: '#FFFFFF', borderRadius: 10, padding: '10px 12px', border: '1px solid #E7DED1', marginBottom: 8 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0 }}>Custom Name / Text</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '2px 0 0' }}>Customer types a name, message or text to print</p>
+                    </div>
+                    <button type="button" onClick={() => setForm(f => ({ ...f, allow_custom_name: !f.allow_custom_name }))}
+                      style={{ width: 44, height: 24, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0, position: 'relative', background: form.allow_custom_name ? '#C8A23A' : '#D4C9BC', transition: 'background 0.2s' }}>
+                      <span style={{ position: 'absolute', top: 2, width: 20, height: 20, background: '#FFF', borderRadius: '50%', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', transition: 'left 0.2s', left: form.allow_custom_name ? 22 : 2 }} />
+                    </button>
+                  </div>
+                  {form.allow_custom_name && (
+                    <div style={{ marginBottom: 8 }}>
+                      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', display: 'block', marginBottom: 4 }}>Label shown to customer</label>
+                      <input value={form.custom_name_label} onChange={e => setForm(f => ({ ...f, custom_name_label: e.target.value }))}
+                        placeholder="e.g. Enter name to print..."
+                        style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '8px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                        onFocus={e => e.target.style.borderColor = '#C8A23A'} onBlur={e => e.target.style.borderColor = '#E7DED1'} />
+                    </div>
+                  )}
+                  {/* Custom photo toggle */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, background: '#FFFFFF', borderRadius: 10, padding: '10px 12px', border: '1px solid #E7DED1' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: '#2C241B', margin: 0 }}>Custom Photo Upload</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: '2px 0 0' }}>Customer uploads a photo to be printed on product</p>
+                    </div>
+                    <button type="button" onClick={() => setForm(f => ({ ...f, allow_custom_photo: !f.allow_custom_photo }))}
+                      style={{ width: 44, height: 24, borderRadius: 999, border: 'none', cursor: 'pointer', flexShrink: 0, position: 'relative', background: form.allow_custom_photo ? '#C8A23A' : '#D4C9BC', transition: 'background 0.2s' }}>
+                      <span style={{ position: 'absolute', top: 2, width: 20, height: 20, background: '#FFF', borderRadius: '50%', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', transition: 'left 0.2s', left: form.allow_custom_photo ? 22 : 2 }} />
+                    </button>
+                  </div>
+                  {form.allow_custom_photo && (
+                    <div style={{ marginTop: 8 }}>
+                      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', display: 'block', marginBottom: 4 }}>Label shown to customer</label>
+                      <input value={form.custom_photo_label} onChange={e => setForm(f => ({ ...f, custom_photo_label: e.target.value }))}
+                        placeholder="e.g. Upload your photo..."
+                        style={{ width: '100%', boxSizing: 'border-box', background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10, padding: '8px 12px', fontSize: 13, color: '#2C241B', outline: 'none', fontFamily: "'Inter',sans-serif" }}
+                        onFocus={e => e.target.style.borderColor = '#C8A23A'} onBlur={e => e.target.style.borderColor = '#E7DED1'} />
+                    </div>
+                  )}
+                </div>
+                {/* Image uploader */}
+                <ImageUploader
+                  images={form.images}
+                  onImagesChange={imgs => setForm(f => ({ ...f, images: imgs }))}
+                  uploading={uploading}
+                  setUploading={setUploading}
+                />
+                {errors.images && <p style={{ fontSize: 11, color: '#EF4444', margin: '-8px 0 0' }}>{errors.images}</p>}
+
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
                   <button onClick={() => !uploading && setModalOpen(false)}
-                    className="flex-1 py-2.5 border border-[#E7DED1] text-[#8F857A] rounded-lg text-sm hover:border-[#C8A23A]/50 transition-all">
+                    style={{ flex: 1, padding: '10px 0', border: '1px solid #E7DED1', borderRadius: 10, background: '#FFF', fontFamily: "'Inter',sans-serif", fontSize: 13, color: '#8F857A', cursor: 'pointer' }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = '#C8A23A'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = '#E7DED1'}>
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving || uploading}
-                    className="flex-1 py-2.5 bg-[#C8A23A] text-white font-semibold rounded-lg text-sm hover:bg-[#A88422] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
-                    {(saving || uploading) && <Loader2 size={14} className="animate-spin" />}
+                    style={{ flex: 1, padding: '10px 0', background: 'linear-gradient(135deg,#D4AF37,#B8860B)', border: 'none', borderRadius: 10, fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: '#FFF', cursor: 'pointer', opacity: (saving || uploading) ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    {(saving || uploading) && <Loader2 size={13} className="animate-spin" />}
                     {editProduct ? "Update Product" : "Add Product"}
                   </button>
                 </div>

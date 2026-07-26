@@ -501,8 +501,8 @@ export default function AdminOrders() {
     return id.includes(q) || String(o.id).toLowerCase().includes(q) || name.includes(q) || phone.includes(q)
   })
 
-  const isNS0 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("NS0")
-  const isNS1 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("NS1")
+  const isNS0 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("SS0")
+  const isNS1 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("SS1")
 
   const ns0Orders = localOrders.filter(isNS0)
   const ns1Orders = localOrders.filter(isNS1)
@@ -529,7 +529,7 @@ export default function AdminOrders() {
         <input
           value={search}
           onChange={e => { setSearch(e.target.value); setSearchPage(1) }}
-          placeholder="Search by Order ID (e.g. NS0-001)"
+          placeholder="Search by Order ID (e.g. SS0-001)"
           style={{
             width: '100%', boxSizing: 'border-box',
             background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10,
@@ -564,12 +564,12 @@ export default function AdminOrders() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1,1fr)', gap: 14 }}
             className="lg:grid-cols-2">
 
-            {/* NS0 — Home */}
+            {/* SS0 — Home */}
             <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
               {/* Column header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C8A23A', flexShrink: 0 }} />
-                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>NS0 — Home</h2>
+                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>SS0 — Home</h2>
                 <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(200,162,58,0.12)', color: '#A88422', padding: '1px 8px', borderRadius: 20 }}>{ns0Orders.length}</span>
                 <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto', fontWeight: 500 }}>
                   {ns0Orders.filter(o => o.payment_status === "pending_verification").length} pending
@@ -578,7 +578,7 @@ export default function AdminOrders() {
               {/* Orders */}
               <div style={{ padding: '10px 12px' }}>
                 {ns0Orders.length === 0
-                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS0 orders</p>
+                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No SS0 orders</p>
                   : paginate(ns0Orders, ns0Page, pageSize).map(order => (
                     <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                       onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
@@ -590,12 +590,12 @@ export default function AdminOrders() {
               </div>
             </div>
 
-            {/* NS1 — HYD */}
+            {/* SS1 — HYD */}
             <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
               {/* Column header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#A88422', flexShrink: 0 }} />
-                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>NS1 — HYD</h2>
+                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>SS1 — HYD</h2>
                 <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(168,132,34,0.1)', color: '#A88422', padding: '1px 8px', borderRadius: 20 }}>{ns1Orders.length}</span>
                 <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto', fontWeight: 500 }}>
                   {ns1Orders.filter(o => o.payment_status === "pending_verification").length} pending
@@ -604,7 +604,7 @@ export default function AdminOrders() {
               {/* Orders */}
               <div style={{ padding: '10px 12px' }}>
                 {ns1Orders.length === 0
-                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No NS1 orders</p>
+                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No SS1 orders</p>
                   : paginate(ns1Orders, ns1Page, pageSize).map(order => (
                     <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                       onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
