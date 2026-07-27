@@ -1,7 +1,19 @@
 import { supabase } from '../lib/supabase'
 import { mockProducts } from '../data/products'
 
-// Try Supabase first, fall back to mock data
+// Check if Supabase has any products at all
+async function hasSupabaseProducts() {
+  try {
+    const { count, error } = await supabase
+      .from('products')
+      .select('*', { count: 'exact', head: true })
+    return !error && count > 0
+  } catch {
+    return false
+  }
+}
+
+// Try Supabase first, fall back to mock data only if Supabase has no products
 export async function fetchProducts(filters = {}) {
   try {
     let query = supabase.from('products').select('*')
@@ -15,8 +27,24 @@ export async function fetchProducts(filters = {}) {
     else if (filters.category) query = query.order('price', { ascending: true }) // categories default to price asc
     else query = query.order('created_at', { ascending: false })
 
+    if (filters.limit) query = query.limit(filters.limit)
+
     const { data, error } = await query
-    if (error || !data?.length) return applyFilters(mockProducts, filters)
+
+    // Only fall back to mock if there's a connection error (not just empty results)
+    if (error) {
+      console.warn('Supabase error, using mock data:', error.message)
+      return applyFilters(mockProducts, filters)
+    }
+
+    // If Supabase returned data (even empty array for a filtered query), use it
+    // Only fall back to mock if Supabase has NO products at all
+    if (!data?.length) {
+      const hasReal = await hasSupabaseProducts()
+      if (!hasReal) return applyFilters(mockProducts, filters)
+      return [] // Supabase has products but none match the filter
+    }
+
     return data
   } catch {
     return applyFilters(mockProducts, filters)

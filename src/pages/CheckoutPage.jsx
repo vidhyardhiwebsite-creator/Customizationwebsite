@@ -197,9 +197,23 @@ export default function CheckoutPage() {
         const groupTotal = groupSubtotal + (isFirstGroup ? shipping : 0)
 
         // Generate sequential order ID: NS0-001, NS0-002 / NS1-001, NS1-002
-        const { data: seqData, error: seqErr } = await supabase.rpc("get_next_series_number", { p_series: series })
-        if (seqErr) throw seqErr
-        const displayOrderId = `${series}-${String(seqData).padStart(3, "0")}`
+        let seqNum = 1
+        try {
+          const { data: seqData, error: seqErr } = await supabase.rpc("get_next_series_number", { p_series: series })
+          if (!seqErr && seqData != null) {
+            seqNum = Number(seqData)
+          } else {
+            // Fallback: count existing orders for this series + 1
+            const { count } = await supabase
+              .from("orders")
+              .select("*", { count: "exact", head: true })
+              .eq("order_series", series)
+            seqNum = (count || 0) + 1
+          }
+        } catch {
+          seqNum = Date.now() % 1000 + 1
+        }
+        const displayOrderId = `${series}-${String(seqNum).padStart(3, "0")}`
 
         const { data: order, error: orderErr } = await supabase.from("orders").insert({
           user_id: user.id,

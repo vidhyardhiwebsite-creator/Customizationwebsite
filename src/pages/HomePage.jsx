@@ -4,6 +4,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion"
 import { Helmet } from "react-helmet-async"
 import { ArrowRight, Star, ShieldCheck, Truck, Award, Heart, ChevronLeft, ChevronRight, Upload, Eye, ShoppingBag, Package, CheckCircle, Sparkles, Zap, Gift, Pen, Image } from "lucide-react"
 import { fetchProducts } from "../services/productService"
+import { supabase } from "../lib/supabase"
 import { formatINR } from "../utils/format"
 import PromoBanners from "../components/PromoBanners"
 import ReviewsSection from "../components/ReviewsSection"
@@ -38,14 +39,14 @@ const STATS = [
 ]
 
 const CATEGORIES = [
-  { name:"Photo Frames",    img:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&q=80", to:"/products?category=Photo+Frames" },
-  { name:"Mugs & Bottles",  img:"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&q=80", to:"/products?category=Mugs" },
-  { name:"T-Shirts",        img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80", to:"/products?category=T-Shirts" },
-  { name:"Keychains",       img:"https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=80", to:"/products?category=Keychains" },
-  { name:"Wallets",         img:"https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80", to:"/products?category=Wallets" },
-  { name:"Mobile Pouches",  img:"https://images.unsplash.com/photo-1609942071884-qddbf0b9c69d?w=500&q=80", to:"/products?category=Mobile+Pouches" },
-  { name:"Corporate Gifts", img:"https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80", to:"/products?category=Corporate+Gifts" },
-  { name:"Gift Boxes",      img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", to:"/products?category=Gift+Boxes" },
+  { name:"Photo Frames",    dbCategory:"Photo Frames",    img:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&q=80", to:"/products?category=Photo+Frames" },
+  { name:"Mugs & Bottles",  dbCategory:"Mugs",            img:"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&q=80", to:"/products?category=Mugs" },
+  { name:"T-Shirts",        dbCategory:"T-Shirts",        img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80", to:"/products?category=T-Shirts" },
+  { name:"Keychains",       dbCategory:"Keychains",       img:"https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=80", to:"/products?category=Keychains" },
+  { name:"Wallets",         dbCategory:"Wallets",         img:"https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80", to:"/products?category=Wallets" },
+  { name:"Mobile Pouches",  dbCategory:"Mobile Pouches",  img:"https://images.unsplash.com/photo-1609942071884-qddbf0b9c69d?w=500&q=80", to:"/products?category=Mobile+Pouches" },
+  { name:"Corporate Gifts", dbCategory:"Corporate Gifts", img:"https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80", to:"/products?category=Corporate+Gifts" },
+  { name:"Gift Boxes",      dbCategory:"Gift Boxes",      img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", to:"/products?category=Gift+Boxes" },
 ]
 
 const HOW_STEPS = [
@@ -198,14 +199,37 @@ function FeatCard({ product }) {
 ══════════════════════════════════════════ */
 export default function HomePage() {
   const [products,  setProducts]  = useState([])
-  const [tIdx,      setTIdx]      = useState(0)
   const scrollRef                 = useRef(null)
   const [heroImg,   setHeroImg]   = useState(0)
   const [heroImgs,  setHeroImgs]  = useState(DEFAULT_HERO_IMGS)
+  const [categoryImgs, setCategoryImgs] = useState({}) // { categoryName: imageUrl }
 
   useEffect(()=>{ fetchProducts({limit:12}).then(r=>setProducts(r||[])).catch(()=>{}) },[])
-  useEffect(()=>{ const t=setInterval(()=>setTIdx(i=>(i+1)%TESTIMONIALS.length),5500); return()=>clearInterval(t) },[])
   useEffect(()=>{ const t=setInterval(()=>setHeroImg(i=>(i+1)%heroImgs.length),4000); return()=>clearInterval(t) },[heroImgs.length])
+
+  // Fetch latest product image per category from Supabase
+  useEffect(()=>{
+    async function loadCategoryImgs() {
+      try {
+        const categoryNames = CATEGORIES.map(c => c.dbCategory)
+        const { data, error } = await supabase
+          .from('products')
+          .select('category, images, created_at')
+          .in('category', categoryNames)
+          .order('created_at', { ascending: false })
+        if (error || !data?.length) return
+        // Pick the most recently added product image per category
+        const imgMap = {}
+        for (const row of data) {
+          if (!imgMap[row.category] && row.images?.[0]) {
+            imgMap[row.category] = row.images[0]
+          }
+        }
+        setCategoryImgs(imgMap)
+      } catch {}
+    }
+    loadCategoryImgs()
+  },[])
 
   // Load hero images from admin settings
   useEffect(()=>{
@@ -214,7 +238,7 @@ export default function HomePage() {
     }).catch(()=>{})
   },[])
 
-  const featured    = products.filter(p=>p.is_featured).slice(0,8)
+  const featured    = products.slice(0,8)
   const bestSellers = products.slice(0,10)
 
   return (
@@ -407,7 +431,7 @@ export default function HomePage() {
               <motion.div key={cat.name} variants={fadeUp}>
                 <Link to={cat.to} className="group block relative overflow-hidden rounded-[20px] bg-[#F3EEE6] shadow-warm-sm" style={{ aspectRatio:"4/3", display:"block" }}>
                   <div className="img-zoom absolute inset-0">
-                    <img src={cat.img} alt={cat.name} className="w-full h-full object-cover" onError={e=>e.target.src=FB}/>
+                    <img src={categoryImgs[cat.dbCategory] || cat.img} alt={cat.name} className="w-full h-full object-cover" onError={e=>e.target.src=cat.img}/>
                   </div>
                   {/* gradient only at bottom for text legibility */}
                   <div className="absolute inset-0 pointer-events-none" style={{ background:"linear-gradient(180deg, transparent 35%, rgba(15,11,8,0.55) 62%, rgba(10,7,4,0.88) 100%)" }}/>
@@ -564,107 +588,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════ 10. TESTIMONIALS ════════ */}
+      {/* ════════ 10. REAL CUSTOMER REVIEWS ════════ */}
       <section style={{ background:"#F3EEE6", borderTop:"1px solid #E7DED1" }} className="section-gap">
-        <div className="container-lux">
-          <Reveal style={{ textAlign:"center", marginBottom:"clamp(28px,4vw,48px)" }}>
-            <SectionHead
-              eyebrow="Customer Stories"
-              title={<>What Our <span className="text-gold-accent">Customers Say</span></>}
-              center
-            />
-          </Reveal>
-          <div style={{ maxWidth:760, margin:"0 auto" }}>
-            {/* Featured rotating card */}
-            <AnimatePresence mode="wait">
-              <motion.div key={tIdx} initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-20}} transition={{duration:0.4}}
-                className="card-lux" style={{ padding:"clamp(24px,5vw,56px)", position:"relative", overflow:"hidden", textAlign:"center", marginBottom:24 }}>
-                <div style={{ position:"absolute", top:0, left:"10%", right:"10%", height:2, background:"linear-gradient(90deg, transparent, #C8A23A, transparent)" }}/>
-                <div style={{ display:"flex", justifyContent:"center", gap:5, marginBottom:20 }}>
-                  {[...Array(5)].map((_,i)=><Star key={i} size={20} className="fill-[#C8A23A] text-[#C8A23A]"/>)}
-                </div>
-                <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1rem,2.5vw,1.3rem)", fontStyle:"italic", fontWeight:400, lineHeight:1.8, color:"#2C241B", textAlign:"center", maxWidth:540, margin:"0 auto clamp(24px,4vw,36px)" }}>
-                  "{TESTIMONIALS[tIdx].review}"
-                </p>
-                <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:14, flexWrap:"wrap" }}>
-                  <img src={TESTIMONIALS[tIdx].avatar} alt={TESTIMONIALS[tIdx].name} style={{ width:52, height:52, borderRadius:"50%", objectFit:"cover", border:"2px solid #E7DED1", flexShrink:0, boxShadow:"0 2px 12px rgba(200,162,58,0.2)" }}/>
-                  <div style={{ textAlign:"left" }}>
-                    <p style={{ fontFamily:"'Inter',sans-serif", fontWeight:600, fontSize:15, color:"#2C241B", lineHeight:1.3, margin:0 }}>{TESTIMONIALS[tIdx].name}</p>
-                    <p style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#8F857A", margin:"3px 0 0", lineHeight:1 }}>{TESTIMONIALS[tIdx].city}&nbsp;·&nbsp;{TESTIMONIALS[tIdx].product}</p>
-                  </div>
-                  <span className="badge badge-success"><CheckCircle size={9}/>&nbsp;Verified</span>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-            {/* Dots */}
-            <div style={{ display:"flex", justifyContent:"center", gap:8, marginBottom:32 }}>
-              {TESTIMONIALS.map((_,i)=>(
-                <button key={i} onClick={()=>setTIdx(i)} style={{ width:i===tIdx?24:8, height:8, borderRadius:999, border:"none", cursor:"pointer", padding:0, background:i===tIdx?"#C8A23A":"#E7DED1", transition:"all 0.3s ease" }}/>
-              ))}
-            </div>
-            {/* Mini cards — responsive 1col mobile, 3col desktop */}
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(1,1fr)", gap:12 }} className="sm:grid-cols-3 sm:gap-4">
-              {TESTIMONIALS.slice(0,3).map((t,i)=>(
-                <Reveal key={t.name} delay={i*0.07}>
-                  <button onClick={()=>setTIdx(i)} style={{ width:"100%", textAlign:"left", padding:"clamp(14px,2.5vw,20px)", background:"#FAF8F3", border:`1px solid ${tIdx===i?"rgba(200,162,58,0.45)":"#E7DED1"}`, borderRadius:20, cursor:"pointer", transition:"all 0.3s ease", display:"flex", flexDirection:"column", gap:10, boxShadow:tIdx===i?"0 4px 20px rgba(200,162,58,0.12)":"0 2px 10px rgba(44,36,27,0.05)" }}
-                    onMouseEnter={e=>{ e.currentTarget.style.borderColor="rgba(200,162,58,0.45)"; e.currentTarget.style.transform="translateY(-3px)" }}
-                    onMouseLeave={e=>{ e.currentTarget.style.borderColor=tIdx===i?"rgba(200,162,58,0.45)":"#E7DED1"; e.currentTarget.style.transform="none" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                      <img src={t.avatar} alt={t.name} style={{ width:38, height:38, borderRadius:"50%", objectFit:"cover", border:"1px solid #E7DED1", flexShrink:0 }}/>
-                      <div>
-                        <p style={{ fontFamily:"'Inter',sans-serif", fontWeight:600, fontSize:13, color:"#2C241B", margin:0, lineHeight:1.3 }}>{t.name}</p>
-                        <p style={{ fontFamily:"'Inter',sans-serif", fontSize:11, color:"#8F857A", margin:"2px 0 0", lineHeight:1 }}>{t.city}</p>
-                      </div>
-                    </div>
-                    <div style={{ display:"flex", gap:2 }}>
-                      {[...Array(5)].map((_,j)=><Star key={j} size={11} className="fill-[#C8A23A] text-[#C8A23A]"/>)}
-                    </div>
-                    <p style={{ fontFamily:"'Inter',sans-serif", fontSize:12, color:"#6F655A", lineHeight:1.65, fontStyle:"italic", margin:0, display:"-webkit-box", WebkitLineClamp:3, WebkitBoxOrient:"vertical", overflow:"hidden" }}>"{t.review}"</p>
-                  </button>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ 11. REVIEWS SECTION ════════ */}
-      <section style={{ background:"#F8F5F0" }} className="section-gap">
         <ReviewsSection />
-      </section>
-
-      {/* ════════ 12. INSTAGRAM GALLERY ════════ */}
-      <section style={{ background:"#F3EEE6", borderTop:"1px solid #E7DED1" }} className="section-gap">
-        <div className="container-lux">
-          <Reveal style={{ textAlign:"center", marginBottom:"clamp(28px,4vw,48px)" }}>
-            <SectionHead
-              eyebrow="@vidhyrathi"
-              title={<>Follow Our <span className="text-gold-accent">Story</span></>}
-              subtitle="Tag us with #vidhyrathi to be featured in our community gallery."
-              center
-            />
-          </Reveal>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:8 }} className="sm:grid-cols-3 md:grid-cols-4 sm:gap-3 md:gap-4">
-            {GALLERY.map((img,i)=>(
-              <Reveal key={i} delay={i*0.04}>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                  className={`group relative block overflow-hidden rounded-[18px] bg-[#F3EEE6] shadow-warm-sm${i===0?" sm:col-span-2 sm:row-span-2":""}`}
-                  style={{ aspectRatio:"1", display:"block" }}>
-                  <div className="img-zoom absolute inset-0">
-                    <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" onError={e=>e.target.src=FB}/>
-                  </div>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[18px] flex items-center justify-center" style={{ background:"rgba(200,162,58,0.15)" }}>
-                    <div style={{ width:44, height:44, borderRadius:"50%", background:"rgba(255,255,255,0.9)", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 16px rgba(44,36,27,0.16)" }}>
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ color:"#C8A23A" }}>
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </a>
-              </Reveal>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* ════════ 13. CORPORATE GIFTS ════════ */}

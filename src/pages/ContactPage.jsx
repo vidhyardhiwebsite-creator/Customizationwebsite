@@ -3,11 +3,11 @@ import { Mail, Phone, Clock, MapPin, Send } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 
-const WHATSAPP = "919876543210"
+const WHATSAPP = "919393933533"
 
 const CONTACT_INFO = [
   { icon: <Mail size={20} />,    label: "Email",            value: "hello@vidhyrathi.com",  href: "mailto:hello@vidhyrathi.com" },
-  { icon: <Phone size={20} />,   label: "Phone / WhatsApp", value: "+91 98765 43210",        href: "tel:+919876543210" },
+  { icon: <Phone size={20} />,   label: "Phone / WhatsApp", value: "+91 93939 33533",        href: "tel:+919393933533" },
   { icon: <Clock size={20} />,   label: "Working Hours",    value: "Mon–Sat, 10am–7pm IST",  href: null },
   { icon: <MapPin size={20} />,  label: "Location",         value: "India · Shipped Nationwide", href: null },
 ]
@@ -169,7 +169,7 @@ export default function ContactPage() {
                     onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 3px 12px rgba(37,211,102,0.3)" }}>
                     <WA_ICON /> WhatsApp
                   </a>
-                  <a href="https://www.instagram.com/vidhyrathi" target="_blank" rel="noopener noreferrer"
+                  <a href="https://www.instagram.com/sivasri__fashion_?igsh=MTVjd2NmcXdzdnhpdA==" target="_blank" rel="noopener noreferrer"
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 8,
                       padding: "10px 20px", borderRadius: 999,

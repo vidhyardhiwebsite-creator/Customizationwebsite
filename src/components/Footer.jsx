@@ -48,32 +48,31 @@ export default function Footer() {
       {/* Newsletter stripe */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="container-lux section-gap-sm">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div>
+          <div style={{ display:"flex", flexDirection:"column", gap:24 }} className="lg:flex-row lg:items-center lg:justify-between">
+            <div style={{ flex:1 }}>
               <span className="eyebrow" style={{ color:"#C8A23A" }}>Stay Connected</span>
-              <h3 className="font-playfair font-bold text-white text-[1.6rem] leading-tight">
+              <h3 className="font-playfair font-bold text-white" style={{ fontSize:"clamp(1.3rem,3vw,1.6rem)", lineHeight:1.25, margin:"4px 0 0" }}>
                 Join Our Gifting Community
               </h3>
-              <p className="font-inter text-[14px] mt-2" style={{ color:"rgba(255,255,255,0.5)" }}>
+              <p className="font-inter" style={{ fontSize:14, marginTop:8, color:"rgba(255,255,255,0.5)" }}>
                 Exclusive offers, new arrivals & personalization inspiration.
               </p>
             </div>
-            <div className="w-full lg:w-auto lg:min-w-[420px]">
+            <div style={{ width:"100%", maxWidth:480 }}>
               {done ? (
                 <div className="flex items-center gap-2 px-6 py-3 rounded-2xl" style={{ background:"rgba(200,162,58,0.15)", border:"1px solid rgba(200,162,58,0.3)", color:"#C8A23A" }}>
-                  <span className="font-inter font-semibold text-[14px]">? Welcome to the Vidhyrathi family!</span>
+                  <span className="font-inter font-semibold text-[14px]">Welcome to the Vidhyrathi family!</span>
                 </div>
               ) : (
-                <form onSubmit={handleSub} className="flex gap-3">
-                  <div className="flex-1 relative">
-                    <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color:"rgba(255,255,255,0.3)" }}/>
+                <form onSubmit={handleSub} style={{ display:"flex", gap:10 }}>
+                  <div style={{ flex:1, position:"relative", minWidth:0 }}>
+                    <Mail size={15} style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:"rgba(255,255,255,0.3)", pointerEvents:"none" }}/>
                     <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" required
-                      className="w-full pl-11 pr-4 py-3 rounded-full font-inter text-[14px] focus:outline-none transition-all"
-                      style={{ background:"rgba(255,255,255,0.07)", border:"1px solid rgba(255,255,255,0.12)", color:"#FFFFFF" }}
+                      style={{ width:"100%", boxSizing:"border-box", paddingLeft:40, paddingRight:14, paddingTop:12, paddingBottom:12, borderRadius:999, fontFamily:"'Inter',sans-serif", fontSize:14, background:"rgba(255,255,255,0.07)", border:"1px solid rgba(255,255,255,0.12)", color:"#FFFFFF", outline:"none" }}
                       onFocus={e => e.target.style.borderColor = "rgba(200,162,58,0.6)"}
                       onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}/>
                   </div>
-                  <button type="submit" className="btn-primary flex-shrink-0" style={{ height:48 }}>Subscribe</button>
+                  <button type="submit" className="btn-primary flex-shrink-0" style={{ height:48, padding:"0 22px", whiteSpace:"nowrap" }}>Subscribe</button>
                 </form>
               )}
             </div>
@@ -107,7 +106,7 @@ export default function Footer() {
               India's premium personalized gifting brand. Every gift we craft carries a story, a memory, and a lifetime of love.
             </p>
             <div className="space-y-3 mb-7">
-              {[{ icon:<Phone size={13}/>, text:"+91 98765 43210", href:"tel:+919876543210" },
+              {[{ icon:<Phone size={13}/>, text:"+91 93939 33533", href:"tel:+919393933533" },
                 { icon:<Mail size={13}/>, text:"hello@vidhyrathi.com", href:"mailto:hello@vidhyrathi.com" },
                 { icon:<MapPin size={13}/>, text:"India � Shipped Nationwide" }
               ].map((c,i) => (
@@ -122,7 +121,7 @@ export default function Footer() {
               ))}
             </div>
             <div className="flex gap-2">
-              {[{ S:SocialSVG.Instagram, href:"https://instagram.com", label:"Instagram" },
+              {[{ S:SocialSVG.Instagram, href:"https://www.instagram.com/sivasri__fashion_?igsh=MTVjd2NmcXdzdnhpdA==", label:"Instagram" },
                 { S:SocialSVG.Facebook,  href:"https://facebook.com",  label:"Facebook"  },
                 { S:SocialSVG.YouTube,   href:"https://youtube.com",   label:"YouTube"   },
               ].map(({ S, href, label }) => (

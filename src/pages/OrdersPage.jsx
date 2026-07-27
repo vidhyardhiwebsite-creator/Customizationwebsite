@@ -128,16 +128,17 @@ export default function OrdersPage() {
   }, [user])
 
   const getStatusBadge = (order) => {
-    if (order.payment_status === "pending") return { label: "Pending Payment", color: "bg-yellow-500 text-white", icon: Clock }
-    if (order.payment_status === "failed") return { label: "Payment Failed", color: "bg-red-500 text-white", icon: XCircle }
-    if (order.order_status === "cancelled") return { label: "Cancelled", color: "bg-red-500 text-white", icon: XCircle }
+    if (order.payment_status === "pending") return { label: "Pending", color: "bg-yellow-100 text-yellow-800", icon: Clock }
+    if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-100 text-red-700", icon: XCircle }
+    if (order.order_status === "cancelled") return { label: "Cancelled", color: "bg-red-100 text-red-700", icon: XCircle }
     const status = order.order_status || "confirmed"
     const map = {
-      confirmed: { label: "Order Confirmed", color: "bg-blue-500 text-white", icon: CheckCircle },
-      shipping: { label: "Shipped", color: "bg-orange-500 text-white", icon: Truck },
-      delivered: { label: "Delivered", color: "bg-green-500 text-white", icon: Package },
+      confirmed:  { label: "Confirmed",  color: "bg-blue-100 text-blue-700",   icon: CheckCircle },
+      shipping:   { label: "Shipped",    color: "bg-orange-100 text-orange-700", icon: Truck },
+      delivered:  { label: "Delivered",  color: "bg-green-100 text-green-700",  icon: Package },
+      pending:    { label: "Pending",    color: "bg-yellow-100 text-yellow-800", icon: Clock },
     }
-    return map[status] || { label: status, color: "bg-gray-500 text-white", icon: Package }
+    return map[status] || { label: status, color: "bg-gray-100 text-gray-600", icon: Package }
   }
 
   if (loading) {
@@ -200,7 +201,7 @@ export default function OrdersPage() {
             )}
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filteredOrders.length === 0 && search && (
               <div className="text-center py-12">
                 <p className="body-md mb-3">No orders found for "{search}"</p>
@@ -214,27 +215,32 @@ export default function OrdersPage() {
             return (
               <motion.div key={order.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 className="card-lux overflow-hidden">
-                <div className="flex items-center justify-between p-4 sm:p-5 cursor-pointer transition-colors rounded-[20px]"
-                  style={{ background: "transparent" }}
+                <div
+                  style={{ background: "transparent", cursor: "pointer", padding: "14px 16px", borderRadius: 20 }}
                   onMouseEnter={e => e.currentTarget.style.background = "#FAF8F3"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                   onClick={() => setExpanded(expanded === order.id ? null : order.id)}>
-                  <div>
-                    <p className="font-inter font-semibold text-[14px] text-[#2C241B]">
-                      {order.display_order_id || `Order #${order.id?.slice(-8)?.toUpperCase()}`}
+                  {/* Top row: Order ID + Amount */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 4 }}>
+                    <p className="font-inter font-semibold text-[#2C241B]" style={{ fontSize: 14, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, minWidth: 0 }}>
+                      {order.display_order_id && !order.display_order_id.includes("null")
+                        ? order.display_order_id
+                        : `Order #${order.id?.slice(-6)?.toUpperCase()}`}
                     </p>
-                    <p className="font-inter text-[12px] text-[#8F857A] mt-0.5">{formatDate(order.created_at)}</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <p className="font-inter font-bold text-[15px] text-[#2C241B]">{formatINR(order.total_amount)}</p>
-                      <span className={`text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1 mt-1 font-semibold ${statusInfo.color}`}>
-                        <StatusIcon size={10} /> {statusInfo.label}
-                      </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                      <p className="font-inter font-bold text-[#2C241B]" style={{ fontSize: 15, margin: 0, whiteSpace: "nowrap" }}>{formatINR(order.total_amount)}</p>
+                      {expanded === order.id
+                        ? <ChevronUp size={15} style={{ color: "#8F857A", flexShrink: 0 }} />
+                        : <ChevronDown size={15} style={{ color: "#8F857A", flexShrink: 0 }} />}
                     </div>
-                    {expanded === order.id
-                      ? <ChevronUp size={16} style={{ color: "#8F857A", flexShrink: 0 }} />
-                      : <ChevronDown size={16} style={{ color: "#8F857A", flexShrink: 0 }} />}
+                  </div>
+                  {/* Bottom row: Date + Status badge */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                    <p className="font-inter text-[#8F857A]" style={{ fontSize: 12, margin: 0 }}>{formatDate(order.created_at)}</p>
+                    <span className={`font-inter font-semibold flex items-center gap-1 flex-shrink-0 ${statusInfo.color}`}
+                      style={{ fontSize: 11, padding: "3px 10px", borderRadius: 999, whiteSpace: "nowrap" }}>
+                      <StatusIcon size={10} /> {statusInfo.label}
+                    </span>
                   </div>
                 </div>
 
@@ -281,45 +287,54 @@ export default function OrdersPage() {
                       )}
 
                       {/* Order items */}
-                      <div className="space-y-3">
+                      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                         {order.order_items?.map(item => (
                           <Link
                             key={item.id}
                             to={`/products/${item.product_id || item.products?.id}`}
-                            className="flex flex-col hover:bg-[#FAF8F5] rounded-lg p-1 -mx-1 transition-colors group"
+                            style={{ display: "block", textDecoration: "none", borderRadius: 12, padding: "10px", background: "#FFFFFF", border: "1px solid #E7DED1" }}
                           >
-                            <div className="flex items-center gap-3">
+                            {/* Product row */}
+                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                               {item.products?.images?.[0] && (
                                 isVideoUrl(item.products.images[0]) ? (
                                   <video
                                     src={item.products.images[0]}
                                     muted playsInline loop autoPlay
-                                    className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-[#E8E0D5] group-hover:border-[#C9956C] transition-colors bg-black"
+                                    style={{ width: 52, height: 52, borderRadius: 8, objectFit: "cover", flexShrink: 0, border: "1px solid #E7DED1", background: "#000" }}
                                   />
                                 ) : (
                                   <img src={item.products.images[0]} alt={item.products?.name}
-                                    className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-[#E8E0D5] group-hover:border-[#C9956C] transition-colors"
+                                    style={{ width: 52, height: 52, borderRadius: 8, objectFit: "cover", flexShrink: 0, border: "1px solid #E7DED1" }}
                                     onError={e => { e.target.src = "https://images.unsplash.com/photo-1515562153-702640cf-b037-4b1e-83b0-418397cf1be3?w=400&q=80" }} />
                                 )
                               )}
-                              <div className="flex-1">
-                                <p className="text-[#1A1A2E] text-sm group-hover:text-[#1B2B5E] transition-colors">{item.products?.name || "Product"}</p>
-                                <p className="text-[#8A8AAA] text-xs">Qty: {item.quantity} × {formatINR(item.price)}</p>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#2C241B", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                  {item.products?.name || "Product"}
+                                </p>
+                                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#8F857A", margin: "3px 0 0" }}>
+                                  Qty: {item.quantity} × {formatINR(item.price)}
+                                </p>
                               </div>
-                              <p className="text-[#1B2B5E] text-sm font-medium">{formatINR(item.quantity * item.price)}</p>
+                              <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: "#2C241B", flexShrink: 0, margin: 0 }}>
+                                {formatINR(item.quantity * item.price)}
+                              </p>
                             </div>
-                            {/* Show customization if any */}
+                            {/* Customization */}
                             {(item.custom_name || item.custom_photo_url) && (
-                              <div className="ml-15 mt-1 pl-14 border-l-2 border-[#4DB6AC]/40 space-y-1">
+                              <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #E7DED1", display: "flex", flexDirection: "column", gap: 6 }}>
                                 {item.custom_name && (
-                                  <p className="text-xs text-[#4A4A6A]">
-                                    <span className="text-[#4DB6AC] font-medium">✏ Text:</span> {item.custom_name}
-                                  </p>
+                                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "#C8A23A", whiteSpace: "nowrap" }}>✏ Text:</span>
+                                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#2C241B" }}>{item.custom_name}</span>
+                                  </div>
                                 )}
                                 {item.custom_photo_url && (
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs text-[#4DB6AC] font-medium">📷 Photo:</span>
-                                    <img src={item.custom_photo_url} alt="Custom" className="h-10 w-10 object-cover rounded border border-[#4DB6AC]/40" />
+                                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "#C8A23A", whiteSpace: "nowrap" }}>📷 Photo:</span>
+                                    <img src={item.custom_photo_url} alt="Custom"
+                                      style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 6, border: "1px solid #E7DED1" }} />
                                   </div>
                                 )}
                               </div>
@@ -329,13 +344,13 @@ export default function OrdersPage() {
                       </div>
 
                       {addr.full_name && (
-                          <div className="card-warm p-3 text-xs rounded-xl">
-                            <p className="font-inter font-semibold text-[12px] text-[#2C241B] mb-1">Delivery Address</p>
-                            <p className="font-inter text-[#2C241B]">{addr.full_name}, {addr.phone}</p>
-                            <p className="font-inter text-[#6F655A]">{addr.address1}{addr.address2 ? `, ${addr.address2}` : ""}</p>
-                            <p className="font-inter text-[#6F655A]">{addr.city}, {addr.state} – {addr.pincode}</p>
-                          </div>
-                        )}
+                        <div style={{ background: "#FFFFFF", border: "1px solid #E7DED1", borderRadius: 12, padding: "12px 14px" }}>
+                          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 12, color: "#2C241B", margin: "0 0 6px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Delivery Address</p>
+                          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#2C241B", margin: "0 0 2px" }}>{addr.full_name}, {addr.phone}</p>
+                          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#6F655A", margin: "0 0 2px" }}>{addr.address1}{addr.address2 ? `, ${addr.address2}` : ""}</p>
+                          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#6F655A", margin: 0 }}>{addr.city}, {addr.state} – {addr.pincode}</p>
+                        </div>
+                      )}
                       </div>
                     </motion.div>
                   )}
