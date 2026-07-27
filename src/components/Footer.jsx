@@ -106,7 +106,7 @@ export default function Footer() {
               India's premium personalized gifting brand. Every gift we craft carries a story, a memory, and a lifetime of love.
             </p>
             <div className="space-y-3 mb-7">
-              {[{ icon:<Phone size={13}/>, text:"+91 93939 33533", href:"tel:+919393933533" },
+              {[{ icon:<Phone size={13}/>, text:"+91 98487 60606", href:"tel:+919848760606" },
                 { icon:<Mail size={13}/>, text:"hello@vidhyrathi.com", href:"mailto:hello@vidhyrathi.com" },
                 { icon:<MapPin size={13}/>, text:"India � Shipped Nationwide" }
               ].map((c,i) => (

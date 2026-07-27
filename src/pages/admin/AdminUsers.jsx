@@ -4,7 +4,7 @@ import { useAdminStore } from "../../store/adminStore"
 import { formatINR } from "../../utils/format"
 import { supabase } from "../../lib/supabase"
 
-const ADMIN_WHATSAPP = "911234567870"
+const ADMIN_WHATSAPP = "919848760606"
 
 const WA_ICON = () => (
   <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">

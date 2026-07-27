@@ -3,11 +3,12 @@ import { Mail, Phone, Clock, MapPin, Send } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 
-const WHATSAPP = "919393933533"
+const WHATSAPP_LINK = "https://wa.me/c/919848760606"
+const WHATSAPP_NUMBER = "919848760606"
 
 const CONTACT_INFO = [
   { icon: <Mail size={20} />,    label: "Email",            value: "hello@vidhyrathi.com",  href: "mailto:hello@vidhyrathi.com" },
-  { icon: <Phone size={20} />,   label: "Phone / WhatsApp", value: "+91 93939 33533",        href: "tel:+919393933533" },
+  { icon: <Phone size={20} />,   label: "Phone / WhatsApp", value: "+91 98487 60606",        href: "tel:+919848760606" },
   { icon: <Clock size={20} />,   label: "Working Hours",    value: "Mon–Sat, 10am–7pm IST",  href: null },
   { icon: <MapPin size={20} />,  label: "Location",         value: "India · Shipped Nationwide", href: null },
 ]
@@ -44,7 +45,7 @@ export default function ContactPage() {
     e.preventDefault()
     if (!validate()) return
     const text = `Hi Vidhyrathi! 👋\n\nName: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`, "_blank")
+    window.open(`https://wa.me/c/919848760606?text=${encodeURIComponent(text)}`, "_blank")
     setSent(true)
     setForm({ name: "", email: "", message: "" })
     setTimeout(() => setSent(false), 5000)
@@ -156,7 +157,7 @@ export default function ContactPage() {
                   Connect With Us
                 </p>
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                  <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer"
+                  <a href={"https://wa.me/c/919848760606"} target="_blank" rel="noopener noreferrer"
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 8,
                       padding: "10px 20px", borderRadius: 999,
