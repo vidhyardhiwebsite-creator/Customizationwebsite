@@ -288,7 +288,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Main layout */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20 }} className="lg:grid-cols-[1fr_380px]">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20, alignItems: "start" }} className="lg:grid-cols-[1fr_360px]">
           {/* Left Column */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
@@ -348,17 +348,17 @@ export default function CheckoutPage() {
                   </h2>
 
                   {/* QR + Details Row */}
-                  <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 20, alignItems: "start", marginBottom: 20 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "flex-start", marginBottom: 20 }}>
                     {/* QR Code */}
-                    <div style={{ textAlign: "center" }}>
-                      <div style={{ width: 160, height: 160, background: "#FFFFFF", borderRadius: 14, border: "2px solid #E7DED1", padding: 4, overflow: "hidden" }}>
+                    <div style={{ textAlign: "center", flexShrink: 0, width: "100%", maxWidth: 160 }}>
+                      <div style={{ width: "100%", maxWidth: 160, aspectRatio: "1", background: "#FFFFFF", borderRadius: 14, border: "2px solid #E7DED1", padding: 4, overflow: "hidden", margin: "0 auto" }}>
                         <img src={getQRUrl(UPI_ID, grandTotal)} alt="UPI QR Code" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
                       </div>
                       <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#8F857A", marginTop: 6 }}>Scan to pay</p>
                     </div>
 
                     {/* Details */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1, minWidth: "min(100%, 220px)" }}>
                       {/* Amount */}
                       <div style={{ background: "linear-gradient(135deg,rgba(200,162,58,0.1),rgba(200,162,58,0.05))", border: "1.5px solid rgba(200,162,58,0.3)", borderRadius: 14, padding: "14px 16px" }}>
                         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, color: "#A88422", textTransform: "uppercase", letterSpacing: "0.1em", margin: "0 0 4px" }}>Amount to Pay</p>
@@ -447,7 +447,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right Column: Order Summary */}
-          <div style={{ background: "#FFFFFF", border: "1px solid #E7DED1", borderRadius: 20, padding: "clamp(16px,3vw,24px)", height: "fit-content", position: "sticky", top: 24 }}>
+          <div style={{ background: "#FFFFFF", border: "1px solid #E7DED1", borderRadius: 20, padding: "clamp(16px,3vw,24px)", height: "fit-content" }} className="lg:sticky lg:top-6">
             <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#2C241B", margin: "0 0 16px" }}>Order Summary</h2>
 
             {/* Items */}
