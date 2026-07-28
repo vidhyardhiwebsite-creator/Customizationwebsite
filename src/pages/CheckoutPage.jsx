@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+﻿import { useState, useEffect, useRef } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
 import { MapPin, Plus, Check, CheckCircle, Upload, Copy, Smartphone, AlertCircle, Loader2, Zap } from "lucide-react"
@@ -51,7 +51,7 @@ function NewAddressForm({ onSave, onCancel, saving }) {
           <button key={l} type="button" onClick={() => setForm(f => ({ ...f, label: l }))}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-all`}
             style={form.label === l
-              ? { background: "linear-gradient(135deg,#D4AF37,#B8860B)", color: "#fff", border: "none" }
+              — { background: "linear-gradient(135deg,#D4AF37,#B8860B)", color: "#fff", border: "none" }
               : { background: "#FFFFFF", color: "#6F655A", border: "1px solid #E7DED1" }}>{l}</button>
         ))}
       </div>
@@ -95,7 +95,7 @@ export default function CheckoutPage() {
 
   // Normalise items into the same shape as cart items so the rest of the page works identically
   const items = isBuyNow
-    ? [{ id: `buynow_${buyNowData.product.id}`, product_id: buyNowData.product.id, quantity: buyNowData.quantity, products: buyNowData.product, custom_name: buyNowData.custom_name || null, custom_photo_url: buyNowData.custom_photo_url || null }]
+    — [{ id: `buynow_${buyNowData.product.id}`, product_id: buyNowData.product.id, quantity: buyNowData.quantity, products: buyNowData.product, custom_name: buyNowData.custom_name || null, custom_photo_url: buyNowData.custom_photo_url || null }]
     : cartItems
 
   const total = items.reduce((s, i) => s + (i.products?.price || 0) * i.quantity, 0)
@@ -106,7 +106,7 @@ export default function CheckoutPage() {
     if (!addr) return 100
     const state = (addr.state || "").toLowerCase().trim()
     const localStates = ["andhra pradesh", "telangana", "ap", "ts"]
-    return localStates.some(s => state.includes(s)) ? 80 : 100
+    return localStates.some(s => state.includes(s)) — 80 : 100
   }
 
   const [addresses, setAddresses] = useState([])
@@ -131,7 +131,7 @@ export default function CheckoutPage() {
       setSelectedId(prev => {
         if (prev && addrs.find(a => a.id === prev)) return prev
         const def = addrs.find(a => a.is_default) || addrs[0]
-        return def ? def.id : null
+        return def — def.id : null
       })
       if (addrs.length === 0) setShowNewForm(true)
       setLoading(false)
@@ -142,7 +142,7 @@ export default function CheckoutPage() {
     setSavingAddr(true)
     try {
       const newAddr = await saveAddress(user.id, form)
-      const updated = form.is_default ? [newAddr, ...addresses.map(a => ({ ...a, is_default: false }))] : [...addresses, newAddr]
+      const updated = form.is_default — [newAddr, ...addresses.map(a => ({ ...a, is_default: false }))] : [...addresses, newAddr]
       setAddresses(updated)
       setSelectedId(newAddr.id)
       setShowNewForm(false)
@@ -194,7 +194,7 @@ export default function CheckoutPage() {
         const groupSubtotal = groupItems.reduce((s, i) => s + (i.products?.price || 0) * i.quantity, 0)
         // Distribute shipping proportionally � or add full shipping to first group only
         const isFirstGroup = createdOrderIds.length === 0
-        const groupTotal = groupSubtotal + (isFirstGroup ? shipping : 0)
+        const groupTotal = groupSubtotal + (isFirstGroup — shipping : 0)
 
         // Generate sequential order ID: NS0-001, NS0-002 / NS1-001, NS1-002
         let seqNum = 1
@@ -274,14 +274,14 @@ export default function CheckoutPage() {
     <div style={{ background: "#F8F5F0", minHeight: "100vh" }}>
       <div className="container-lux" style={{ paddingTop: 40, paddingBottom: 80 }}>
         <div className="mb-8">
-          <span className="eyebrow">{isBuyNow ? "Quick Purchase" : "Checkout"}</span>
-          <h1 className="heading-xl">{isBuyNow ? "Buy <span class='text-gold-accent'>Now</span>" : <>Complete Your <span className="text-gold-accent">Order</span></>}</h1>
+          <span className="eyebrow">{isBuyNow — "Quick Purchase" : "Checkout"}</span>
+          <h1 className="heading-xl">{isBuyNow — <>Buy <span className="text-gold-accent">Now</span></> : <>Complete Your <span className="text-gold-accent">Order</span></>}</h1>
         </div>
       {isBuyNow && (
           <div className="mb-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
             style={{ background: "rgba(200,162,58,0.08)", border: "1px solid rgba(200,162,58,0.25)", color: "#A88422" }}>
             <Zap size={14} className="flex-shrink-0" />
-            Buying <span className="font-semibold mx-1">{buyNowData.product.name}</span> directly � your cart is unchanged.
+            Buying <span className="font-semibold mx-1">{buyNowData.product.name}</span> directly — your cart is unchanged.
           </div>
         )}
 
@@ -289,14 +289,14 @@ export default function CheckoutPage() {
         <div className="flex items-center gap-3 mb-8">
           {["address","payment"].map((s, i) => (
             <div key={s} className="flex items-center gap-2">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === s || (s === "address" && step === "payment") ? "text-white" : "text-[#8F857A]"}`}
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === s || (s === "address" && step === "payment") — "text-white" : "text-[#8F857A]"}`}
                 style={step === s || (s === "address" && step === "payment")
-                  ? { background: "linear-gradient(135deg,#D4AF37,#B8860B)" }
+                  — { background: "linear-gradient(135deg,#D4AF37,#B8860B)" }
                   : { background: "#F3EEE6", border: "1px solid #E7DED1" }}>
                 {i + 1}
               </div>
-              <span className={`text-sm capitalize font-inter ${step === s ? "text-[#2C241B] font-semibold" : "text-[#8F857A]"}`}>
-                {s === "address" ? "Delivery Address" : "Payment"}
+              <span className={`text-sm capitalize font-inter ${step === s — "text-[#2C241B] font-semibold" : "text-[#8F857A]"}`}>
+                {s === "address" — "Delivery Address" : "Payment"}
               </span>
               {i === 0 && <div className="w-8 h-px mx-1" style={{ background: "#E7DED1" }} />}
             </div>
@@ -313,15 +313,15 @@ export default function CheckoutPage() {
                   </h2>
                   {!showNewForm && <button onClick={() => setShowNewForm(true)} className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#C8A23A" }}><Plus size={13} /> Add New</button>}
                 </div>
-                {loading ? <div className="h-20 rounded-xl animate-pulse" style={{ background: "#F3EEE6" }} /> : (
+                {loading — <div className="h-20 rounded-xl animate-pulse" style={{ background: "#F3EEE6" }} /> : (
                   <div className="space-y-3">
                     {showNewForm && <NewAddressForm onSave={handleSaveNew} onCancel={() => addresses.length > 0 && setShowNewForm(false)} saving={savingAddr} />}
                     {addresses.map(addr => (
                       <div key={addr.id} onClick={() => { setSelectedId(addr.id); setShowNewForm(false) }}
                         className="rounded-xl p-4 cursor-pointer transition-all"
                         style={{
-                          border: selectedId === addr.id ? "1.5px solid #C8A23A" : "1px solid #E7DED1",
-                          background: selectedId === addr.id ? "rgba(200,162,58,0.05)" : "#FAF8F3",
+                          border: selectedId === addr.id — "1.5px solid #C8A23A" : "1px solid #E7DED1",
+                          background: selectedId === addr.id — "rgba(200,162,58,0.05)" : "#FAF8F3",
                         }}>
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -356,7 +356,7 @@ export default function CheckoutPage() {
                     <Smartphone size={16} style={{ color: "#C8A23A" }} /> Pay via UPI
                   </h2>
 
-                {/* QR Code � flip card, hidden by default, tap to reveal */}
+                {/* QR Code — flip card, hidden by default, tap to reveal */}
                 <div className="flex flex-col sm:flex-row gap-6 items-center mb-5">
                   {(() => {
                     const selectedAddr = addresses.find(a => a.id === selectedId)
@@ -372,7 +372,7 @@ export default function CheckoutPage() {
                           width: "176px", height: "176px",
                           transition: "transform 0.6s",
                           transformStyle: "preserve-3d",
-                          transform: qrRevealed ? "rotateY(180deg)" : "rotateY(0deg)",
+                          transform: qrRevealed — "rotateY(180deg)" : "rotateY(0deg)",
                           position: "relative"
                         }}>
                           {/* Front � blurred placeholder */}
@@ -391,7 +391,7 @@ export default function CheckoutPage() {
                             <p className="text-gray-500 text-xs mt-1">?{Math.ceil(grandTotal).toLocaleString("en-IN")}</p>
                           </div>
                         </div>
-                        <p className="text-center text-xs text-gray-500 mt-2">{qrRevealed ? "Tap to hide" : "Tap to show QR"}</p>
+                        <p className="text-center text-xs text-gray-500 mt-2">{qrRevealed — "Tap to hide" : "Tap to show QR"}</p>
                       </div>
                     )
                   })()}
@@ -424,7 +424,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="border rounded-xl p-3 mb-4" style={{ borderColor: "rgba(200,162,58,0.2)", background: "rgba(200,162,58,0.04)" }}>
-                    <p className="text-[13px] text-center" style={{ color: "#8F857A" }}>?? Card / Net Banking / EMI � <span style={{ color: "#C8A23A" }}>Coming Soon</span></p>
+                    <p className="text-[13px] text-center" style={{ color: "#8F857A" }}>💳 Card / Net Banking / EMI — <span style={{ color: "#C8A23A" }}>Coming Soon</span></p>
                   </div>
 
                   {/* Screenshot upload */}
@@ -443,7 +443,7 @@ export default function CheckoutPage() {
                         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleScreenshotChange} />
                         <Upload size={20} style={{ color: "#C8A23A", flexShrink: 0 }} />
                         <div>
-                          <p className="font-inter font-semibold text-[14px] text-[#2C241B]">{screenshot ? screenshot.name : "Upload payment screenshot"}</p>
+                          <p className="font-inter font-semibold text-[14px] text-[#2C241B]">{screenshot — screenshot.name : "Upload payment screenshot"}</p>
                           <p className="font-inter text-[12px] text-[#8F857A]">JPG, PNG &mdash; max 10MB</p>
                         </div>
                       </label>
@@ -503,7 +503,7 @@ export default function CheckoutPage() {
                   {selectedAddr && (
                     <p className="font-inter text-[11px] text-[#8F857A]">
                       {["andhra pradesh","telangana","ap","ts"].some(s => (selectedAddr.state||"").toLowerCase().includes(s))
-                        ? "AP/Telangana rate"
+                        — "AP/Telangana rate"
                         : "Other states rate"}
                     </p>
                   )}
@@ -515,7 +515,7 @@ export default function CheckoutPage() {
               )
             })()}
           </div>
-          <p className="font-inter text-[11px] text-center" style={{ color: "#8F857A" }}>?? UPI Payment � Secure &amp; Safe</p>
+          <p className="font-inter text-[11px] text-center" style={{ color: "#8F857A" }}>🔒 UPI Payment ✓ Secure &amp; Safe</p>
         </div>
       </div>
       </div>
