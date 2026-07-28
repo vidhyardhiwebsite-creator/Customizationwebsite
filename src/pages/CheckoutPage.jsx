@@ -10,7 +10,7 @@ import { supabase } from "../lib/supabase"
 import { formatINR } from "../utils/format"
 import toast from "react-hot-toast"
 
-const UPI_ID = "Q487529392@ybl"
+const UPI_ID = "9848760606@ybl"
 const ADMIN_WHATSAPP = "919848760606"
 // Generate QR dynamically from UPI ID using Google Charts API
 const getQRUrl = (upiId, amount) =>
@@ -127,7 +127,7 @@ export default function CheckoutPage() {
     const userId = user.id
     fetchAddresses(userId).then(addrs => {
       setAddresses(addrs)
-      // Only set default if nothing is selected yet — prevents resetting on re-render or tab focus
+      // Only set default if nothing is selected yet ï¿½ prevents resetting on re-render or tab focus
       setSelectedId(prev => {
         if (prev && addrs.find(a => a.id === prev)) return prev
         const def = addrs.find(a => a.is_default) || addrs[0]
@@ -182,7 +182,7 @@ export default function CheckoutPage() {
       )
       const ns0Items = items.filter(i => !ns1Items.includes(i))
 
-      // Build list of [series, itemsForSeries] pairs — skip empty
+      // Build list of [series, itemsForSeries] pairs ï¿½ skip empty
       const orderGroups = []
       if (ns0Items.length > 0) orderGroups.push(["NS0", ns0Items])
       if (ns1Items.length > 0) orderGroups.push(["NS1", ns1Items])
@@ -192,7 +192,7 @@ export default function CheckoutPage() {
 
       for (const [series, groupItems] of orderGroups) {
         const groupSubtotal = groupItems.reduce((s, i) => s + (i.products?.price || 0) * i.quantity, 0)
-        // Distribute shipping proportionally — or add full shipping to first group only
+        // Distribute shipping proportionally ï¿½ or add full shipping to first group only
         const isFirstGroup = createdOrderIds.length === 0
         const groupTotal = groupSubtotal + (isFirstGroup ? shipping : 0)
 
@@ -243,7 +243,7 @@ export default function CheckoutPage() {
 
       const displayOrderId = createdOrderIds.join(" + ")
 
-      // Clear cart only for normal cart checkout — Buy Now doesn't touch the cart
+      // Clear cart only for normal cart checkout ï¿½ Buy Now doesn't touch the cart
       if (!isBuyNow) await clearCart(user.id)
 
       setStep("success")
@@ -281,7 +281,7 @@ export default function CheckoutPage() {
           <div className="mb-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
             style={{ background: "rgba(200,162,58,0.08)", border: "1px solid rgba(200,162,58,0.25)", color: "#A88422" }}>
             <Zap size={14} className="flex-shrink-0" />
-            Buying <span className="font-semibold mx-1">{buyNowData.product.name}</span> directly — your cart is unchanged.
+            Buying <span className="font-semibold mx-1">{buyNowData.product.name}</span> directly ï¿½ your cart is unchanged.
           </div>
         )}
 
@@ -356,7 +356,7 @@ export default function CheckoutPage() {
                     <Smartphone size={16} style={{ color: "#C8A23A" }} /> Pay via UPI
                   </h2>
 
-                {/* QR Code — flip card, hidden by default, tap to reveal */}
+                {/* QR Code ï¿½ flip card, hidden by default, tap to reveal */}
                 <div className="flex flex-col sm:flex-row gap-6 items-center mb-5">
                   {(() => {
                     const selectedAddr = addresses.find(a => a.id === selectedId)
@@ -375,7 +375,7 @@ export default function CheckoutPage() {
                           transform: qrRevealed ? "rotateY(180deg)" : "rotateY(0deg)",
                           position: "relative"
                         }}>
-                          {/* Front — blurred placeholder */}
+                          {/* Front ï¿½ blurred placeholder */}
                           <div style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                             className="absolute inset-0 bg-[#F2EDE6] border-2 border-[#1B2B5E]/20 rounded-xl flex flex-col items-center justify-center gap-2">
                             <div className="w-16 h-16 grid grid-cols-3 gap-1 opacity-30">
@@ -384,7 +384,7 @@ export default function CheckoutPage() {
                             <p className="text-[#1B2B5E] text-xs font-semibold">Tap to reveal QR</p>
                             <p className="text-[#4A4A6A] text-xs">?{Math.ceil(grandTotal).toLocaleString("en-IN")}</p>
                           </div>
-                          {/* Back — actual QR */}
+                          {/* Back ï¿½ actual QR */}
                           <div style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                             className="absolute inset-0 bg-white p-2 rounded-xl flex flex-col items-center justify-center">
                             <img src={getQRUrl(UPI_ID, grandTotal)} alt="UPI QR Code" className="w-40 h-40 object-contain" />
@@ -424,7 +424,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="border rounded-xl p-3 mb-4" style={{ borderColor: "rgba(200,162,58,0.2)", background: "rgba(200,162,58,0.04)" }}>
-                    <p className="text-[13px] text-center" style={{ color: "#8F857A" }}>?? Card / Net Banking / EMI — <span style={{ color: "#C8A23A" }}>Coming Soon</span></p>
+                    <p className="text-[13px] text-center" style={{ color: "#8F857A" }}>?? Card / Net Banking / EMI ï¿½ <span style={{ color: "#C8A23A" }}>Coming Soon</span></p>
                   </div>
 
                   {/* Screenshot upload */}
@@ -451,7 +451,7 @@ export default function CheckoutPage() {
                         <div className="mt-2 relative inline-block">
                           <img src={screenshotPreview} alt="Screenshot preview" className="h-32 rounded-xl object-cover" style={{ border: "1px solid rgba(200,162,58,0.3)" }} />
                           <button onClick={() => { setScreenshot(null); setScreenshotPreview(null) }}
-                            className="absolute -top-2 -right-2 bg-[#D9534F] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">×</button>
+                            className="absolute -top-2 -right-2 bg-[#D9534F] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">ï¿½</button>
                         </div>
                       )}
                     </div>
@@ -515,7 +515,7 @@ export default function CheckoutPage() {
               )
             })()}
           </div>
-          <p className="font-inter text-[11px] text-center" style={{ color: "#8F857A" }}>?? UPI Payment · Secure &amp; Safe</p>
+          <p className="font-inter text-[11px] text-center" style={{ color: "#8F857A" }}>?? UPI Payment ï¿½ Secure &amp; Safe</p>
         </div>
       </div>
       </div>
