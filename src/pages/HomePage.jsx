@@ -47,7 +47,7 @@ const CATEGORIES = [
   { name:"Mobile Pouches",  dbCategory:"Mobile Pouches",  img:"https://images.unsplash.com/photo-1609942071884-qddbf0b9c69d?w=500&q=80", to:"/products?category=Mobile+Pouches" },
   { name:"Corporate Gifts", dbCategory:"Corporate Gifts", img:"https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80", to:"/products?category=Corporate+Gifts" },
   { name:"Gift Boxes",      dbCategory:"Gift Boxes",      img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", to:"/products?category=Gift+Boxes" },
-  { name:"Devotee",         dbCategory:"Devotee",         img:"/images/devoteebg.png", to:"/products?category=Devotee" },
+  { name:"Devotee",         dbCategory:"Devotee",         img:"/images/devoteebg.jpeg", to:"/products?category=Devotee" },
 ]
 
 const HOW_STEPS = [

@@ -34,6 +34,35 @@ const COLS = [
   ]},
 ]
 
+function MapCard() {
+  return (
+    <div style={{ marginTop: 32 }}>
+      <h4 className="font-inter font-semibold text-white text-[14px] mb-3 tracking-wide"
+        style={{ display:"flex", alignItems:"center", gap:6 }}>
+        <MapPin size={14} style={{ color:"#C8A23A" }}/> Find Us
+      </h4>
+      <div style={{
+        borderRadius: 12,
+        overflow: "hidden",
+        border: "1px solid rgba(255,255,255,0.12)",
+        width: "100%",
+        maxWidth: 400,
+      }}>
+        <iframe
+          title="Vidhyrathi Store Location"
+          src="https://maps.google.com/maps?q=Sivasri+fashion,+Balaji+complex,+Tuni,+Andhra+Pradesh+533401&z=15&output=embed"
+          width="100%"
+          height="200"
+          style={{ border: 0, display: "block" }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
+    </div>
+  )
+}
+
 export default function Footer() {
   const [email, setEmail] = useState("")
   const [done, setDone] = useState(false)
@@ -134,6 +163,9 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+
+            {/* Google Maps location */}
+            <MapCard />
           </div>
 
           {/* Links */}

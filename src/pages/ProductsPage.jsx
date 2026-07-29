@@ -69,7 +69,7 @@ export default function ProductsPage() {
           <div style={{
             position: "fixed",
             top: 0, left: 0, right: 0, bottom: 0,
-            backgroundImage: 'url("/images/devoteebg.png")',
+            backgroundImage: 'url("/images/devoteebg.jpeg")',
             backgroundSize: "cover",
             backgroundPosition: "50% 15%",
             backgroundRepeat: "no-repeat",
@@ -77,7 +77,7 @@ export default function ProductsPage() {
             pointerEvents: "none",
           }}>
             {/* Overlay */}
-            <div style={{ position: "absolute", inset: 0, background: "rgba(10,5,2,0.42)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", inset: 0, background: "rgba(10,5,2,0.72)", pointerEvents: "none" }} />
           </div>
         )}
         {/* Page header */}
