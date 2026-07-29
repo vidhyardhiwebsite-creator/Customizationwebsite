@@ -26,6 +26,7 @@ export const CATEGORIES = [
   "MDF Photo Frames",
   "T-Shirts",
   "Custom Cut Boards",
+  "Devotee",
 ]
 
 export const TAGS = ["personalized", "gifting", "photo", "custom", "premium"]

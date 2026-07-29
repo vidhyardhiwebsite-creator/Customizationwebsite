@@ -44,7 +44,7 @@ export default function Footer() {
   }
 
   return (
-    <footer style={{ background: "#2C241B" }}>
+    <footer style={{ background: "#2C241B", position: "relative", zIndex: 1 }}>
       {/* Newsletter stripe */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="container-lux section-gap-sm">

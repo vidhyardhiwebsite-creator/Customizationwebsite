@@ -59,25 +59,53 @@ export default function ProductsPage() {
         <meta name="description" content={`Shop ${category||'all'} personalised gifts at Vidhyrathi.`}/>
       </Helmet>
 
-      <div style={{ background:'#F8F5F0', minHeight:'100vh' }}>
+      <div style={{
+        backgroundColor: category === "Devotee" ? '#0A0502' : '#F8F5F0',
+        minHeight:'100vh',
+        position: 'relative'
+      }}>
+        {/* Fixed full-page background for Devotee — stays still while content scrolls */}
+        {category === "Devotee" && (
+          <div style={{
+            position: "fixed",
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundImage: 'url("/images/devoteebg.png")',
+            backgroundSize: "cover",
+            backgroundPosition: "50% 15%",
+            backgroundRepeat: "no-repeat",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}>
+            {/* Overlay */}
+            <div style={{ position: "absolute", inset: 0, background: "rgba(10,5,2,0.42)", pointerEvents: "none" }} />
+          </div>
+        )}
         {/* Page header */}
-        <div style={{ background:'#F3EEE6', borderBottom:'1px solid #E7DED1' }}>
+        <div style={{
+          background: category === "Devotee" ? 'transparent' : '#F3EEE6',
+          borderBottom: category === "Devotee" ? '1px solid rgba(200,162,58,0.3)' : '1px solid #E7DED1',
+          position: "relative", zIndex: 2
+        }}>
           <div className="container-lux" style={{ paddingTop:'clamp(20px,3vw,32px)', paddingBottom:'clamp(16px,2.5vw,28px)' }}>
-            <span className="eyebrow" style={{ marginBottom: 6 }}>{category ? "Category" : search ? "Search Results" : "All Products"}</span>
-            <h1 className="heading-xl" style={{ marginBottom: 4 }}>
+            <span className="eyebrow" style={{ marginBottom: 6, color: category === "Devotee" ? "#C8A23A" : undefined }}>
+              {category ? "Category" : search ? "Search Results" : "All Products"}
+            </span>
+            <h1 className="heading-xl" style={{ marginBottom: 4, color: category === "Devotee" ? "#FFFFFF" : undefined }}>
               {category ? <><span className="text-gold-accent">{category}</span></>
                : search ? <>Results for "<span className="text-gold-accent">{search}</span>"</>
                : <>Our <span className="text-gold-accent">Collection</span></>}
             </h1>
-            <p className="body-md">
+            <p className="body-md" style={{ color: category === "Devotee" ? "rgba(255,255,255,0.75)" : undefined }}>
               {loading ? "Loading..." : `${products.length} handcrafted piece${products.length!==1?"s":""} available`}
             </p>
           </div>
         </div>
 
-        <div className="container-lux" style={{ paddingTop:'clamp(16px,2.5vw,32px)', paddingBottom:'clamp(40px,6vw,80px)' }}>
-          {/* Filter row */}
-          <div style={{ marginBottom: 'clamp(16px,4vw,32px)' }}>
+        <div className="container-lux" style={{ paddingTop:'clamp(16px,2.5vw,32px)', paddingBottom:'clamp(40px,6vw,80px)', position: "relative", zIndex: 2 }}>
+        {/* Devotee Category Banner — removed, whole page is now the bg image */}
+
+        {/* Filter row */}
+          <div style={{ marginBottom: 'clamp(16px,4vw,32px)', background: category === "Devotee" ? "rgba(10,5,2,0.5)" : "transparent", borderRadius: category === "Devotee" ? 16 : 0, padding: category === "Devotee" ? "16px" : 0, backdropFilter: category === "Devotee" ? "blur(8px)" : "none" }}>
 
             {/* Pills — swipeable on mobile, wraps on desktop */}
             <div className="pill-scroll">

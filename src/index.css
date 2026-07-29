@@ -13,6 +13,7 @@
   --bg-card:   #FFFFFF;
   --bg-card2:  #FAF8F3;
   --bg-footer: #2C241B;
+  --bg-texture: url("https://www.transparenttextures.com/patterns/cream-paper.png");
 
   /* Accent Pastels */
   --peach:     #FDDCB5;
@@ -57,7 +58,12 @@ html {
 }
 
 body {
-  background: #F8F5F0;
+  background-color: #F8F5F0;
+  background-image:
+    url("https://www.transparenttextures.com/patterns/cream-paper.png");
+  background-attachment: fixed;
+  background-repeat: repeat;
+  background-size: auto;
   color: #2C241B;
   font-family: 'Inter', Georgia, sans-serif;
   font-size: 14px;
