@@ -631,3 +631,13 @@ input[type="checkbox"],input[type="radio"],summary { cursor: pointer; }
   transform: translateY(-4px);
 }
 
+
+/* Hide scrollbar for mobile filter tabs */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

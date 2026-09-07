@@ -385,7 +385,8 @@ export default function AdminOrders() {
   const paginatedOrders = paginate(filtered, currentPage, pageSize)
 
   return (
-    <div className="p-6 md:p-8 max-w-7xl mx-auto">
+    <div className="min-h-screen w-full overflow-x-hidden">
+      <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
       
       {/* â”€â”€ Header â”€â”€ */}
       <div className="mb-8 flex items-center justify-between">
@@ -408,7 +409,9 @@ export default function AdminOrders() {
 
       {/* â”€â”€ Search â”€â”€ */}
       <div className="relative mb-6">
-        <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8F857A]" />
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+          <Search size={18} className="text-[#8F857A]" />
+        </div>
         <input
           value={search}
           onChange={e => { setSearch(e.target.value); setCurrentPage(1) }}
@@ -569,8 +572,7 @@ export default function AdminOrders() {
         </div>
       )}
 
+      </div>
     </div>
   )
 }
-
-
