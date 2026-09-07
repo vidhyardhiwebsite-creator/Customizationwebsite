@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, ChevronDown, ChevronUp, AlertTriangle, Eye, Truck, Upload } from "lucide-react"
+import { Search, ChevronDown, ChevronUp, AlertTriangle, Eye, Truck, Upload, CheckCircle2, AlertCircle, X } from "lucide-react"
 import { useAdminStore } from "../../store/adminStore"
 import { formatINR, formatDate } from "../../utils/format"
 import { supabase } from "../../lib/supabase"
@@ -123,7 +123,7 @@ function TrackingPanel({ order, onSave }) {
         <div className="relative inline-block">
           <img src={preview} alt="Tracking" className="h-24 rounded-lg border-2 border-orange-300 object-cover" />
           <button onClick={() => { setImage(null); setPreview(null) }}
-            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow">Ã—</button>
+            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow">×</button>
         </div>
       )}
       <button onClick={handleSave} disabled={saving}
@@ -148,7 +148,7 @@ function OrderCard({ order, onStatusUpdate }) {
   }
 
   const getPaymentBadge = () => {
-    if (needsVerification) return { label: "âš  Verify", color: "bg-orange-100 text-orange-600" }
+    if (needsVerification) return { label: "Verify", color: "bg-orange-100 text-orange-600" }
     if (order.payment_status === "paid") return { label: "âœ“ Verified", color: "bg-green-500 text-white" }
     if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500 text-white" }
     return { label: "Pending", color: "bg-gray-100 text-gray-600" }
@@ -185,7 +185,8 @@ function OrderCard({ order, onStatusUpdate }) {
           <div className="flex items-center justify-between pt-2">
             <span className="text-xs text-[#8F857A]">{formatDate(order.created_at)}</span>
             <div className="flex items-center gap-2">
-              <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${paymentBadge.color}`}>
+              <span className={`inline-flex items-center justify-center gap-1 text-xs px-2.5 py-1.5 rounded-full font-semibold ${paymentBadge.color}`}>
+                <PaymentIcon size={12} className="flex-shrink-0" />
                 {paymentBadge.label}
               </span>
               <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
@@ -217,7 +218,8 @@ function OrderCard({ order, onStatusUpdate }) {
 
           {/* Payment Column */}
           <div>
-            <span className={`inline-block text-xs px-3 py-1.5 rounded-full font-semibold ${paymentBadge.color}`}>
+            <span className={`inline-flex items-center justify-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-semibold ${paymentBadge.color}`}>
+              <PaymentIcon size={13} className="flex-shrink-0" />
               {paymentBadge.label}
             </span>
           </div>
@@ -283,7 +285,7 @@ export default function AdminOrders() {
       const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
       const orderId_ = order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()
       const customerName = addr.full_name || "Customer"
-      const amount = `â‚¹${order.total_amount?.toLocaleString("en-IN")}`
+      const amount = `₹${order.total_amount?.toLocaleString("en-IN")}`
       const phone = addr.phone?.replace(/\D/g, "")
       if (phone) {
         const waMsg = encodeURIComponent(
@@ -291,7 +293,7 @@ export default function AdminOrders() {
         )
         window.open(`https://wa.me/91${phone}?text=${waMsg}`, "_blank")
       } else {
-        toast("No phone number found for customer", { icon: "âš ï¸" })
+        toast("No phone number found for customer", { icon: "⚠️" })
       }
     }
   }
@@ -325,7 +327,7 @@ export default function AdminOrders() {
       const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
       const orderId_ = order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()
       const customerName = addr.full_name || "Customer"
-      const amount = `â‚¹${order.total_amount?.toLocaleString("en-IN")}`
+      const amount = `₹${order.total_amount?.toLocaleString("en-IN")}`
       const phone = addr.phone?.replace(/\D/g, "")
       if (phone) {
         const waMsg = encodeURIComponent(
@@ -389,7 +391,7 @@ export default function AdminOrders() {
         <div>
           <h1 className="text-3xl font-bold text-[#2C241B] mb-2">Orders</h1>
           <p className="text-sm text-[#8F857A]">
-            {localOrders.length} total orders Â· {pendingCount} awaiting verification
+            {localOrders.length} total orders · {pendingCount} awaiting verification
           </p>
         </div>
         <button 
