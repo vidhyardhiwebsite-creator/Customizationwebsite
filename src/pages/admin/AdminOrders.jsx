@@ -135,7 +135,7 @@ function TrackingPanel({ order, onSave }) {
   )
 }
 
-function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReject, onNotify, onScreenshot, onTrackingSave }) {
+function OrderCard({ order, onStatusUpdate }) {
   const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
   const isCancelled = order.order_status === "cancelled"
   const needsVerification = order.payment_status === "pending_verification"
@@ -376,7 +376,7 @@ export default function AdminOrders() {
   const deliveredCount = localOrders.filter(o => o.order_status === "delivered").length
   const cancelledCount = localOrders.filter(o => o.order_status === "cancelled").length
 
-  const cardProps = { onStatusUpdate: handleStatusUpdate, onVerify: verifyPayment, onReject: rejectPayment, onNotify: notifyCustomer, onScreenshot: setScreenshotModal, onTrackingSave: handleTrackingSave }
+  const cardProps = { onStatusUpdate: handleStatusUpdate }
 
   // Paginate filtered results
   const paginatedOrders = paginate(filtered, currentPage, pageSize)
@@ -499,9 +499,7 @@ export default function AdminOrders() {
           </div>
         ) : (
           paginatedOrders.map(order => (
-            <OrderCard key={order.id} order={order} expanded={expanded === order.id}
-              onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-              {...cardProps} />
+            <OrderCard key={order.id} order={order} onStatusUpdate={handleStatusUpdate} />
           ))
         )}
       </div>
