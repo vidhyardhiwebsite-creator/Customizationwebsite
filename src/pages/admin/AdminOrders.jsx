@@ -409,12 +409,11 @@ export default function AdminOrders() {
       {/* â”€â”€ Search â”€â”€ */}
       {/* Search */}
       <div className="relative mb-6">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8F857A] pointer-events-none" />
         <input
           value={search}
           onChange={e => { setSearch(e.target.value); setCurrentPage(1) }}
           placeholder="Search by name, phone, order ID..."
-          className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] placeholder:text-[#8F857A]/60 focus:outline-none focus:border-[#C8A23A] transition-colors"
+          className="w-full px-4 py-3.5 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] placeholder:text-[#8F857A]/60 focus:outline-none focus:border-[#C8A23A] transition-colors"
         />
       </div>
 
