@@ -568,22 +568,7 @@ export default function AdminOrders() {
         </div>
       )}
 
-      {/* Screenshot modal */}
-      <AnimatePresence>
-        {screenshotModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-            onClick={() => setScreenshotModal(null)}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="max-w-lg w-full bg-white rounded-2xl overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b border-[#E7DED1]">
-                <p className="text-[#C8A23A] font-medium">Payment Screenshot</p>
-                <button onClick={() => setScreenshotModal(null)} className="text-[#8F857A] hover:text-[#2C241B]">&times;</button>
-              </div>
-              <img src={screenshotModal} alt="Payment screenshot" className="w-full max-h-[70vh] object-contain p-4" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {
     </div>
   )
 }
