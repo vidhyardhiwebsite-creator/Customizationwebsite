@@ -157,12 +157,11 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
   const paymentBadge = getPaymentBadge()
 
   return (
-    <div className={`border rounded-xl overflow-hidden bg-white ${getStatusColor()}`}>
+    <div className={`border rounded-xl overflow-hidden bg-white ${getStatusColor()} cursor-pointer hover:shadow-lg transition-all`}
+      onClick={() => window.location.href = `/admin/orders/${order.id}`}
+    >
       {/* Card Header - Table Row */}
-      <div 
-        onClick={onToggle}
-        className="cursor-pointer hover:bg-[#F8F5F0] transition-colors"
-      >
+      <div className="hover:bg-[#F8F5F0] transition-colors">
         {/* Mobile Layout */}
         <div className="md:hidden p-4 space-y-3">
           <div className="flex items-start justify-between">
@@ -178,7 +177,9 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-sm font-bold text-[#C8A23A]">{formatINR(order.total_amount)}</span>
-              {expanded ? <ChevronUp size={16} className="text-[#8F857A]" /> : <ChevronDown size={16} className="text-[#8F857A]" />}
+              <span className={`text-xs px-2 py-1 rounded-full font-medium ${paymentBadge.color}`}>
+                {paymentBadge.label}
+              </span>
             </div>
           </div>
           <div className="flex items-center justify-between">
@@ -193,20 +194,20 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
         </div>
 
         {/* Desktop Layout - Table Row */}
-        <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-4 px-4 py-4 items-center">
+        <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-6 px-6 py-5 items-center">
           {/* Customer Column */}
           <div className="min-w-0">
-            <p className="text-sm font-medium text-[#2C241B] truncate">{addr.full_name || "Customer"}</p>
+            <p className="text-sm font-semibold text-[#2C241B] truncate mb-1">{addr.full_name || "Customer"}</p>
             <p className="text-xs text-[#8F857A] truncate">{addr.phone}</p>
-            <p className="text-xs text-[#C8A23A] font-mono mt-0.5">
+            <p className="text-xs text-[#C8A23A] font-mono mt-1">
               {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
             </p>
           </div>
 
           {/* Date Column */}
           <div>
-            <p className="text-sm text-[#2C241B]">{new Date(order.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
-            <p className="text-xs text-[#8F857A]">{new Date(order.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
+            <p className="text-sm font-medium text-[#2C241B]">{new Date(order.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+            <p className="text-xs text-[#8F857A] mt-0.5">{new Date(order.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
           </div>
 
           {/* Amount Column */}
@@ -216,165 +217,17 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
 
           {/* Payment Column */}
           <div>
-            <span className={`inline-block text-xs px-3 py-1 rounded-full font-medium ${paymentBadge.color}`}>
+            <span className={`inline-block text-xs px-3 py-1.5 rounded-full font-semibold ${paymentBadge.color}`}>
               {paymentBadge.label}
             </span>
           </div>
 
           {/* Status Column */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
-            {expanded ? <ChevronUp size={16} className="text-[#8F857A]" /> : <ChevronDown size={16} className="text-[#8F857A]" />}
           </div>
         </div>
       </div>
-
-      {/* Expanded Details */}
-      <AnimatePresence>
-        {expanded && (
-          <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
-            <div className="border-t border-[#E7DED1] p-4 space-y-4">
-              {needsVerification && (
-                <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4 space-y-3">
-                  <p className="text-orange-600 text-sm font-semibold flex items-center gap-2">
-                    <AlertTriangle size={14} /> Payment Verification Required
-                  </p>
-                  {order.payment_screenshot_url && (
-                    <div className="space-y-2">
-                      <img
-                        src={order.payment_screenshot_url}
-                        alt="Payment screenshot"
-                        className="w-full max-h-48 object-contain rounded-lg border border-orange-500/20 bg-white cursor-pointer"
-                        onClick={() => onScreenshot(order.payment_screenshot_url)}
-                      />
-                      <button onClick={() => onScreenshot(order.payment_screenshot_url)}
-                        className="flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700">
-                        <Eye size={11} /> View Full Screenshot
-                      </button>
-                    </div>
-                  )}
-                  {order.upi_ref && <p className="text-[#8F857A] text-xs">UPI Ref: <span className="font-mono text-[#2C241B]">{order.upi_ref}</span></p>}
-                  <div className="grid grid-cols-2 gap-2">
-                    <button onClick={() => onVerify(order.id)}
-                      className="py-2.5 bg-green-500 border border-green-600 text-white text-sm font-bold rounded-lg hover:bg-green-600 transition-all shadow-sm">
-                      ✅ Confirm Payment
-                    </button>
-                    <button onClick={() => onReject(order.id)}
-                      className="py-2.5 bg-red-500 border border-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-600 transition-all shadow-sm">
-                      ❌ Reject
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {order.payment_status === "paid" && (
-                <div className="bg-white border border-[#E7DED1] rounded-xl p-4 space-y-3">
-                  <p className="text-[#2C241B] text-sm font-semibold">Order Status</p>
-                  {/* Colorful step tracker */}
-                  <div className="flex items-start gap-0 mb-2">
-                    {[
-                      { key: "confirmed", label: "Confirmed", activeColor: "bg-blue-500", doneColor: "bg-blue-500", lineColor: "bg-blue-400", textColor: "text-blue-500" },
-                      { key: "shipping",  label: "Shipped",   activeColor: "bg-orange-500", doneColor: "bg-orange-500", lineColor: "bg-orange-400", textColor: "text-orange-500" },
-                      { key: "delivered", label: "Delivered", activeColor: "bg-green-500", doneColor: "bg-green-500", lineColor: "bg-green-400", textColor: "text-green-500" },
-                    ].map((step, idx) => {
-                      const steps = ["confirmed","shipping","delivered"]
-                      const currentIdx = steps.indexOf(order.order_status || "confirmed")
-                      const done = idx <= currentIdx
-                      const active = idx === currentIdx
-                      return (
-                        <div key={step.key} className="flex-1 flex flex-col items-center">
-                          <div className="flex items-center w-full">
-                            <div className={`w-full h-1 rounded-full ${idx === 0 ? "opacity-0" : done ? (idx === 1 ? "bg-blue-400" : "bg-orange-400") : "bg-[#E7DED1]"}`} />
-                            <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all shadow-sm ${done || active ? `${step.activeColor} border-transparent` : "border-[#E7DED1] bg-[#F3EEE6]"}`}>
-                              {step.key === "confirmed" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-4 h-4 ${done || active ? "text-white" : "text-[#8F857A]"}`}><polyline points="20 6 9 17 4 12"/></svg>}
-                              {step.key === "shipping" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`w-4 h-4 ${done || active ? "text-white" : "text-[#8F857A]"}`}><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
-                              {step.key === "delivered" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-4 h-4 ${done || active ? "text-white" : "text-[#8F857A]"}`}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>}
-                            </div>
-                            <div className={`w-full h-1 rounded-full ${idx === 2 ? "opacity-0" : done && idx < currentIdx ? step.lineColor : "bg-[#E7DED1]"}`} />
-                          </div>
-                          <p className={`text-xs mt-1.5 text-center font-medium ${active ? step.textColor : done ? step.textColor + " opacity-70" : "text-[#8F857A]"}`}>{step.label}</p>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <div className="flex items-center justify-between pt-1 border-t border-gray-100">
-                    <span className="text-[#8F857A] text-xs">Change status:</span>
-                    <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
-                  </div>
-                </div>
-              )}
-
-              {/* Tracking panel - shown when order is shipping */}
-              {order.order_status === "shipping" && (
-                <TrackingPanel order={order} onSave={onTrackingSave} />
-              )}
-
-              {/* Order Items */}
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-[#2C241B]">Order Items</p>
-                {order.order_items?.map(item => (
-                  <div key={item.id} className="bg-[#F8F5F0] rounded-lg p-3">
-                    <div className="flex items-center gap-3">
-                      {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-12 h-12 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#2C241B] truncate">{item.products?.name}</p>
-                        {item.products?.custom_id && (
-                          <p className="text-[#C8A23A] text-xs font-mono">Product ID: {item.products.custom_id}</p>
-                        )}
-                        <p className="text-[#8F857A] text-xs">Qty: {item.quantity} × {formatINR(item.price)}</p>
-                      </div>
-                    </div>
-                    {/* Customization data */}
-                    {(item.custom_name || item.custom_photo_url) && (
-                      <div className="mt-3 ml-0 border-l-2 border-[#4DB6AC] pl-3 space-y-2">
-                        {item.custom_name && (
-                          <p className="text-xs text-[#2C241B]">
-                            <span className="text-[#4DB6AC] font-medium">✏ Text:</span> {item.custom_name}
-                          </p>
-                        )}
-                        {item.custom_photo_url && (
-                          <div>
-                            <p className="text-xs text-[#4DB6AC] font-medium mb-1">📷 Customer Photo:</p>
-                            <a href={item.custom_photo_url} target="_blank" rel="noopener noreferrer">
-                              <img
-                                src={item.custom_photo_url}
-                                alt="Customer custom photo"
-                                className="h-20 w-20 object-cover rounded border-2 border-[#4DB6AC]/40 hover:border-[#4DB6AC] transition-all cursor-pointer"
-                              />
-                            </a>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Shipping Address */}
-              {addr.full_name && (
-                <div className="bg-[#F8F5F0] rounded-lg p-3">
-                  <p className="text-sm font-semibold text-[#2C241B] mb-2">Shipping Address</p>
-                  <p className="text-sm text-[#2C241B]">{addr.full_name}</p>
-                  <p className="text-xs text-[#8F857A]">{addr.phone}</p>
-                  <p className="text-xs text-[#8F857A] mt-1">
-                    {addr.address1}, {addr.city} - {addr.pincode}
-                  </p>
-                  {addr.state && <p className="text-xs text-[#8F857A]">{addr.state}</p>}
-                </div>
-              )}
-
-              {/* WhatsApp Button */}
-              <button onClick={() => onNotify(order, addr)}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-[#25D366] text-white text-sm font-bold rounded-lg hover:bg-[#1ebe5d] transition-all shadow-sm">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                WhatsApp Customer
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   )
 }
@@ -389,8 +242,6 @@ export default function AdminOrders() {
   const { orders, loadOrders } = useAdminStore()
   const [localOrders, setLocalOrders] = useState([])
   const [search, setSearch] = useState("")
-  const [expanded, setExpanded] = useState(null)
-  const [screenshotModal, setScreenshotModal] = useState(null)
   const [searchParams] = useSearchParams()
   const filterToday = searchParams.get("filter") === "today"
   const [statusFilter, setStatusFilter] = useState("all") // all, pending_verification, confirmed, shipping, delivered, cancelled
@@ -531,34 +382,45 @@ export default function AdminOrders() {
   const paginatedOrders = paginate(filtered, currentPage, pageSize)
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto">
       
       {/* ── Header ── */}
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#2C241B] mb-2">Orders</h1>
-        <p className="text-sm text-[#8F857A]">
-          {localOrders.length} total orders · {pendingCount} awaiting verification
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-[#2C241B] mb-2">Orders</h1>
+          <p className="text-sm text-[#8F857A]">
+            {localOrders.length} total orders · {pendingCount} awaiting verification
+          </p>
+        </div>
+        <button 
+          onClick={() => loadOrders()}
+          className="flex items-center gap-2 px-4 py-2 text-sm text-[#8F857A] hover:text-[#2C241B] transition-colors"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+          </svg>
+          Refresh
+        </button>
       </div>
 
       {/* ── Search ── */}
       <div className="relative mb-6">
-        <Search size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8F857A]" />
+        <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8F857A]" />
         <input
           value={search}
           onChange={e => { setSearch(e.target.value); setCurrentPage(1) }}
           placeholder="Search by name, phone, order ID..."
-          className="w-full pl-12 pr-4 py-3 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A] transition-colors"
+          className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A] transition-colors"
         />
       </div>
 
       {/* ── Status Filter Tabs ── */}
-      <div className="mb-6">
+      <div className="mb-8">
         <div className="border-b border-[#E7DED1]">
-          <div className="flex gap-2 overflow-x-auto pb-px">
+          <div className="flex gap-4 overflow-x-auto pb-px">
             <button
               onClick={() => { setStatusFilter("all"); setCurrentPage(1) }}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 ${
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 ${
                 statusFilter === "all"
                   ? "text-[#C8A23A] border-[#C8A23A]"
                   : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
@@ -568,60 +430,60 @@ export default function AdminOrders() {
             </button>
             <button
               onClick={() => { setStatusFilter("pending_verification"); setCurrentPage(1) }}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
                 statusFilter === "pending_verification"
                   ? "text-[#C8A23A] border-[#C8A23A]"
                   : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
               }`}
             >
-              Pending <span className="bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-xs">{pendingCount}</span>
+              Pending <span className="bg-orange-100 text-orange-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">{pendingCount}</span>
             </button>
             <button
               onClick={() => { setStatusFilter("confirmed"); setCurrentPage(1) }}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
                 statusFilter === "confirmed"
                   ? "text-[#C8A23A] border-[#C8A23A]"
                   : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
               }`}
             >
-              Confirmed <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs">{confirmedCount}</span>
+              Confirmed <span className="bg-blue-100 text-blue-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">{confirmedCount}</span>
             </button>
             <button
               onClick={() => { setStatusFilter("shipping"); setCurrentPage(1) }}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
                 statusFilter === "shipping"
                   ? "text-[#C8A23A] border-[#C8A23A]"
                   : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
               }`}
             >
-              Shipped <span className="bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-xs">{shippedCount}</span>
+              Shipped <span className="bg-orange-100 text-orange-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">{shippedCount}</span>
             </button>
             <button
               onClick={() => { setStatusFilter("delivered"); setCurrentPage(1) }}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
                 statusFilter === "delivered"
                   ? "text-[#C8A23A] border-[#C8A23A]"
                   : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
               }`}
             >
-              Delivered <span className="bg-green-100 text-green-600 px-2 py-0.5 rounded-full text-xs">{deliveredCount}</span>
+              Delivered <span className="bg-green-100 text-green-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">{deliveredCount}</span>
             </button>
             <button
               onClick={() => { setStatusFilter("cancelled"); setCurrentPage(1) }}
-              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
                 statusFilter === "cancelled"
                   ? "text-[#C8A23A] border-[#C8A23A]"
                   : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
               }`}
             >
-              Cancelled <span className="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-xs">{cancelledCount}</span>
+              Cancelled <span className="bg-red-100 text-red-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">{cancelledCount}</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* ── Table Header (Desktop) ── */}
-      <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-4 px-4 py-3 bg-[#F8F5F0] rounded-lg mb-2 text-xs font-semibold text-[#8F857A]">
+      <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-6 px-6 py-4 bg-[#F8F5F0] rounded-lg mb-3 text-xs font-semibold text-[#8F857A] uppercase tracking-wider">
         <div>Customer</div>
         <div>Date</div>
         <div>Amount</div>
@@ -630,7 +492,7 @@ export default function AdminOrders() {
       </div>
 
       {/* ── Orders List ── */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {filtered.length === 0 ? (
           <div className="text-center py-16 text-[#8F857A]">
             <p className="text-lg">No orders found</p>
