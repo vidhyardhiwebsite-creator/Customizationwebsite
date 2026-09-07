@@ -173,7 +173,7 @@ export default function AdminOrderDetail() {
       <Link to="/admin/orders" className="inline-flex items-center gap-2 text-sm text-[#8F857A] hover:text-[#2C241B] mb-6 transition-colors">
         <ArrowLeft size={16} />
         Back to Orders
-      Link>
+      </Link>
 
       {/* Header */}
       <div className="mb-8">
