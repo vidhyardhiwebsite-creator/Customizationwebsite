@@ -14,7 +14,7 @@ const SORT_OPTIONS = [
   { value:'price_asc', label:'Price: Low ? High' },
   { value:'price_desc',label:'Price: High ? Low' },
 ]
-const PAGE_SIZES  = [8, 12, 24, 48]
+const PAGE_SIZES  = [8, 10, 12, 24, 48]
 const DEFAULT_PS  = 12
 
 export default function ProductsPage() {
@@ -157,14 +157,14 @@ export default function ProductsPage() {
 
           {/* Count + per page */}
           {!loading && products.length>0 && (
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
               <p className="font-inter text-[13px] text-[#8F857A]">
-                Showing {(page-1)*pageSize+1}�{Math.min(page*pageSize,products.length)} of {products.length}
+                Showing {(page-1)*pageSize+1}–{Math.min(page*pageSize,products.length)} of {products.length}
               </p>
-              <div className="flex items-center gap-2">
-                <span className="font-inter text-[12px] text-[#8F857A]">Per page</span>
+              <div className="flex items-center gap-3">
+                <span className="font-inter text-[13px] text-[#8F857A]">Per page</span>
                 <select value={pageSize} onChange={e=>{setPageSize(Number(e.target.value));setPage(1)}}
-                  className="input-warm text-[13px]" style={{ width:'auto', height:36, padding:"0 10px" }}>
+                  className="input-warm text-[13px]" style={{ width:'auto', height:38, padding:"0 12px", minWidth: '70px' }}>
                   {PAGE_SIZES.map(n=><option key={n} value={n}>{n}</option>)}
                 </select>
               </div>
