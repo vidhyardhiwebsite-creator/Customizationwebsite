@@ -164,28 +164,28 @@ function OrderCard({ order, onStatusUpdate }) {
       <div className="hover:bg-[#F8F5F0] transition-colors">
         {/* Mobile Layout */}
         <div className="md:hidden p-4 space-y-3">
-          <div className="flex items-start justify-between">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs text-[#8F857A]">Order</span>
-                <span className="text-xs text-[#C8A23A] font-mono font-bold">
-                  {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
-                </span>
-              </div>
-              <p className="text-sm font-medium text-[#2C241B] truncate">{addr.full_name || "Customer"}</p>
-              <p className="text-xs text-[#8F857A] mt-0.5">{addr.phone}</p>
-            </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-sm font-bold text-[#C8A23A]">{formatINR(order.total_amount)}</span>
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${paymentBadge.color}`}>
-                {paymentBadge.label}
+          {/* Order ID and Amount */}
+          <div className="flex items-center justify-between pb-3 border-b border-[#E7DED1]">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#8F857A] font-medium">Order</span>
+              <span className="text-xs text-[#C8A23A] font-mono font-bold">
+                {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
               </span>
             </div>
+            <span className="text-base font-bold text-[#C8A23A]">{formatINR(order.total_amount)}</span>
           </div>
-          <div className="flex items-center justify-between">
+
+          {/* Customer Details */}
+          <div className="space-y-1">
+            <p className="text-sm font-semibold text-[#2C241B]">{addr.full_name || "Customer"}</p>
+            <p className="text-xs text-[#8F857A]">{addr.phone}</p>
+          </div>
+
+          {/* Date, Payment, Status */}
+          <div className="flex items-center justify-between pt-2">
             <span className="text-xs text-[#8F857A]">{formatDate(order.created_at)}</span>
             <div className="flex items-center gap-2">
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${paymentBadge.color}`}>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${paymentBadge.color}`}>
                 {paymentBadge.label}
               </span>
               <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
@@ -194,7 +194,7 @@ function OrderCard({ order, onStatusUpdate }) {
         </div>
 
         {/* Desktop Layout - Table Row */}
-        <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-6 px-6 py-5 items-center">
+        <div className="hidden md:grid md:grid-cols-[minmax(220px,2.5fr)_minmax(140px,1.2fr)_minmax(100px,1fr)_minmax(120px,1fr)_minmax(140px,1.2fr)] gap-4 px-6 py-5 items-center">
           {/* Customer Column */}
           <div className="min-w-0">
             <p className="text-sm font-semibold text-[#2C241B] truncate mb-1">{addr.full_name || "Customer"}</p>
@@ -483,7 +483,7 @@ export default function AdminOrders() {
       </div>
 
       {/* â”€â”€ Table Header (Desktop) â”€â”€ */}
-      <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-6 px-6 py-4 bg-[#F8F5F0] rounded-lg mb-3 text-xs font-semibold text-[#8F857A] uppercase tracking-wider">
+      <div className="hidden md:grid md:grid-cols-[minmax(220px,2.5fr)_minmax(140px,1.2fr)_minmax(100px,1fr)_minmax(120px,1fr)_minmax(140px,1.2fr)] gap-4 px-6 py-4 bg-[#F8F5F0] rounded-lg mb-3 text-xs font-semibold text-[#8F857A] uppercase tracking-wider">
         <div>Customer</div>
         <div>Date</div>
         <div>Amount</div>

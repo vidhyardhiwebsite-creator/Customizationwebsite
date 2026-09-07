@@ -55,11 +55,12 @@ export default function AdminOrderDetail() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    if (!orders.length) loadOrders()
+    loadOrders()
   }, [])
 
   useEffect(() => {
-    const foundOrder = orders.find(o => o.id === parseInt(orderId))
+    if (!orders.length) return
+    const foundOrder = orders.find(o => String(o.id) === String(orderId))
     if (foundOrder) {
       setOrder(foundOrder)
       setTrackingId(foundOrder.tracking_id || "")
