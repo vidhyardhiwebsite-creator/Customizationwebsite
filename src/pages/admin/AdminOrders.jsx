@@ -148,13 +148,14 @@ function OrderCard({ order, onStatusUpdate }) {
   }
 
   const getPaymentBadge = () => {
-    if (needsVerification) return { label: "Verify", color: "bg-orange-100 text-orange-600" }
-    if (order.payment_status === "paid") return { label: "âœ“ Verified", color: "bg-green-500 text-white" }
-    if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500 text-white" }
-    return { label: "Pending", color: "bg-gray-100 text-gray-600" }
+    if (needsVerification) return { icon: AlertCircle, label: "Verify", color: "bg-orange-100 text-orange-600" }
+    if (order.payment_status === "paid") return { icon: CheckCircle2, label: "Verified", color: "bg-green-500 text-white" }
+    if (order.payment_status === "failed") return { icon: X, label: "Failed", color: "bg-red-500 text-white" }
+    return { icon: AlertCircle, label: "Pending", color: "bg-gray-100 text-gray-600" }
   }
 
   const paymentBadge = getPaymentBadge()
+  const PaymentIcon = paymentBadge.icon
 
   return (
     <div className={`border rounded-xl overflow-hidden bg-white ${getStatusColor()} cursor-pointer hover:shadow-lg transition-all`}
