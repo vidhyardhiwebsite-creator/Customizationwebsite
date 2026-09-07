@@ -385,8 +385,7 @@ export default function AdminOrders() {
   const paginatedOrders = paginate(filtered, currentPage, pageSize)
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
-      <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto">
       
       {/* â”€â”€ Header â”€â”€ */}
       <div className="mb-8 flex items-center justify-between">
@@ -408,22 +407,21 @@ export default function AdminOrders() {
       </div>
 
       {/* â”€â”€ Search â”€â”€ */}
+      {/* Search */}
       <div className="relative mb-6">
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
-          <Search size={18} className="text-[#8F857A]" />
-        </div>
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8F857A] pointer-events-none" />
         <input
           value={search}
           onChange={e => { setSearch(e.target.value); setCurrentPage(1) }}
           placeholder="Search by name, phone, order ID..."
-          className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A] transition-colors"
+          className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] placeholder:text-[#8F857A]/60 focus:outline-none focus:border-[#C8A23A] transition-colors"
         />
       </div>
 
       {/* â”€â”€ Status Filter Tabs â”€â”€ */}
       <div className="mb-8">
-        <div className="border-b border-[#E7DED1]">
-          <div className="flex gap-4 overflow-x-auto pb-px">
+        <div className="border-b border-[#E7DED1] overflow-x-auto scrollbar-hide">
+          <div className="flex gap-4 pb-px min-w-max">
             <button
               onClick={() => { setStatusFilter("all"); setCurrentPage(1) }}
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all border-b-2 ${
@@ -572,7 +570,6 @@ export default function AdminOrders() {
         </div>
       )}
 
-      </div>
     </div>
   )
 }

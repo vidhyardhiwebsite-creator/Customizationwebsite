@@ -182,7 +182,7 @@ export default function AdminLayout({ children }) {
       </AnimatePresence>
 
       {/* ── Main area ── */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0, maxWidth: "100vw" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
 
         {/* ── Header ── */}
         <header style={{
