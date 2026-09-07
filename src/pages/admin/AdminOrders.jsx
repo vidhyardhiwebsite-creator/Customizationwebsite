@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+﻿import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, ChevronDown, ChevronUp, AlertTriangle, Eye, Truck, Upload } from "lucide-react"
@@ -49,7 +49,7 @@ function StatusDropdown({ orderId, currentStatus, onStatusUpdate }) {
                 className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-[#F8F5F0] transition-colors ${s.key === currentStatus ? "opacity-50 cursor-default" : ""}`}>
                 <span className={`w-2 h-2 rounded-full border ${s.color}`} />
                 <span className="text-[#8F857A]">{s.label}</span>
-                {s.key === currentStatus && <span className="ml-auto text-[#8F857A]">✓</span>}
+                {s.key === currentStatus && <span className="ml-auto text-[#8F857A]">âœ“</span>}
               </button>
             ))}
           </motion.div>
@@ -123,7 +123,7 @@ function TrackingPanel({ order, onSave }) {
         <div className="relative inline-block">
           <img src={preview} alt="Tracking" className="h-24 rounded-lg border-2 border-orange-300 object-cover" />
           <button onClick={() => { setImage(null); setPreview(null) }}
-            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow">×</button>
+            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow">Ã—</button>
         </div>
       )}
       <button onClick={handleSave} disabled={saving}
@@ -148,8 +148,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
   }
 
   const getPaymentBadge = () => {
-    if (needsVerification) return { label: "⚠ Verify", color: "bg-orange-100 text-orange-600" }
-    if (order.payment_status === "paid") return { label: "✓ Verified", color: "bg-green-500 text-white" }
+    if (needsVerification) return { label: "âš  Verify", color: "bg-orange-100 text-orange-600" }
+    if (order.payment_status === "paid") return { label: "âœ“ Verified", color: "bg-green-500 text-white" }
     if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500 text-white" }
     return { label: "Pending", color: "bg-gray-100 text-gray-600" }
   }
@@ -278,12 +278,12 @@ export default function AdminOrders() {
     }))
     toast.success("Status updated to " + newStatus)
 
-    // When admin cancels — notify customer via WhatsApp
+    // When admin cancels â€” notify customer via WhatsApp
     if (newStatus === "cancelled" && order) {
       const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
       const orderId_ = order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()
       const customerName = addr.full_name || "Customer"
-      const amount = `₹${order.total_amount?.toLocaleString("en-IN")}`
+      const amount = `â‚¹${order.total_amount?.toLocaleString("en-IN")}`
       const phone = addr.phone?.replace(/\D/g, "")
       if (phone) {
         const waMsg = encodeURIComponent(
@@ -291,7 +291,7 @@ export default function AdminOrders() {
         )
         window.open(`https://wa.me/91${phone}?text=${waMsg}`, "_blank")
       } else {
-        toast("No phone number found for customer", { icon: "⚠️" })
+        toast("No phone number found for customer", { icon: "âš ï¸" })
       }
     }
   }
@@ -325,7 +325,7 @@ export default function AdminOrders() {
       const addr = (() => { try { return typeof order.address === "object" ? order.address : JSON.parse(order.address) } catch { return {} } })()
       const orderId_ = order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()
       const customerName = addr.full_name || "Customer"
-      const amount = `₹${order.total_amount?.toLocaleString("en-IN")}`
+      const amount = `â‚¹${order.total_amount?.toLocaleString("en-IN")}`
       const phone = addr.phone?.replace(/\D/g, "")
       if (phone) {
         const waMsg = encodeURIComponent(
@@ -384,12 +384,12 @@ export default function AdminOrders() {
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto">
       
-      {/* ── Header ── */}
+      {/* â”€â”€ Header â”€â”€ */}
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[#2C241B] mb-2">Orders</h1>
           <p className="text-sm text-[#8F857A]">
-            {localOrders.length} total orders · {pendingCount} awaiting verification
+            {localOrders.length} total orders Â· {pendingCount} awaiting verification
           </p>
         </div>
         <button 
@@ -403,7 +403,7 @@ export default function AdminOrders() {
         </button>
       </div>
 
-      {/* ── Search ── */}
+      {/* â”€â”€ Search â”€â”€ */}
       <div className="relative mb-6">
         <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8F857A]" />
         <input
@@ -414,7 +414,7 @@ export default function AdminOrders() {
         />
       </div>
 
-      {/* ── Status Filter Tabs ── */}
+      {/* â”€â”€ Status Filter Tabs â”€â”€ */}
       <div className="mb-8">
         <div className="border-b border-[#E7DED1]">
           <div className="flex gap-4 overflow-x-auto pb-px">
@@ -482,7 +482,7 @@ export default function AdminOrders() {
         </div>
       </div>
 
-      {/* ── Table Header (Desktop) ── */}
+      {/* â”€â”€ Table Header (Desktop) â”€â”€ */}
       <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-6 px-6 py-4 bg-[#F8F5F0] rounded-lg mb-3 text-xs font-semibold text-[#8F857A] uppercase tracking-wider">
         <div>Customer</div>
         <div>Date</div>
@@ -491,7 +491,7 @@ export default function AdminOrders() {
         <div>Status</div>
       </div>
 
-      {/* ── Orders List ── */}
+      {/* â”€â”€ Orders List â”€â”€ */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
           <div className="text-center py-16 text-[#8F857A]">
@@ -506,12 +506,12 @@ export default function AdminOrders() {
         )}
       </div>
 
-      {/* ── Pagination ── */}
+      {/* â”€â”€ Pagination â”€â”€ */}
       {filtered.length > 0 && (
         <div className="mt-6 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <p className="text-sm text-[#8F857A]">
-              Showing {Math.min((currentPage - 1) * pageSize + 1, filtered.length)}–{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length}
+              Showing {Math.min((currentPage - 1) * pageSize + 1, filtered.length)}â€“{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length}
             </p>
             <select 
               value={pageSize} 
@@ -568,7 +568,6 @@ export default function AdminOrders() {
         </div>
       )}
 
-      {
     </div>
   )
 }
