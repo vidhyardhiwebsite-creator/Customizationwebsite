@@ -676,7 +676,7 @@ function OfferBannerManager() {
 
 // Products Per Page Manager - controls how many products users see per page on /products
 function ProductsPerPageManager() {
-  const PAGE_SIZE_OPTIONS = [8, 12, 24, 48]
+  const PAGE_SIZE_OPTIONS = [8, 10, 12, 24, 48]
   const [value, setValue] = useState(12)
   const [saving, setSaving] = useState(false)
 
@@ -702,10 +702,12 @@ function ProductsPerPageManager() {
 
   return (
     <div className="bg-white border border-[#E7DED1] rounded-2xl p-4">
-      <h3 className="text-[#2C241B] font-medium mb-1 flex items-center gap-2 text-sm">
-        <Package size={14} /> Products Per Page
-        <span className="text-xs text-[#8F857A] font-normal ml-1">- controls user-facing /products page</span>
-      </h3>
+      <div className="mb-1">
+        <h3 className="text-[#2C241B] font-medium flex items-center gap-2 text-sm">
+          <Package size={14} /> Products Per Page
+        </h3>
+        <p className="text-xs text-[#8F857A] mt-0.5">Controls user-facing /products page</p>
+      </div>
       <p className="text-[#8F857A] text-xs mb-3">Choose how many products are shown per page on the shop.</p>
       <div className="flex items-center gap-2 flex-wrap">
         {PAGE_SIZE_OPTIONS.map(n => (

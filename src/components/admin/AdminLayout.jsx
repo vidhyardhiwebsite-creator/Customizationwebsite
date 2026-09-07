@@ -34,10 +34,10 @@ function Sidebar({ pathname, onSignOut, onNavClick }) {
       <div style={{ padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,255,255,0.07)", flexShrink: 0 }}>
         <Link to="/admin" onClick={onNavClick} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <div style={{ width: 38, height: 38, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "flex-start" }}>
-            <img src="/logo.png" alt="Vidhyrathi" style={{ width: 38, height: "auto", display: "block", marginTop: "-2px" }} />
+            <img src="/logo.png" alt="Srividyardhi" style={{ width: 38, height: "auto", display: "block", marginTop: "-2px" }} />
           </div>
           <div>
-            <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 16, color: "#FFFFFF", margin: 0, lineHeight: 1.2 }}>Vidyarathi</p>
+            <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 16, color: "#FFFFFF", margin: 0, lineHeight: 1.2 }}>Srividyardhi</p>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#C8A23A", margin: 0 }}>Admin Panel</p>
           </div>
         </Link>

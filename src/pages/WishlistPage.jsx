@@ -11,7 +11,7 @@ export default function WishlistPage() {
   if (products.length === 0) {
     return (
       <>
-        <Helmet><title>Wishlist — Vidhyrathi</title></Helmet>
+        <title>Wishlist — Srividyardhi</title>
         <div style={{ background: '#F8F5F0', minHeight: '100vh' }}
           className="flex flex-col items-center justify-center text-center px-4 py-20">
           <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-warm-sm"

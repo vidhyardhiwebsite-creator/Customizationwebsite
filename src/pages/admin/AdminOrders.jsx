@@ -147,64 +147,98 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
     return "border-[#E7DED1]"
   }
 
-  const getStatusBadge = () => {
-    if (needsVerification) return { label: "⚠ Verify", color: "bg-orange-500/20 text-orange-400" }
-    if (isCancelled) return { label: "Cancelled", color: "bg-red-500 text-white" }
+  const getPaymentBadge = () => {
+    if (needsVerification) return { label: "⚠ Verify", color: "bg-orange-100 text-orange-600" }
+    if (order.payment_status === "paid") return { label: "✓ Verified", color: "bg-green-500 text-white" }
     if (order.payment_status === "failed") return { label: "Failed", color: "bg-red-500 text-white" }
-    const s = order.order_status || "confirmed"
-    if (s === "delivered") return { label: "Delivered", color: "bg-green-500 text-white" }
-    if (s === "shipping") return { label: "Shipped", color: "bg-orange-500 text-white" }
-    return { label: "Confirmed", color: "bg-blue-500/20 text-blue-400" }
+    return { label: "Pending", color: "bg-gray-100 text-gray-600" }
   }
 
-  const badge = getStatusBadge()
+  const paymentBadge = getPaymentBadge()
 
   return (
-    <div className={`border rounded-xl overflow-hidden mb-2 ${getStatusColor()}`}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', cursor: 'pointer' }}
-        className="hover:bg-[#F8F5F0]" onClick={onToggle}>
-        
-        {/* Left: order id + customer name */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ fontSize: 11, color: '#8F857A', flexShrink: 0 }}>Order</span>
-            <span style={{ fontSize: 11, color: '#C8A23A', fontFamily: 'monospace', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
-            </span>
+    <div className={`border rounded-xl overflow-hidden bg-white ${getStatusColor()}`}>
+      {/* Card Header - Table Row */}
+      <div 
+        onClick={onToggle}
+        className="cursor-pointer hover:bg-[#F8F5F0] transition-colors"
+      >
+        {/* Mobile Layout */}
+        <div className="md:hidden p-4 space-y-3">
+          <div className="flex items-start justify-between">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs text-[#8F857A]">Order</span>
+                <span className="text-xs text-[#C8A23A] font-mono font-bold">
+                  {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
+                </span>
+              </div>
+              <p className="text-sm font-medium text-[#2C241B] truncate">{addr.full_name || "Customer"}</p>
+              <p className="text-xs text-[#8F857A] mt-0.5">{addr.phone}</p>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-sm font-bold text-[#C8A23A]">{formatINR(order.total_amount)}</span>
+              {expanded ? <ChevronUp size={16} className="text-[#8F857A]" /> : <ChevronDown size={16} className="text-[#8F857A]" />}
+            </div>
           </div>
-          <p style={{ fontSize: 11, color: '#8F857A', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {addr.full_name || "Customer"} · {formatDate(order.created_at)}
-          </p>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#8F857A]">{formatDate(order.created_at)}</span>
+            <div className="flex items-center gap-2">
+              <span className={`text-xs px-2 py-1 rounded-full font-medium ${paymentBadge.color}`}>
+                {paymentBadge.label}
+              </span>
+              <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
+            </div>
+          </div>
         </div>
 
-        {/* Right: amount + badge + chevron — never wraps */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-          <span style={{ fontSize: 12, color: '#C8A23A', fontWeight: 700, whiteSpace: 'nowrap' }}>{formatINR(order.total_amount)}</span>
-          <span style={{
-            fontSize: 10, padding: '2px 8px', borderRadius: 999, fontWeight: 700, whiteSpace: 'nowrap',
-            background: badge.color.includes('orange') ? 'rgba(249,115,22,0.15)' :
-                        badge.color.includes('green') ? '#22C55E' :
-                        badge.color.includes('red') ? '#EF4444' :
-                        badge.color.includes('blue') ? 'rgba(59,130,246,0.15)' : 'rgba(200,162,58,0.15)',
-            color: badge.color.includes('orange') ? '#EA580C' :
-                   badge.color.includes('green') ? '#fff' :
-                   badge.color.includes('red') ? '#fff' :
-                   badge.color.includes('blue') ? '#3B82F6' : '#A88422',
-          }}>{badge.label}</span>
-          {expanded
-            ? <ChevronUp size={12} style={{ color: '#8F857A', flexShrink: 0 }} />
-            : <ChevronDown size={12} style={{ color: '#8F857A', flexShrink: 0 }} />
-          }
+        {/* Desktop Layout - Table Row */}
+        <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-4 px-4 py-4 items-center">
+          {/* Customer Column */}
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-[#2C241B] truncate">{addr.full_name || "Customer"}</p>
+            <p className="text-xs text-[#8F857A] truncate">{addr.phone}</p>
+            <p className="text-xs text-[#C8A23A] font-mono mt-0.5">
+              {order.display_order_id || "#" + String(order.id).slice(-6).toUpperCase()}
+            </p>
+          </div>
+
+          {/* Date Column */}
+          <div>
+            <p className="text-sm text-[#2C241B]">{new Date(order.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+            <p className="text-xs text-[#8F857A]">{new Date(order.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
+          </div>
+
+          {/* Amount Column */}
+          <div>
+            <p className="text-sm font-bold text-[#C8A23A]">{formatINR(order.total_amount)}</p>
+          </div>
+
+          {/* Payment Column */}
+          <div>
+            <span className={`inline-block text-xs px-3 py-1 rounded-full font-medium ${paymentBadge.color}`}>
+              {paymentBadge.label}
+            </span>
+          </div>
+
+          {/* Status Column */}
+          <div className="flex items-center justify-between">
+            <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
+            {expanded ? <ChevronUp size={16} className="text-[#8F857A]" /> : <ChevronDown size={16} className="text-[#8F857A]" />}
+          </div>
         </div>
       </div>
 
+      {/* Expanded Details */}
       <AnimatePresence>
         {expanded && (
           <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
-            <div className="border-t border-[#E7DED1] p-3 space-y-3">
+            <div className="border-t border-[#E7DED1] p-4 space-y-4">
               {needsVerification && (
-                <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3 space-y-3">
-                  <p className="text-orange-400 text-xs font-semibold flex items-center gap-1"><AlertTriangle size={12} /> Payment Verification Required</p>
+                <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4 space-y-3">
+                  <p className="text-orange-600 text-sm font-semibold flex items-center gap-2">
+                    <AlertTriangle size={14} /> Payment Verification Required
+                  </p>
                   {order.payment_screenshot_url && (
                     <div className="space-y-2">
                       <img
@@ -214,7 +248,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                         onClick={() => onScreenshot(order.payment_screenshot_url)}
                       />
                       <button onClick={() => onScreenshot(order.payment_screenshot_url)}
-                        className="flex items-center gap-1 text-xs text-orange-300 hover:text-orange-200">
+                        className="flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700">
                         <Eye size={11} /> View Full Screenshot
                       </button>
                     </div>
@@ -235,8 +269,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
 
               {order.payment_status === "paid" && (
                 <div className="bg-white border border-[#E7DED1] rounded-xl p-4 space-y-3">
-                  <p className="text-[#2C241B] text-xs font-semibold">Order Status</p>
-                  {/* Colorful step tracker — same as user panel */}
+                  <p className="text-[#2C241B] text-sm font-semibold">Order Status</p>
+                  {/* Colorful step tracker */}
                   <div className="flex items-start gap-0 mb-2">
                     {[
                       { key: "confirmed", label: "Confirmed", activeColor: "bg-blue-500", doneColor: "bg-blue-500", lineColor: "bg-blue-400", textColor: "text-blue-500" },
@@ -263,7 +297,6 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                       )
                     })}
                   </div>
-                  {/* Status dropdown to change */}
                   <div className="flex items-center justify-between pt-1 border-t border-gray-100">
                     <span className="text-[#8F857A] text-xs">Change status:</span>
                     <StatusDropdown orderId={order.id} currentStatus={order.order_status || "confirmed"} onStatusUpdate={onStatusUpdate} />
@@ -276,22 +309,24 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                 <TrackingPanel order={order} onSave={onTrackingSave} />
               )}
 
-              <div className="space-y-1">
+              {/* Order Items */}
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-[#2C241B]">Order Items</p>
                 {order.order_items?.map(item => (
-                  <div key={item.id} className="bg-[#F8F5F0] rounded p-1.5">
-                    <div className="flex items-center gap-2">
-                      {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-7 h-7 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
+                  <div key={item.id} className="bg-[#F8F5F0] rounded-lg p-3">
+                    <div className="flex items-center gap-3">
+                      {item.products?.images?.[0] && <img src={item.products.images[0]} alt="" className="w-12 h-12 object-cover rounded" onError={e=>{e.target.style.display="none"}} />}
                       <div className="flex-1 min-w-0">
-                        <p className="text-[#2C241B] text-xs truncate">{item.products?.name}</p>
+                        <p className="text-sm font-medium text-[#2C241B] truncate">{item.products?.name}</p>
                         {item.products?.custom_id && (
                           <p className="text-[#C8A23A] text-xs font-mono">Product ID: {item.products.custom_id}</p>
                         )}
-                        <p className="text-[#8F857A] text-xs">x{item.quantity} &middot; {formatINR(item.price)}</p>
+                        <p className="text-[#8F857A] text-xs">Qty: {item.quantity} × {formatINR(item.price)}</p>
                       </div>
                     </div>
                     {/* Customization data */}
                     {(item.custom_name || item.custom_photo_url) && (
-                      <div className="mt-1.5 ml-9 border-l-2 border-[#4DB6AC] pl-2 space-y-1">
+                      <div className="mt-3 ml-0 border-l-2 border-[#4DB6AC] pl-3 space-y-2">
                         {item.custom_name && (
                           <p className="text-xs text-[#2C241B]">
                             <span className="text-[#4DB6AC] font-medium">✏ Text:</span> {item.custom_name}
@@ -304,7 +339,7 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                               <img
                                 src={item.custom_photo_url}
                                 alt="Customer custom photo"
-                                className="h-16 w-16 object-cover rounded border-2 border-[#4DB6AC]/40 hover:border-[#4DB6AC] transition-all cursor-pointer"
+                                className="h-20 w-20 object-cover rounded border-2 border-[#4DB6AC]/40 hover:border-[#4DB6AC] transition-all cursor-pointer"
                               />
                             </a>
                           </div>
@@ -315,15 +350,23 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
                 ))}
               </div>
 
+              {/* Shipping Address */}
               {addr.full_name && (
-                <div className="bg-[#F8F5F0] rounded-lg p-2 text-xs text-[#8F857A]">
-                  <p className="text-[#2C241B]">{addr.full_name} &middot; {addr.phone}</p>
-                  <p>{addr.address1}, {addr.city} &middot; {addr.pincode}</p>
+                <div className="bg-[#F8F5F0] rounded-lg p-3">
+                  <p className="text-sm font-semibold text-[#2C241B] mb-2">Shipping Address</p>
+                  <p className="text-sm text-[#2C241B]">{addr.full_name}</p>
+                  <p className="text-xs text-[#8F857A]">{addr.phone}</p>
+                  <p className="text-xs text-[#8F857A] mt-1">
+                    {addr.address1}, {addr.city} - {addr.pincode}
+                  </p>
+                  {addr.state && <p className="text-xs text-[#8F857A]">{addr.state}</p>}
                 </div>
               )}
+
+              {/* WhatsApp Button */}
               <button onClick={() => onNotify(order, addr)}
-                className="w-full flex items-center justify-center gap-1.5 py-2 bg-[#25D366] text-white text-xs font-bold rounded-lg hover:bg-[#1ebe5d] transition-all shadow-sm">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                className="w-full flex items-center justify-center gap-2 py-3 bg-[#25D366] text-white text-sm font-bold rounded-lg hover:bg-[#1ebe5d] transition-all shadow-sm">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
                 WhatsApp Customer
@@ -336,43 +379,8 @@ function OrderCard({ order, expanded, onToggle, onStatusUpdate, onVerify, onReje
   )
 }
 
-function Pagination({ total, page, pageSize, onPage, onPageSize, pageSizeOptions }) {
-  const totalPages = pageSize === 9999 ? 1 : Math.ceil(total / pageSize)
-  const showingText = pageSize === 9999
-    ? `Showing all ${total}`
-    : `Showing ${Math.min((page - 1) * pageSize + 1, total)}–${Math.min(page * pageSize, total)} of ${total}`
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginTop: 10, paddingTop: 10, borderTop: '1px solid #F3EEE6' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#8F857A', margin: 0 }}>{showingText}</p>
-        <select value={pageSize} onChange={e => onPageSize(Number(e.target.value))}
-          style={{ background: '#F8F5F0', border: '1px solid #E7DED1', borderRadius: 7, padding: '3px 6px', fontSize: 11, color: '#2C241B', outline: 'none', cursor: 'pointer' }}>
-          {pageSizeOptions.map(n => <option key={n} value={n}>{n === 9999 ? "All" : n}</option>)}
-        </select>
-      </div>
-      {totalPages > 1 && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-          <button onClick={() => onPage(page - 1)} disabled={page === 1}
-            style={{ padding: '3px 8px', fontSize: 11, border: '1px solid #E7DED1', borderRadius: 6, background: '#FFF', color: '#8F857A', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}>‹</button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-            <button key={p} onClick={() => onPage(p)}
-              style={{ padding: '3px 8px', fontSize: 11, border: '1px solid', borderRadius: 6, cursor: 'pointer',
-                background: p === page ? 'linear-gradient(135deg,#D4AF37,#B8860B)' : '#FFF',
-                color: p === page ? '#FFF' : '#8F857A',
-                borderColor: p === page ? '#C8A23A' : '#E7DED1',
-              }}>
-              {p}
-            </button>
-          ))}
-          <button onClick={() => onPage(page + 1)} disabled={page === totalPages}
-            style={{ padding: '3px 8px', fontSize: 11, border: '1px solid #E7DED1', borderRadius: 6, background: '#FFF', color: '#8F857A', cursor: 'pointer', opacity: page === totalPages ? 0.4 : 1 }}>›</button>
-        </div>
-      )}
-    </div>
-  )
-}
-
 function paginate(arr, page, size) {
+  if (size === 9999) return arr
   const start = (page - 1) * size
   return arr.slice(start, start + size)
 }
@@ -385,14 +393,12 @@ export default function AdminOrders() {
   const [screenshotModal, setScreenshotModal] = useState(null)
   const [searchParams] = useSearchParams()
   const filterToday = searchParams.get("filter") === "today"
+  const [statusFilter, setStatusFilter] = useState("all") // all, pending_verification, confirmed, shipping, delivered, cancelled
 
   // Pagination
   const PAGE_SIZE_OPTIONS = [5, 10, 20, 50, 9999]
   const [pageSize, setPageSize] = useState(10)
-  const [ns0Page, setNs0Page] = useState(1)
-  const [ns1Page, setNs1Page] = useState(1)
-  const [otherPage, setOtherPage] = useState(1)
-  const [searchPage, setSearchPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => { loadOrders() }, [])
   useEffect(() => {
@@ -492,7 +498,18 @@ export default function AdminOrders() {
 
   const q = search.toLowerCase().trim()
 
-  const filtered = localOrders.filter(o => {
+  // Apply filters
+  let filtered = localOrders.filter(o => {
+    // Status filter
+    if (statusFilter !== "all") {
+      if (statusFilter === "pending_verification" && o.payment_status !== "pending_verification") return false
+      if (statusFilter === "confirmed" && o.order_status !== "confirmed") return false
+      if (statusFilter === "shipping" && o.order_status !== "shipping") return false
+      if (statusFilter === "delivered" && o.order_status !== "delivered") return false
+      if (statusFilter === "cancelled" && o.order_status !== "cancelled") return false
+    }
+    
+    // Search filter
     if (!q) return true
     const id = (o.display_order_id || "").toLowerCase()
     const addr = (() => { try { return typeof o.address === "object" ? o.address : JSON.parse(o.address) } catch { return {} } })()
@@ -501,123 +518,192 @@ export default function AdminOrders() {
     return id.includes(q) || String(o.id).toLowerCase().includes(q) || name.includes(q) || phone.includes(q)
   })
 
-  const isNS0 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("SS0")
-  const isNS1 = (o) => (o.order_series || o.display_order_id || "").toUpperCase().startsWith("SS1")
-
-  const ns0Orders = localOrders.filter(isNS0)
-  const ns1Orders = localOrders.filter(isNS1)
-  const otherOrders = localOrders.filter(o => !isNS0(o) && !isNS1(o))
+  // Count by status
+  const pendingCount = localOrders.filter(o => o.payment_status === "pending_verification").length
+  const confirmedCount = localOrders.filter(o => o.order_status === "confirmed" && o.payment_status === "paid").length
+  const shippedCount = localOrders.filter(o => o.order_status === "shipping").length
+  const deliveredCount = localOrders.filter(o => o.order_status === "delivered").length
+  const cancelledCount = localOrders.filter(o => o.order_status === "cancelled").length
 
   const cardProps = { onStatusUpdate: handleStatusUpdate, onVerify: verifyPayment, onReject: rejectPayment, onNotify: notifyCustomer, onScreenshot: setScreenshotModal, onTrackingSave: handleTrackingSave }
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, maxWidth: '100%', minWidth: 0 }}>
+  // Paginate filtered results
+  const paginatedOrders = paginate(filtered, currentPage, pageSize)
 
+  return (
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      
       {/* ── Header ── */}
-      <div style={{ paddingBottom: 12, borderBottom: '1px solid #E7DED1' }}>
-        <h1 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(18px,3vw,24px)', fontWeight: 700, color: '#2C241B', margin: 0 }}>
-          {filterToday ? "Today's Orders" : "Orders"}
-        </h1>
-        <p style={{ fontSize: 12, color: '#8F857A', margin: '3px 0 0' }}>
-          {localOrders.length} total &middot; {localOrders.filter(o => o.payment_status === "pending_verification").length} awaiting verification
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#2C241B] mb-2">Orders</h1>
+        <p className="text-sm text-[#8F857A]">
+          {localOrders.length} total orders · {pendingCount} awaiting verification
         </p>
       </div>
 
       {/* ── Search ── */}
-      <div style={{ position: 'relative' }}>
-        <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#8F857A', pointerEvents: 'none' }} />
+      <div className="relative mb-6">
+        <Search size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8F857A]" />
         <input
           value={search}
-          onChange={e => { setSearch(e.target.value); setSearchPage(1) }}
-          placeholder="Search by Order ID (e.g. SS0-001)"
-          style={{
-            width: '100%', boxSizing: 'border-box',
-            background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 10,
-            paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
-            fontSize: 13, color: '#2C241B', outline: 'none',
-          }}
-          onFocus={e => e.target.style.borderColor = '#C8A23A'}
-          onBlur={e => e.target.style.borderColor = '#E7DED1'}
+          onChange={e => { setSearch(e.target.value); setCurrentPage(1) }}
+          placeholder="Search by name, phone, order ID..."
+          className="w-full pl-12 pr-4 py-3 bg-white border border-[#E7DED1] rounded-xl text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A] transition-colors"
         />
       </div>
 
-      {/* ── Search results ── */}
-      {q && (
-        <div>
-          <p style={{ fontSize: 12, color: '#8F857A', marginBottom: 10 }}>{filtered.length} result{filtered.length !== 1 ? "s" : ""} for "{search}"</p>
-          {filtered.length === 0
-            ? <p style={{ color: '#6F655A', fontSize: 13, textAlign: 'center', padding: '48px 0' }}>No orders found</p>
-            : paginate(filtered, searchPage, pageSize).map(order => (
-              <OrderCard key={order.id} order={order} expanded={expanded === order.id}
-                onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                {...cardProps} />
-            ))
-          }
-          <Pagination total={filtered.length} page={searchPage} pageSize={pageSize} onPage={setSearchPage}
-            onPageSize={n => { setPageSize(n); setSearchPage(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
-        </div>
-      )}
-
-      {/* ── Two-column series layout ── */}
-      {!q && (
-        <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1,1fr)', gap: 14 }}
-            className="lg:grid-cols-2">
-
-            {/* SS0 — Home */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
-              {/* Column header */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C8A23A', flexShrink: 0 }} />
-                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>SS0 — Home</h2>
-                <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(200,162,58,0.12)', color: '#A88422', padding: '1px 8px', borderRadius: 20 }}>{ns0Orders.length}</span>
-                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto', fontWeight: 500 }}>
-                  {ns0Orders.filter(o => o.payment_status === "pending_verification").length} pending
-                </span>
-              </div>
-              {/* Orders */}
-              <div style={{ padding: '10px 12px' }}>
-                {ns0Orders.length === 0
-                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No SS0 orders</p>
-                  : paginate(ns0Orders, ns0Page, pageSize).map(order => (
-                    <OrderCard key={order.id} order={order} expanded={expanded === order.id}
-                      onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                      {...cardProps} />
-                  ))
-                }
-                <Pagination total={ns0Orders.length} page={ns0Page} pageSize={pageSize} onPage={setNs0Page}
-                  onPageSize={n => { setPageSize(n); setNs0Page(1); setNs1Page(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
-              </div>
-            </div>
-
-            {/* SS1 — HYD */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DED1', borderRadius: 14, overflow: 'hidden' }}>
-              {/* Column header */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', background: '#F8F5F0', borderBottom: '1px solid #E7DED1' }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#A88422', flexShrink: 0 }} />
-                <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: '#2C241B', margin: 0 }}>SS1 — HYD</h2>
-                <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(168,132,34,0.1)', color: '#A88422', padding: '1px 8px', borderRadius: 20 }}>{ns1Orders.length}</span>
-                <span style={{ fontSize: 11, color: '#D97706', marginLeft: 'auto', fontWeight: 500 }}>
-                  {ns1Orders.filter(o => o.payment_status === "pending_verification").length} pending
-                </span>
-              </div>
-              {/* Orders */}
-              <div style={{ padding: '10px 12px' }}>
-                {ns1Orders.length === 0
-                  ? <p style={{ color: '#8F857A', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No SS1 orders</p>
-                  : paginate(ns1Orders, ns1Page, pageSize).map(order => (
-                    <OrderCard key={order.id} order={order} expanded={expanded === order.id}
-                      onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                      {...cardProps} />
-                  ))
-                }
-                <Pagination total={ns1Orders.length} page={ns1Page} pageSize={pageSize} onPage={setNs1Page}
-                  onPageSize={n => { setPageSize(n); setNs0Page(1); setNs1Page(1) }} pageSizeOptions={PAGE_SIZE_OPTIONS} />
-              </div>
-            </div>
-
+      {/* ── Status Filter Tabs ── */}
+      <div className="mb-6">
+        <div className="border-b border-[#E7DED1]">
+          <div className="flex gap-2 overflow-x-auto pb-px">
+            <button
+              onClick={() => { setStatusFilter("all"); setCurrentPage(1) }}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 ${
+                statusFilter === "all"
+                  ? "text-[#C8A23A] border-[#C8A23A]"
+                  : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
+              }`}
+            >
+              All Statuses
+            </button>
+            <button
+              onClick={() => { setStatusFilter("pending_verification"); setCurrentPage(1) }}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+                statusFilter === "pending_verification"
+                  ? "text-[#C8A23A] border-[#C8A23A]"
+                  : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
+              }`}
+            >
+              Pending <span className="bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-xs">{pendingCount}</span>
+            </button>
+            <button
+              onClick={() => { setStatusFilter("confirmed"); setCurrentPage(1) }}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+                statusFilter === "confirmed"
+                  ? "text-[#C8A23A] border-[#C8A23A]"
+                  : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
+              }`}
+            >
+              Confirmed <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs">{confirmedCount}</span>
+            </button>
+            <button
+              onClick={() => { setStatusFilter("shipping"); setCurrentPage(1) }}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+                statusFilter === "shipping"
+                  ? "text-[#C8A23A] border-[#C8A23A]"
+                  : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
+              }`}
+            >
+              Shipped <span className="bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-xs">{shippedCount}</span>
+            </button>
+            <button
+              onClick={() => { setStatusFilter("delivered"); setCurrentPage(1) }}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+                statusFilter === "delivered"
+                  ? "text-[#C8A23A] border-[#C8A23A]"
+                  : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
+              }`}
+            >
+              Delivered <span className="bg-green-100 text-green-600 px-2 py-0.5 rounded-full text-xs">{deliveredCount}</span>
+            </button>
+            <button
+              onClick={() => { setStatusFilter("cancelled"); setCurrentPage(1) }}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all border-b-2 flex items-center gap-2 ${
+                statusFilter === "cancelled"
+                  ? "text-[#C8A23A] border-[#C8A23A]"
+                  : "text-[#8F857A] border-transparent hover:text-[#2C241B]"
+              }`}
+            >
+              Cancelled <span className="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-xs">{cancelledCount}</span>
+            </button>
           </div>
-        </>
+        </div>
+      </div>
+
+      {/* ── Table Header (Desktop) ── */}
+      <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-4 px-4 py-3 bg-[#F8F5F0] rounded-lg mb-2 text-xs font-semibold text-[#8F857A]">
+        <div>Customer</div>
+        <div>Date</div>
+        <div>Amount</div>
+        <div>Payment</div>
+        <div>Status</div>
+      </div>
+
+      {/* ── Orders List ── */}
+      <div className="space-y-2">
+        {filtered.length === 0 ? (
+          <div className="text-center py-16 text-[#8F857A]">
+            <p className="text-lg">No orders found</p>
+          </div>
+        ) : (
+          paginatedOrders.map(order => (
+            <OrderCard key={order.id} order={order} expanded={expanded === order.id}
+              onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
+              {...cardProps} />
+          ))
+        )}
+      </div>
+
+      {/* ── Pagination ── */}
+      {filtered.length > 0 && (
+        <div className="mt-6 flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <p className="text-sm text-[#8F857A]">
+              Showing {Math.min((currentPage - 1) * pageSize + 1, filtered.length)}–{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length}
+            </p>
+            <select 
+              value={pageSize} 
+              onChange={e => { setPageSize(Number(e.target.value)); setCurrentPage(1) }}
+              className="bg-white border border-[#E7DED1] rounded-lg px-3 py-1.5 text-sm text-[#2C241B] focus:outline-none focus:border-[#C8A23A]"
+            >
+              {PAGE_SIZE_OPTIONS.map(n => (
+                <option key={n} value={n}>{n === 9999 ? "All" : n}</option>
+              ))}
+            </select>
+          </div>
+          
+          {Math.ceil(filtered.length / pageSize) > 1 && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 text-sm border border-[#E7DED1] rounded-lg bg-white text-[#8F857A] hover:bg-[#F8F5F0] disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: Math.ceil(filtered.length / pageSize) }, (_, i) => i + 1)
+                .filter(p => {
+                  // Show first, last, current, and neighbors
+                  const totalPages = Math.ceil(filtered.length / pageSize)
+                  return p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1
+                })
+                .map((p, idx, arr) => (
+                  <>
+                    {idx > 0 && arr[idx - 1] !== p - 1 && <span key={`ellipsis-${p}`} className="px-2 text-[#8F857A]">...</span>}
+                    <button
+                      key={p}
+                      onClick={() => setCurrentPage(p)}
+                      className={`px-3 py-1.5 text-sm border rounded-lg transition-all ${
+                        p === currentPage
+                          ? "bg-gradient-to-br from-[#D4AF37] to-[#B8860B] text-white border-[#C8A23A]"
+                          : "bg-white text-[#8F857A] border-[#E7DED1] hover:bg-[#F8F5F0]"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  </>
+                ))
+              }
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === Math.ceil(filtered.length / pageSize)}
+                className="px-3 py-1.5 text-sm border border-[#E7DED1] rounded-lg bg-white text-[#8F857A] hover:bg-[#F8F5F0] disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Screenshot modal */}

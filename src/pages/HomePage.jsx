@@ -245,7 +245,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Vidhyrathi — Premium Personalised Gifts</title>
+        <title>Srividyardhi — Premium Personalised Gifts</title>
         <meta name="description" content="India's most loved personalised gifting brand. Custom photo frames, mugs, T-shirts, corporate gifts — crafted with love, delivered with care."/>
       </Helmet>
 
@@ -544,7 +544,7 @@ export default function HomePage() {
           <Reveal style={{ marginBottom:"clamp(24px,4vw,48px)" }}>
             <SectionHead
               eyebrow="Our Promise"
-              title={<>Why Choose <span className="text-gold-accent">Vidhyrathi</span></>}
+              title={<>Why Choose <span className="text-gold-accent">Srividyardhi</span></>}
               subtitle="We don't just make gifts — we craft unforgettable experiences that last a lifetime."
             />
           </Reveal>

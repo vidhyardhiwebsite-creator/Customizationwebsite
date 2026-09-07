@@ -449,12 +449,12 @@ export default function Navbar() {
                 overflow: "hidden",
                 flexShrink: 0,
                 display: "flex",
-                alignItems: "flex-start",
+                alignItems: "center",
               }}>
                 <img
                   src="/logo.png"
-                  alt="Vidhyrathi"
-                  style={{ width: 40, height: "auto", display: "block", marginTop: "-3px" }}
+                  alt="Srividyardhi"
+                  style={{ width: 40, height: "auto", display: "block", marginTop: "-6px" }}
                 />
               </div>
               {/* Brand name text */}
@@ -466,7 +466,7 @@ export default function Navbar() {
                   color: "#2C241B",
                   margin: 0,
                   lineHeight: 1.15,
-                }}>Vidyarathi</p>
+                }}>Srividyardhi</p>
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 600,
@@ -476,7 +476,7 @@ export default function Navbar() {
                   color: "#C8A23A",
                   margin: 0,
                   marginTop: 2,
-                }}>Personalized Gifts</p>
+                }}>Creative Gifts</p>
               </div>
             </Link>
           </div>
@@ -700,12 +700,12 @@ export default function Navbar() {
             }}>
               {/* Logo + Name */}
               <Link to="/" onClick={closeAll} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-                <div style={{ width: 40, height: 40, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "flex-start" }}>
-                  <img src="/logo.png" alt="Vidhyrathi" style={{ width: 40, height: "auto", display: "block", marginTop: "-3px" }} />
+                <div style={{ width: 40, height: 40, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center" }}>
+                  <img src="/logo.png" alt="Srividyardhi" style={{ width: 40, height: "auto", display: "block", marginTop: "-6px" }} />
                 </div>
                 <div>
-                  <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 16, color: "#2C241B", margin: 0, lineHeight: 1.2 }}>Vidyarathi</p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "#C8A23A", margin: 0 }}>Personalized Gifts</p>
+                  <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 700, fontSize: 16, color: "#2C241B", margin: 0, lineHeight: 1.2 }}>Srividyardhi</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "#C8A23A", margin: 0 }}>Creative Gifts</p>
                 </div>
               </Link>
 
